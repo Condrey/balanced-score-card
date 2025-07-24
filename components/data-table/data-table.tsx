@@ -104,7 +104,7 @@ export function DataTable<TData, TValue>({
         )}
         <div className="flex items-center gap-2">
           <DataTableViewOptions table={table} />
-          <Button onClick={()=>query.refetch()} variant="outline" size="icon">
+          <Button onClick={()=>query.refetch()} disabled={query.isFetching} variant="outline" size="icon">
             <RefreshCcwIcon className={cn(query.isFetching&&'animate-spin')}/>
           </Button>
           {children}

@@ -32,7 +32,7 @@ export default function FormAddEditPosition({
 }: FormAddEditPositionProps) {
   const form = useForm<PositionSchema>({
     resolver: zodResolver(positionSchema),
-    defaultValues: {
+    values: {
       id: position?.id || "",
       jobTitle: position?.jobTitle || "",
       departmentalMandate: position?.departmentalMandate || "",
