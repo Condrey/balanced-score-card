@@ -111,8 +111,8 @@ export default function FormAddEditOrganization({
                           organizationStructures[structure];
                         const Icon = icon;
                         return (
-                          <SelectItem key={structure} value={structure} className='flex items-center'>
-                            <Icon className="size-4 mr-2" /> {label}
+                          <SelectItem key={structure} value={structure} >
+                            <div className='flex flex-row items-center w-full'><Icon className="size-4 mr-2" /> {label}</div>
                           </SelectItem>
                         );
                       })}

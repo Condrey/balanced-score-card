@@ -19,7 +19,6 @@ export function upsertOrganizationMutation() {
         toast.success("Organization created successfully");
         return [data,...oldData, ];
       });
-            queryClient.invalidateQueries({queryKey})
     },
     onError: (error, variables, context) => {
       console.error(error);
@@ -41,7 +40,6 @@ export function deleteOrganizationMutation() {
         );
         return oldData.filter((d) => d.id !== data.id);
       });
-      queryClient.invalidateQueries({queryKey})
     },
     onError: (error, variables, context) => {
       console.error(error);

@@ -23,30 +23,31 @@ export const useOrganizationColumns: ColumnDef<OrganizationData>[] = [
     header({ column }) {
       return <DataTableColumnHeader column={column} title="Organization name" />;
     },
+   
+  },
+  {
+    accessorKey: "voteName",
+    header({ column }) {
+      return <DataTableColumnHeader column={column} title="Vote/ site code" />;
+    },
     cell({ row }) {
-      const organization = row.original;
-      return (
-        <div>
-          <div className="">{organization.name}</div>
-          <div className="text-xs text-muted-foreground">
-            {organization.voteName}
-          </div>
-        </div>
-      );
+      return <div className="text-muted-foreground max-w-fit mx-auto w-full">{row.original.voteName}</div>;
     },
   },
   {
     accessorKey: "structure",
     header({ column }) {
-      return <DataTableColumnHeader column={column} title="Staff duties" />;
+      return <DataTableColumnHeader column={column} title="Organization structure" />;
     },
     cell({ row }) {
       const structure = row.original.structure;
       const {label,icon} = organizationStructures[structure];
       const Icon = icon;
-      return <Badge variant={structure===OrganizationStructure.CITY?'destructive':
+      return <div className='w-full max-w-fit mx-auto'>
+         <Badge variant={structure===OrganizationStructure.CITY?'destructive':
         structure===OrganizationStructure.DISTRICT?'secondary':'default'
-      } className=''><Icon className="size-4 mr-2" />{label}</Badge>;
+      } ><Icon className="size-4 mr-2" />{label}</Badge>
+      </div>;
     },
   },
   

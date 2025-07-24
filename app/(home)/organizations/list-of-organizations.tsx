@@ -6,6 +6,9 @@ import { OrganizationData } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
 import { getAllOrganizations } from "./actions";
 import ButtonAddEditOrganization from "./button-add-edit-organization";
+import { useOrganizationColumns } from "./columns";
+import { DataTable } from "@/components/data-table/data-table";
+import { PlusIcon } from "lucide-react";
 
 interface ListOfOrganizationsProps {
   organizations: OrganizationData[];
@@ -37,7 +40,12 @@ export default function ListOfOrganizations({
             </ButtonAddEditOrganization>
         </EmptyContainer>
       ) : (
-        <div>Organizations found</div>
+        <DataTable query={query} data={data} columns={useOrganizationColumns}
+        filterColumn={{id:"name"}}>
+          <ButtonAddEditOrganization variant={'secondary'} >
+            <PlusIcon/>
+          </ButtonAddEditOrganization>
+        </DataTable>
       )}
     </div>
   );
