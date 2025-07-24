@@ -8,6 +8,7 @@ import { cache } from "react";
 async function allPositions() {
   return await prisma.position.findMany({
     include: positionDataInclude,
+    orderBy: {'createdAt':'desc'}
   });
 }
 export const getAllPositions = cache(allPositions);

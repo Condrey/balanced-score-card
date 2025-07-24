@@ -33,12 +33,12 @@ export default function FormDuties({ form }: FormDutiesProps) {
         name="duties"
         render={({ field }) => (
           <FormItem >
-            <FormLabel>Duties</FormLabel>
+            <FormLabel>Duties <span className="text-xs text-muted-foreground">({field.value.length})</span></FormLabel>
             <div className="flex items-center  gap-2">  
    <Input
               value={newValue.duty}
               onChange={(e) => setNewValue({id: cuid(), duty:e.target.value})}
-              placeholder="Enter a duty from job description"
+              placeholder="Enter a new duty from job description"
               onKeyPress={(e) =>
                 e.key === "Enter" && (e.preventDefault(), addValue())
               }

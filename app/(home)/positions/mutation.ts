@@ -17,8 +17,9 @@ export function upsertPositionMutation() {
           return oldData.map((p) => (p.id === data.id ? data : p));
         }
         toast.success("Position created successfully");
-        return [...oldData, data];
+        return [data,...oldData, ];
       });
+            queryClient.invalidateQueries({queryKey})
     },
     onError: (error, variables, context) => {
       console.error(error);

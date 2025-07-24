@@ -31,7 +31,7 @@ status === 'success' && !data.length?
 <EmptyContainer message={'There are no positions added yet.'}  >
     <ButtonAddEditPosition variant={'secondary'}>Create a new one</ButtonAddEditPosition>
 </EmptyContainer>
-:<DataTable data={data} columns={usePositionColumns} filterColumn={{id:"jobTitle",label:'Job title'}}>
+:<DataTable query={query} data={data} columns={usePositionColumns} filterColumn={{id:"jobTitle",label:'Job title'}}>
         <ButtonAddEditPosition size={'icon'}>
             <PlusIcon/>
         </ButtonAddEditPosition>
