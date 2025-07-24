@@ -1,4 +1,12 @@
-import { Home, LetterTextIcon, StoreIcon, VoteIcon } from "lucide-react";
+"use client";
+import {
+  HomeIcon,
+  LetterTextIcon,
+  Loader2Icon,
+  LucideIcon,
+  StoreIcon,
+  VoteIcon,
+} from "lucide-react";
 
 import {
   Sidebar,
@@ -10,15 +18,13 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useCustomSearchParams } from "@/hooks/use-custom-search-param";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useTransition } from "react";
 
 // Menu items.
 const items = [
-  {
-    title: "Home",
-    url: "/",
-    icon: Home,
-  },
   {
     title: "Positions",
     url: "/positions",
@@ -37,6 +43,8 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const pathname = usePathname();
+  const isHomeActive = pathname === "/";
   return (
     <Sidebar>
       <SidebarContent>
@@ -44,16 +52,18 @@ export function AppSidebar() {
           <SidebarGroupLabel>Navigation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              <ListItem
+                item={{ title: "Home", url: "/", icon: HomeIcon }}
+                isActive={isHomeActive}
+              />
+              {/* Map through items to create list items */}
+              {items.map((item) => {
+                const isActive =
+                  pathname.startsWith(item.url) && pathname !== "/";
+                return (
+                  <ListItem key={item.title} item={item} isActive={isActive} />
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
@@ -61,3 +71,35 @@ export function AppSidebar() {
     </Sidebar>
   );
 }
+
+const ListItem = ({
+  item,
+  isActive,
+}: {
+  item: { title: string; url: string; icon: LucideIcon };
+  isActive: boolean;
+}) => {
+  const [isPending, startTransition] = useTransition();
+  const { getNavigationLinkWithPathnameWithoutUpdate } =
+    useCustomSearchParams();
+  const newUrl = getNavigationLinkWithPathnameWithoutUpdate(item.url);
+  const Icon = item.icon;
+  return (
+    <SidebarMenuItem>
+      <SidebarMenuButton
+        isActive={isActive}
+        onClick={() => startTransition(() => {})}
+        asChild
+      >
+        <Link href={newUrl}>
+          {!isPending ? (
+            <Icon className="size-4" />
+          ) : (
+            <Loader2Icon className="animate-spin size-4" />
+          )}
+          <span>{item.title}</span>
+        </Link>
+      </SidebarMenuButton>
+    </SidebarMenuItem>
+  );
+};

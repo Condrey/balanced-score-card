@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,6 +6,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import LoadingButton from "@/components/ui/loading-button";
+import { useCustomSearchParams } from "@/hooks/use-custom-search-param";
 import { OrganizationData } from "@/lib/types";
 import {
   ArrowUpRightIcon,
@@ -15,7 +16,7 @@ import {
   Trash2Icon,
 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { DialogDeleteOrganization } from "./button-delete-organization";
 import FormAddEditOrganization from "./form-add-edit-organization";
 
@@ -28,19 +29,23 @@ export default function DropdownMenuOrganization({
 }: DropdownMenuOrganizationProps) {
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
+  const [isPending, startTransition] = useTransition()
+  const {getNavigationLinkWithPathnameWithoutUpdate} = useCustomSearchParams();
+  const newUrl = getNavigationLinkWithPathnameWithoutUpdate(`/organizations/${organization.id}`);
+
   return (
     <>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <Button variant={"ghost"} size={"icon"}>
+          <LoadingButton loading={isPending} variant={"ghost"} size={"icon"}>
             <MoreHorizontalIcon />
-          </Button>
+          </LoadingButton>
         </DropdownMenuTrigger>
         <DropdownMenuContent>
           <DropdownMenuGroup>
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => setOpenEdit(true)}>
-              <Link href={`/organizations/${organization.id}`} className="w-full flex">
+              <Link href={newUrl} className="w-full flex" onClick={()=>startTransition(()=>{})}>
                 <ArrowUpRightIcon className="mr-2" /> View Organization
               </Link>
             </DropdownMenuItem>
