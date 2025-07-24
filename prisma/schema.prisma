@@ -1,0 +1,187 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Position {
+  id                  String     @id @default(uuid())
+  jobTitle            String
+  departmentalMandate String
+  salaryScale         String
+  reportsTo           Position?  @relation("PositionReportsTo", fields: [reportsToId], references: [id])
+  reportsToId         String?
+  responsibleFor      Position[] @relation("PositionReportsTo")
+  duties              String[]
+
+  @@map("positions")
+}
+
+model Organization {
+  id                   String                @id @default(uuid())
+  name                 String
+  voteName             String
+  structure            OrganizationStructure @default(DISTRICT)
+  organizationContexts OrganizationContext[]
+
+  @@map("organizations")
+}
+
+model OrganizationContext {
+  id             String        @id @default(uuid())
+  financialYear  String
+  mandate        String
+  vision         String
+  mission        String
+  goal           String
+  ndp            Ndp           @relation(fields: [ndpId], references: [id])
+  Organization   Organization? @relation(fields: [organizationId], references: [id])
+  organizationId String?
+  ndpId          String
+
+  @@map("organization_contexts")
+}
+
+model Ndp {
+  id                   String                @id @default(uuid())
+  version              String
+  programmes           String[] // List of programmes under the NDP
+  osps                 Osp[]
+  organizationContexts OrganizationContext[]
+
+  @@map("ndps")
+}
+
+model Osp {
+  id                 String   @id @default(uuid())
+  strategicObjective String
+  strategies         String[] // List of strategies to achieve the objective
+  programmes         String[] // List of programmes under the OSP
+  ndp                Ndp?     @relation(fields: [ndpId], references: [id])
+  ndpId              String?
+
+  @@map("osps")
+}
+
+enum OrganizationStructure {
+  CITY
+  DISTRICT
+  MUNICIPALITY
+  LOCAL_GOVERNMENT
+}
+
+model Employee {
+  id             String   @id @default(uuid())
+  employeeNumber String   @unique
+  name           String
+  jobTitle       String
+  salaryScale    String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  // Relations
+  supervisedBSCs BSC[] @relation("Supervisee")
+  supervisorBSCs BSC[] @relation("Supervisor")
+
+  @@map("employees")
+}
+
+model BSC {
+  id        String   @id @default(uuid())
+  year      Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Supervisee and Supervisor Relations
+  superviseeId String
+  supervisee   Employee @relation("Supervisee", fields: [superviseeId], references: [id])
+  supervisorId String
+  supervisor   Employee @relation("Supervisor", fields: [supervisorId], references: [id])
+
+  // Strategic Elements
+  mandate             String
+  vision              String
+  mission             String
+  goal                String
+  ndpProgrammes       String[] // National Development Plan Programmes
+  departmentalMandate String
+  strategicObjectives String[]
+
+  // Performance Plan and Appraisal
+  performanceObjectives PerformanceObjective[]
+
+  // Behavioral Assessment
+  coreValues           CoreValue[]
+  behavioralAttributes BehavioralAttribute[]
+
+  // Calculated Scores
+  performanceScore Float            @default(0) // Out of 80%
+  behavioralScore  Float            @default(0) // Out of 20%
+  overallScore     Float            @default(0) // Total score
+  performanceLevel PerformanceLevel @default(UNSATISFACTORY)
+
+  @@map("bscs")
+}
+
+model PerformanceObjective {
+  id    String @id @default(uuid())
+  bscId String
+  bsc   BSC    @relation(fields: [bscId], references: [id], onDelete: Cascade)
+
+  perspective     PerspectiveType
+  objective       String
+  percentage      Float
+  actions         String[]
+  expectedResults String[]
+  kpis            String[] // Key Performance Indicators
+  score           Float           @default(0)
+  comments        String?
+
+  @@map("performance_objectives")
+}
+
+model CoreValue {
+  id    String @id @default(uuid())
+  bscId String
+  bsc   BSC    @relation(fields: [bscId], references: [id], onDelete: Cascade)
+
+  values  String[]
+  acronym String
+
+  @@map("core_values")
+}
+
+model BehavioralAttribute {
+  id    String @id @default(uuid())
+  bscId String
+  bsc   BSC    @relation(fields: [bscId], references: [id], onDelete: Cascade)
+
+  attribute             String
+  percentage            Float
+  description           String
+  score                 Float   @default(0)
+  commentsJustification String?
+
+  @@map("behavioral_attributes")
+}
+
+enum PerspectiveType {
+  STAKEHOLDERS_CLIENTS // 25%
+  FINANCIAL_STEWARDSHIP // 15%
+  INTERNAL_PROCESSES // 20%
+  MDA_LG_CAPACITY // 20%
+}
+
+enum PerformanceLevel {
+  OUTSTANDING // 90-100%
+  VERY_GOOD // 80-89%
+  GOOD // 70-79%
+  SATISFACTORY // 60-69%
+  UNSATISFACTORY // Below 60%
+}
