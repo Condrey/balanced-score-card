@@ -46,7 +46,7 @@ export const useOrganizationColumns: ColumnDef<OrganizationData>[] = [
       const Icon = icon;
       return <Badge variant={structure===OrganizationStructure.CITY?'destructive':
         structure===OrganizationStructure.DISTRICT?'secondary':'default'
-      }><Icon className="size-4 mr-2" />{label}</Badge>;
+      } className=''><Icon className="size-4 mr-2" />{label}</Badge>;
     },
   },
   
