@@ -10,17 +10,22 @@ import { cn } from "@/lib/utils";
 interface ErrorContainerProps {
   errorMessage: string;
   query: DefinedUseQueryResult | QueryObserverLoadingErrorResult;
-  className?:string;
+  className?: string;
 }
 
 export default function ErrorContainer({
   errorMessage,
   query,
-  className
+  className,
 }: ErrorContainerProps) {
   console.error(query.error);
   return (
-    <div className={cn("flex flex-col gap-4 min-h-[20rem] items-center justify-center",className)}>
+    <div
+      className={cn(
+        "flex flex-col gap-4 min-h-[20rem] items-center justify-center",
+        className,
+      )}
+    >
       <p className="max-w-sm text-muted-foreground text-center">
         {errorMessage}
       </p>

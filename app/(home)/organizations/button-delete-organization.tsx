@@ -24,7 +24,11 @@ export default function ButtonDeleteOrganization({
         onClick={() => setOpen(true)}
         {...props}
       />
-      <DialogDeleteOrganization open={open} setOpen={setOpen} organization={organization} />
+      <DialogDeleteOrganization
+        open={open}
+        setOpen={setOpen}
+        organization={organization}
+      />
     </>
   );
 }

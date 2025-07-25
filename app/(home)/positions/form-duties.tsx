@@ -1,77 +1,114 @@
-import { Badge } from "@/components/ui/badge";
+import { badgeVariants } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { DutySchema, PositionSchema } from "@/lib/validations/others";
-import cuid from "cuid";
+import { cn } from "@/lib/utils";
+import {
+  PositionSchema,
+  stringArraySchema,
+  StringArraySchema,
+} from "@/lib/validations/others";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusIcon, XIcon } from "lucide-react";
-import { useState } from "react";
-import { useFieldArray, UseFormReturn } from "react-hook-form";
+import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
 
 interface FormDutiesProps {
   form: UseFormReturn<PositionSchema>;
 }
 
 export default function FormDuties({ form }: FormDutiesProps) {
-  const {
-    append: appendValue,
-    fields: valueFields,
-    remove: removeValue,
-  } = useFieldArray({ control: form.control, name: "duties" });
-  const [newValue, setNewValue] = useState<DutySchema>({id:'',duty:''});
-  const addValue = () => {
-    if (newValue.duty.trim()) {
-      appendValue(newValue);
-      setNewValue({id:cuid(),duty:''});
-    }
+  const form2 = useForm<StringArraySchema>({
+    resolver: zodResolver(stringArraySchema),
+    defaultValues: {
+      value: "",
+    },
+  });
+
+  const { append, fields, remove } = useFieldArray({
+    control: form.control,
+    name: "duties",
+  });
+  const addValue = (input: StringArraySchema) => {
+    append(input);
+    form2.reset();
   };
   return (
     <>
       <FormField
         control={form.control}
         name="duties"
-        render={({ field }) => (
-          <FormItem >
-            <FormLabel>Duties <span className="text-xs text-muted-foreground">({field.value.length})</span></FormLabel>
-            <div className="flex items-center  gap-2">  
-   <Input
-              value={newValue.duty}
-              onChange={(e) => setNewValue({id: cuid(), duty:e.target.value})}
-              placeholder="Enter a new duty from job description"
-              onKeyPress={(e) =>
-                e.key === "Enter" && (e.preventDefault(), addValue())
-              }
+        render={() => (
+          <FormItem>
+            <FormLabel>
+              Duties{" "}
+              <span className="text-xs text-muted-foreground">
+                ({form.watch("duties")?.length})
+              </span>
+            </FormLabel>
+            <FormField
+              control={form2.control}
+              name="value"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <div className="flex items-center  gap-2">
+                      <Input
+                        placeholder="Enter a programme from the NDP"
+                        onKeyPress={(e) =>
+                          e.key === "Enter" &&
+                          (e.preventDefault(), form2.handleSubmit(addValue)())
+                        }
+                        {...field}
+                      />
+                      <Button
+                        type="button"
+                        onClick={() => form2.handleSubmit(addValue)()}
+                        size="icon"
+                        variant={"outline"}
+                      >
+                        <PlusIcon className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </FormControl>
+                </FormItem>
+              )}
             />
-            <Button type="button" onClick={addValue} size="icon" variant={'outline'}>
-              <PlusIcon className="h-4 w-4" />
-            </Button>
-            </div>
-         <FormMessage/>
+
+            <FormMessage />
           </FormItem>
         )}
       />
 
-      <div className="flex flex-col gap-2">
-        {valueFields.map((field, index) => (
-          <Badge
+      <ol className="flex flex-col gap-2 list-decimal list-inside">
+        {fields.map((field, index) => (
+          <li
             key={field.id}
-            variant="secondary"
-            className="flex items-center gap-1 w-fit max-w-sm"
+            className={cn(
+              "gap-1 w-fit max-w-sm ",
+              badgeVariants({ variant: "secondary" })
+            )}
           >
-            <span className='text-ellipsis line-clamp-1'>{form.watch(`duties.${index}.duty`)}</span>
+            <span className="text-ellipsis line-clamp-1">
+              {form.watch(`duties.${index}.value`)}
+            </span>
             <Button
               type="button"
               variant="ghost"
               size="sm"
-              className="h-4 w-4 p-0 hover:bg-destructive hover:text-destructive-foreground"
-              onClick={() => removeValue(index)}
+              className="h-4 w-4 flex-inline p-0 hover:bg-destructive hover:text-destructive-foreground"
+              onClick={() => remove(index)}
             >
               <XIcon className="h-3 w-3" />
             </Button>
-          </Badge>
+          </li>
         ))}
-      </div>
+      </ol>
     </>
   );
 }

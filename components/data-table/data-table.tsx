@@ -26,14 +26,17 @@ import * as React from "react";
 import { DataTablePagination } from "./data-table-pagination";
 import { DataTableViewOptions } from "./data-table-view-options";
 import { Input } from "@/components/ui/input";
-import { DefinedUseQueryResult, QueryObserverLoadingErrorResult } from "@tanstack/react-query";
+import {
+  DefinedUseQueryResult,
+  QueryObserverLoadingErrorResult,
+} from "@tanstack/react-query";
 import { Button } from "../ui/button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-    query: DefinedUseQueryResult | QueryObserverLoadingErrorResult;
-    handleClick?: (rowId: string) => void;
+  query: DefinedUseQueryResult | QueryObserverLoadingErrorResult;
+  handleClick?: (rowId: string) => void;
   ROWS_PER_TABLE?: number;
   selectedItemId?: string | null;
   filterColumn?: { id: string; label?: string };
@@ -44,7 +47,8 @@ interface DataTableProps<TData, TValue> {
 
 export function DataTable<TData, TValue>({
   columns,
-  data, query,
+  data,
+  query,
   ROWS_PER_TABLE = 5,
   selectedItemId,
   handleClick,
@@ -104,8 +108,15 @@ export function DataTable<TData, TValue>({
         )}
         <div className="flex items-center gap-2">
           <DataTableViewOptions table={table} />
-          <Button onClick={()=>query.refetch()} disabled={query.isFetching} variant="outline" size="icon">
-            <RefreshCcwIcon className={cn(query.isFetching&&'animate-spin')}/>
+          <Button
+            onClick={() => query.refetch()}
+            disabled={query.isFetching}
+            variant="outline"
+            size="icon"
+          >
+            <RefreshCcwIcon
+              className={cn(query.isFetching && "animate-spin")}
+            />
           </Button>
           {children}
         </div>

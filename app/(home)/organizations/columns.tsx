@@ -21,9 +21,10 @@ export const useOrganizationColumns: ColumnDef<OrganizationData>[] = [
   {
     accessorKey: "name",
     header({ column }) {
-      return <DataTableColumnHeader column={column} title="Organization name" />;
+      return (
+        <DataTableColumnHeader column={column} title="Organization name" />
+      );
     },
-   
   },
   {
     accessorKey: "voteName",
@@ -31,33 +32,50 @@ export const useOrganizationColumns: ColumnDef<OrganizationData>[] = [
       return <DataTableColumnHeader column={column} title="Vote/ site code" />;
     },
     cell({ row }) {
-      return <div className="text-muted-foreground max-w-fit mx-auto w-full">{row.original.voteName}</div>;
+      return (
+        <div className="text-muted-foreground max-w-fit mx-auto w-full">
+          {row.original.voteName}
+        </div>
+      );
     },
   },
   {
     accessorKey: "structure",
     header({ column }) {
-      return <DataTableColumnHeader column={column} title="Organization structure" />;
+      return (
+        <DataTableColumnHeader column={column} title="Organization structure" />
+      );
     },
     cell({ row }) {
       const structure = row.original.structure;
-      const {label,icon} = organizationStructures[structure];
+      const { label, icon } = organizationStructures[structure];
       const Icon = icon;
-      return <div className='w-full max-w-fit mx-auto'>
-         <Badge variant={structure===OrganizationStructure.CITY?'destructive':
-        structure===OrganizationStructure.DISTRICT?'secondary':'default'
-      } ><Icon className="size-4 mr-2" />{label}</Badge>
-      </div>;
+      return (
+        <div className="w-full max-w-fit mx-auto">
+          <Badge
+            variant={
+              structure === OrganizationStructure.CITY
+                ? "destructive"
+                : structure === OrganizationStructure.DISTRICT
+                  ? "secondary"
+                  : "default"
+            }
+          >
+            <Icon className="size-4 mr-2" />
+            {label}
+          </Badge>
+        </div>
+      );
     },
   },
-  
+
   {
-    id:'action',
-    header({column}) {
-      return <DataTableColumnHeader column={column} title="Action"/>
+    id: "action",
+    header({ column }) {
+      return <DataTableColumnHeader column={column} title="Action" />;
     },
-    cell({row}) {
-      return <DropdownMenuOrganization organization={row.original}/>
+    cell({ row }) {
+      return <DropdownMenuOrganization organization={row.original} />;
     },
-  }
+  },
 ];

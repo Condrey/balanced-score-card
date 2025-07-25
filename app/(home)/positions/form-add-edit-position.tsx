@@ -1,3 +1,5 @@
+"use client";
+
 import ResponsiveDrawer from "@/components/responsive-drawer";
 import {
   Form,
@@ -38,13 +40,13 @@ export default function FormAddEditPosition({
       departmentalMandate: position?.departmentalMandate || "",
       reportsToId: position?.reportsToId || "",
       salaryScale: position?.salaryScale || "",
-      duties: position?.duties.map((p) => ({ id: cuid(), duty: p })) || [],
+      duties: position?.duties.map((p) => ({value:p})) || [],
     },
   });
   const { mutate, isPending } = upsertPositionMutation();
   const onSubmit = (input: PositionSchema) =>
     mutate(input, { onSuccess: () => setOpen(false) });
-  
+
   return (
     <ResponsiveDrawer
       open={open}
@@ -58,56 +60,61 @@ export default function FormAddEditPosition({
       className="max-w-4xl"
     >
       <Form {...form}>
-        <form className="flex gap-2 *:flex-1 border-t flex-col md:flex-row md:divide-x " onSubmit={form.handleSubmit(onSubmit)}>
+        <form
+          className="flex gap-2 *:flex-1 border-t flex-col md:flex-row md:divide-x "
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
           <div className="flex flex-col  gap-4">
             <FormField
-            control={form.control}
-            name="jobTitle"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Job Title</FormLabel>
-                <FormControl>
-                  <Input placeholder="Job Title" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          /> <FormField
-            control={form.control}
-            name="salaryScale"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Salary Scale</FormLabel>
-                <FormControl>
-                  <Input placeholder="e.g., U7 " {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />  <FormSupervisor form={form} />
-          <FormField
-            control={form.control}
-            name="departmentalMandate"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Job purpose/ Departmental Mandate</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="job purpose from Job description "
-                    {...field}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-       
+              control={form.control}
+              name="jobTitle"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Job Title</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Job Title" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />{" "}
+            <FormField
+              control={form.control}
+              name="salaryScale"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Salary Scale</FormLabel>
+                  <FormControl>
+                    <Input placeholder="e.g., U7 " {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />{" "}
+            <FormSupervisor form={form} />
+            <FormField
+              control={form.control}
+              name="departmentalMandate"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Job purpose/ Departmental Mandate</FormLabel>
+                  <FormControl>
+                    <Textarea
+                      placeholder="job purpose from Job description "
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
-         <div className="flex flex-col md:ps-2   gap-4"> 
-          <FormDuties form={form} />
-          <LoadingButton loading={isPending} type="submit" className="w-full">
-            {position ? "Update" : "Create"}
-          </LoadingButton></div>
+          <div className="flex flex-col md:ps-2   gap-4">
+            <FormDuties form={form} />
+            <LoadingButton loading={isPending} type="submit" className="w-full">
+              {position ? "Update" : "Create"}
+            </LoadingButton>
+          </div>
         </form>
       </Form>
     </ResponsiveDrawer>

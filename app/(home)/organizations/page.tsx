@@ -22,6 +22,6 @@ export default function Page() {
 }
 
 async function Content() {
-const organizations = await getAllOrganizations()
-  return <ListOfOrganizations organizations={organizations}/>
+  const organizations = await getAllOrganizations();
+  return <ListOfOrganizations organizations={organizations} />;
 }

@@ -29,13 +29,16 @@ export default function DropdownMenuOrganization({
 }: DropdownMenuOrganizationProps) {
   const [openEdit, setOpenEdit] = useState(false);
   const [openDelete, setOpenDelete] = useState(false);
-  const [isPending, startTransition] = useTransition()
-  const {getNavigationLinkWithPathnameWithoutUpdate} = useCustomSearchParams();
-  const newUrl = getNavigationLinkWithPathnameWithoutUpdate(`/organizations/${organization.id}`);
+  const [isPending, startTransition] = useTransition();
+  const { getNavigationLinkWithPathnameWithoutUpdate } =
+    useCustomSearchParams();
+  const newUrl = getNavigationLinkWithPathnameWithoutUpdate(
+    `/organizations/${organization.id}`,
+  );
 
   return (
     <>
-      <DropdownMenu modal={false}>
+      <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <LoadingButton loading={isPending} variant={"ghost"} size={"icon"}>
             <MoreHorizontalIcon />
@@ -44,8 +47,8 @@ export default function DropdownMenuOrganization({
         <DropdownMenuContent>
           <DropdownMenuGroup>
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem onClick={() => setOpenEdit(true)}>
-              <Link href={newUrl} className="w-full flex" onClick={()=>startTransition(()=>{})}>
+            <DropdownMenuItem onClick={() => startTransition(() => {})}>
+              <Link href={newUrl} className="w-full flex">
                 <ArrowUpRightIcon className="mr-2" /> View Organization
               </Link>
             </DropdownMenuItem>

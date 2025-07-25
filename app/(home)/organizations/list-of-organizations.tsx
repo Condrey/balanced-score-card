@@ -35,15 +35,19 @@ export default function ListOfOrganizations({
             "There are no organizations added in the database yet. Please add"
           }
         >
-            <ButtonAddEditOrganization variant={'secondary'}>
-                Create a new organization
-            </ButtonAddEditOrganization>
+          <ButtonAddEditOrganization variant={"secondary"}>
+            Create a new organization
+          </ButtonAddEditOrganization>
         </EmptyContainer>
       ) : (
-        <DataTable query={query} data={data} columns={useOrganizationColumns}
-        filterColumn={{id:"name"}}>
-          <ButtonAddEditOrganization variant={'secondary'} >
-            <PlusIcon/>
+        <DataTable
+          query={query}
+          data={data}
+          columns={useOrganizationColumns}
+          filterColumn={{ id: "name" }}
+        >
+          <ButtonAddEditOrganization variant={"secondary"}>
+            <PlusIcon />
           </ButtonAddEditOrganization>
         </DataTable>
       )}

@@ -69,7 +69,7 @@ export const usePositionColumns: ColumnDef<PositionData>[] = [
       return (
         <div>
           {!reportsTo ? (
-            <Badge variant={'destructive'}>No supervisor</Badge>
+            <Badge variant={"destructive"}>No supervisor</Badge>
           ) : (
             <>
               <div>{reportsTo.jobTitle}</div>
@@ -122,12 +122,12 @@ export const usePositionColumns: ColumnDef<PositionData>[] = [
     },
   },
   {
-    id:'action',
-    header({column}) {
-      return <DataTableColumnHeader column={column} title="Action"/>
+    id: "action",
+    header({ column }) {
+      return <DataTableColumnHeader column={column} title="Action" />;
     },
-    cell({row}) {
-      return <DropdownMenuPosition position={row.original}/>
+    cell({ row }) {
+      return <DropdownMenuPosition position={row.original} />;
     },
-  }
+  },
 ];

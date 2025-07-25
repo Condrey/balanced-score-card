@@ -8,7 +8,7 @@ import { cache } from "react";
 async function allPositions() {
   return await prisma.position.findMany({
     include: positionDataInclude,
-    orderBy: {'createdAt':'desc'}
+    orderBy: { createdAt: "desc" },
   });
 }
 export const getAllPositions = cache(allPositions);
@@ -23,7 +23,7 @@ export async function upsertPosition(input: PositionSchema) {
     salaryScale,
     reportsToId,
   } = positionSchema.parse(input);
-  const formattedDuties = duties.map((d) => d.duty).filter(Boolean) as string[];
+  const formattedDuties = duties.map((d) => d.value).filter(Boolean) as string[];
   return await prisma.position.upsert({
     where: { id },
     create: {
@@ -44,11 +44,10 @@ export async function upsertPosition(input: PositionSchema) {
   });
 }
 
-export async function deletePosition(id:string){
-  // TODO: perform auth 
+export async function deletePosition(id: string) {
+  // TODO: perform auth
   return await prisma.position.delete({
-    where:{id},
-    include: positionDataInclude
-  })
-
+    where: { id },
+    include: positionDataInclude,
+  });
 }

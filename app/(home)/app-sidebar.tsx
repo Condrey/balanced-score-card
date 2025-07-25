@@ -21,7 +21,7 @@ import {
 import { useCustomSearchParams } from "@/hooks/use-custom-search-param";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTransition } from "react";
+import { Suspense, useTransition } from "react";
 
 // Menu items.
 const items = [
@@ -46,29 +46,41 @@ export function AppSidebar() {
   const pathname = usePathname();
   const isHomeActive = pathname === "/";
   return (
-    <Sidebar>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Navigation</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              <ListItem
-                item={{ title: "Home", url: "/", icon: HomeIcon }}
-                isActive={isHomeActive}
-              />
-              {/* Map through items to create list items */}
-              {items.map((item) => {
-                const isActive =
-                  pathname.startsWith(item.url) && pathname !== "/";
-                return (
-                  <ListItem key={item.title} item={item} isActive={isActive} />
-                );
-              })}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-    </Sidebar>
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center h-full">
+          <Loader2Icon className="animate-spin size-6" />
+        </div>
+      }
+    >
+      <Sidebar>
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>Navigation</SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <ListItem
+                  item={{ title: "Home", url: "/", icon: HomeIcon }}
+                  isActive={isHomeActive}
+                />
+                {/* Map through items to create list items */}
+                {items.map((item) => {
+                  const isActive =
+                    pathname.startsWith(item.url) && pathname !== "/";
+                  return (
+                    <ListItem
+                      key={item.title}
+                      item={item}
+                      isActive={isActive}
+                    />
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          </SidebarGroup>
+        </SidebarContent>
+      </Sidebar>
+    </Suspense>
   );
 }
 

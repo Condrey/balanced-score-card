@@ -33,7 +33,7 @@ export default function DropdownMenuPosition({
   const { getNavigationLinkWithPathnameWithoutUpdate } =
     useCustomSearchParams();
   const newUrl = getNavigationLinkWithPathnameWithoutUpdate(
-    `/positions/${position.id}`
+    `/positions/${position.id}`,
   );
   return (
     <>

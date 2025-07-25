@@ -17,7 +17,7 @@ export function upsertOrganizationMutation() {
           return oldData.map((p) => (p.id === data.id ? data : p));
         }
         toast.success("Organization created successfully");
-        return [data,...oldData, ];
+        return [data, ...oldData];
       });
     },
     onError: (error, variables, context) => {
@@ -36,7 +36,7 @@ export function deleteOrganizationMutation() {
       queryClient.setQueryData<OrganizationData[]>(queryKey, (oldData) => {
         if (!oldData) return;
         toast.success(
-          `${data.name} was successfully removed from the database.`
+          `${data.name} was successfully removed from the database.`,
         );
         return oldData.filter((d) => d.id !== data.id);
       });

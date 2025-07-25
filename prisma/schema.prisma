@@ -42,10 +42,10 @@ model OrganizationContext {
   vision         String
   mission        String
   goal           String
-  ndp            Ndp           @relation(fields: [ndpId], references: [id])
+  ndp            Ndp  ?         @relation(fields: [ndpId], references: [id])
   Organization   Organization? @relation(fields: [organizationId], references: [id])
   organizationId String?
-  ndpId          String
+  ndpId          String?
 
   @@map("organization_contexts")
 }

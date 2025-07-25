@@ -17,9 +17,9 @@ export function upsertPositionMutation() {
           return oldData.map((p) => (p.id === data.id ? data : p));
         }
         toast.success("Position created successfully");
-        return [data,...oldData, ];
+        return [data, ...oldData];
       });
-            queryClient.invalidateQueries({queryKey})
+      queryClient.invalidateQueries({ queryKey });
     },
     onError: (error, variables, context) => {
       console.error(error);
@@ -37,11 +37,11 @@ export function deletePositionMutation() {
       queryClient.setQueryData<PositionData[]>(queryKey, (oldData) => {
         if (!oldData) return;
         toast.success(
-          `${data.jobTitle} was successfully removed from the database.`
+          `${data.jobTitle} was successfully removed from the database.`,
         );
         return oldData.filter((d) => d.id !== data.id);
       });
-      queryClient.invalidateQueries({queryKey})
+      queryClient.invalidateQueries({ queryKey });
     },
     onError: (error, variables, context) => {
       console.error(error);
