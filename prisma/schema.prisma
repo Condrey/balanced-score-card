@@ -42,8 +42,8 @@ model OrganizationContext {
   vision         String
   mission        String
   goal           String
-  ndp            Ndp  ?         @relation(fields: [ndpId], references: [id])
-  Organization   Organization? @relation(fields: [organizationId], references: [id])
+  ndp            Ndp  ?         @relation(fields: [ndpId], references: [id], onDelete: Cascade)
+  Organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String?
   ndpId          String?
 
@@ -65,7 +65,7 @@ model Osp {
   strategicObjective String
   strategies         String[] // List of strategies to achieve the objective
   programmes         String[] // List of programmes under the OSP
-  ndp                Ndp?     @relation(fields: [ndpId], references: [id])
+  ndp                Ndp?     @relation(fields: [ndpId], references: [id], onDelete: Cascade)
   ndpId              String?
 
   @@map("osps")

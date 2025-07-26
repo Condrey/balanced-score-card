@@ -30,7 +30,7 @@ export const organizationSchema = z.object({
   voteName: z.string().min(1, "Please include vote name"),
   structure: z.nativeEnum(OrganizationStructure),
 });
-export type OrganizationSchema = z.infer<typeof organizationContextSchema>;
+export type OrganizationSchema = z.infer<typeof organizationSchema>;
 
 export const organizationContextSchema = z.object({
   id: z.string().optional(),

@@ -15,7 +15,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { PositionData } from "@/lib/types";
 import { positionSchema, PositionSchema } from "@/lib/validations/others";
 import { zodResolver } from "@hookform/resolvers/zod";
-import cuid from "cuid";
 import { useForm } from "react-hook-form";
 import FormDuties from "./form-duties";
 import FormSupervisor from "./form-supervisor";
@@ -45,7 +44,12 @@ export default function FormAddEditPosition({
   });
   const { mutate, isPending } = upsertPositionMutation();
   const onSubmit = (input: PositionSchema) =>
-    mutate(input, { onSuccess: () => setOpen(false) });
+    mutate(input, {
+      onSuccess: () => {
+        form.reset();
+        setOpen(false);
+      },
+    });
 
   return (
     <ResponsiveDrawer
