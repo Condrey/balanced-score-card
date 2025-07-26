@@ -11,77 +11,78 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
-import { Textarea } from "@/components/ui/textarea";
-import { NdpData, OrganizationContextData } from "@/lib/types";
-import { ndpSchema, NdpSchema, OspSchema } from "@/lib/validations/others";
+import { NdpData, OspData } from "@/lib/types";
+import { ospSchema, OspSchema } from "@/lib/validations/others";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { upsertNdpMutation } from "../mutation";
+import { upsertOspMutation } from "../mutation";
+import FormOspProgrammes from "./form-osp-programmes";
+import FormOspStrategies from "./form-osp-strategies";
 
-interface FormAddEditNdpProps {
-  ndp?: NdpData;
+interface FormAddEditOspProps {
+  osp?: OspData;
   open: boolean;
   setOpen: (open: boolean) => void;
-  context: OrganizationContextData;
+  ndp: NdpData;
 }
 
-export default function FormAddEditNdp({
-  ndp,
+export default function FormAddEditOsp({
+  osp,
   open,
   setOpen,
-  context,
-}: FormAddEditNdpProps) {
-  const form = useForm<NdpSchema>({
-    resolver: zodResolver(ndpSchema),
+  ndp,
+}: FormAddEditOspProps) {
+  const form = useForm<OspSchema>({
+    resolver: zodResolver(ospSchema),
     values: {
-      id: ndp?.id || "",
-      version: ndp?.version || "",
-      programmes: ndp?.programmes || [],
-      //   osps: ndp?.osps as OspSchema[]|| [],
+      id: osp?.id || "",
+      ndpId: osp?.ndpId || ndp.id || "",
+      strategicObjective: osp?.strategicObjective || "",
+      programmes: osp?.programmes.map((p) => ({ value: p })) || [],
+      strategies: osp?.strategies.map((p) => ({ value: p })) || [],
     },
   });
-  const { mutate, isPending } = upsertNdpMutation(context.organizationId!);
-  const onSubmit = (input: NdpSchema) =>
-    mutate(
-      { organizationContextId: context.id, input },
-      { onSuccess: () => setOpen(false) },
-    );
+  const { mutate, isPending } = upsertOspMutation(ndp.id!);
+  const onSubmit = (input: OspSchema) =>
+    mutate(input, { onSuccess: () => setOpen(false) });
 
   return (
     <ResponsiveDrawer
       open={open}
       setOpen={setOpen}
-      title={ndp ? `Update NDP ${ndp.version} version` : "Add a new NDP"}
+      title={osp ? `Update this OSP` : "Add a new OSP"}
+      className="max-w-4xl"
     >
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-          <FormField
-            control={form.control}
-            name="version"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>NDP Version</FormLabel>
-                <FormControl>
-                  <Input placeholder="e.g., IV" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="programmes"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>NDP Version</FormLabel>
-                <FormControl>
-                  <Input placeholder="e.g., IV" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-4 *:flex-1 w-full md:divide-x md:flex-row"
+        >
+          <div className="flex flex-col gap-4">
+            <FormField
+              control={form.control}
+              name="strategicObjective"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Strategic Objective</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="enter the strategic objective"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormOspProgrammes form={form} />
+          </div>
+          <div className="flex flex-col gap-4 md:ps-4">
+            <FormOspStrategies form={form} />
+            <LoadingButton loading={isPending} type="submit" className="w-full">
+              {osp ? "Update" : "Create"}
+            </LoadingButton>
+          </div>
         </form>
       </Form>
     </ResponsiveDrawer>

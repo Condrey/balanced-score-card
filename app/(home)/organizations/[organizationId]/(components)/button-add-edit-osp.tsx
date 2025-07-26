@@ -1,32 +1,27 @@
 import { Button, ButtonProps } from "@/components/ui/button";
-import { NdpData, OrganizationContextData } from "@/lib/types";
+import { OspData, OrganizationContextData, NdpData } from "@/lib/types";
 import { useState } from "react";
-import FormAddEditNdp from "./form-add-edit-ndp";
+import FormAddEditOsp from "./form-add-edit-osp";
 
-interface ButtonAddEditNdpProps extends ButtonProps {
-  ndp?: NdpData;
-  context: OrganizationContextData;
+interface ButtonAddEditOspProps extends ButtonProps {
+  osp?: OspData;
+  ndp: NdpData;
 }
 
-export default function ButtonAddEditNdp({
+export default function ButtonAddEditOsp({
+  osp,
   ndp,
-  context,
   ...props
-}: ButtonAddEditNdpProps) {
+}: ButtonAddEditOspProps) {
   const [open, setOpen] = useState(false);
   return (
     <>
       <Button
-        title={ndp ? "Update this ndp" : "Create a new ndp"}
+        title={osp ? "Update this osp" : "Create a new osp"}
         onClick={() => setOpen(true)}
         {...props}
       />
-      <FormAddEditNdp
-        ndp={ndp}
-        open={open}
-        setOpen={setOpen}
-        context={context}
-      />
+      <FormAddEditOsp osp={osp} open={open} setOpen={setOpen} ndp={ndp} />
     </>
   );
 }

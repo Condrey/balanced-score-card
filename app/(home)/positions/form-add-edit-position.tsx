@@ -40,7 +40,7 @@ export default function FormAddEditPosition({
       departmentalMandate: position?.departmentalMandate || "",
       reportsToId: position?.reportsToId || "",
       salaryScale: position?.salaryScale || "",
-      duties: position?.duties.map((p) => ({value:p})) || [],
+      duties: position?.duties.map((p) => ({ value: p })) || [],
     },
   });
   const { mutate, isPending } = upsertPositionMutation();

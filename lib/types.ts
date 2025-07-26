@@ -8,8 +8,15 @@ export type PositionData = Prisma.PositionGetPayload<{
   include: typeof positionDataInclude;
 }>;
 
+export const ospDataInclude = {
+  // ndp:true
+} satisfies Prisma.OspInclude;
+export type OspData = Prisma.OspGetPayload<{
+  include: typeof ospDataInclude;
+}>;
+
 export const ndpDataInclude = {
-  osps: true,
+  osps: { include: ospDataInclude },
 } satisfies Prisma.NdpInclude;
 export type NdpData = Prisma.NdpGetPayload<{
   include: typeof ndpDataInclude;

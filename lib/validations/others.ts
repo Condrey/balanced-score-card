@@ -49,12 +49,14 @@ export const ospSchema = z.object({
   id: z.string().optional(),
   strategicObjective: z.string().min(1, "This field is required."),
   strategies: z
-    .array(z.string())
-    .min(1, "Please provide at least one strategy"),
+    .array(stringArraySchema)
+    .min(1, "Please enter at least one strategy.")
+    .min(1, "Please provide at least one strategy."),
   programmes: z
-    .array(z.string())
-    .min(1, "Please provide at least one programme"),
-  ndpId: z.string().min(1, "It should belong to a NDP"),
+    .array(stringArraySchema)
+    .min(1, "Please enter at least one programme.")
+    .min(1, "Please provide at least one programme."),
+  ndpId: z.string().min(1, "It should belong to a NDP."),
 });
 export type OspSchema = z.infer<typeof ospSchema>;
 
@@ -63,6 +65,7 @@ export const ndpSchema = z.object({
   version: z.string().min(1, "Specify the NDP version"),
   programmes: z
     .array(stringArraySchema)
+    .min(1, "Please enter at least one programme.")
     .min(1, "Please provide at least one programmes"),
   // osps: z.array(ospSchema).min(1, "Please provide at least one osp"),
 });

@@ -11,9 +11,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
-import { Textarea } from "@/components/ui/textarea";
 import { NdpData, OrganizationContextData } from "@/lib/types";
-import { ndpSchema, NdpSchema, OspSchema } from "@/lib/validations/others";
+import { ndpSchema, NdpSchema } from "@/lib/validations/others";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { upsertNdpMutation } from "../mutation";
@@ -37,8 +36,7 @@ export default function FormAddEditNdp({
     values: {
       id: ndp?.id || "",
       version: ndp?.version || "",
-      programmes: ndp?.programmes.map(p=>({value:p})) || [],
-      //   osps: ndp?.osps as OspSchema[]|| [],
+      programmes: ndp?.programmes.map((p) => ({ value: p })) || [],
     },
   });
   const { mutate, isPending } = upsertNdpMutation(context.organizationId!);
@@ -69,10 +67,10 @@ export default function FormAddEditNdp({
               </FormItem>
             )}
           />
-<FormProgrammes form={form}/>
-         <LoadingButton loading={isPending} type="submit" className="w-full">
-                     {ndp ? "Update" : "Create"}
-                   </LoadingButton>
+          <FormProgrammes form={form} />
+          <LoadingButton loading={isPending} type="submit" className="w-full">
+            {ndp ? "Update" : "Create"}
+          </LoadingButton>
         </form>
       </Form>
     </ResponsiveDrawer>

@@ -4,8 +4,10 @@ import { toast } from "sonner";
 import {
   deleteNdp,
   deleteOrganizationContext,
+  deleteOsp,
   upsertNdp,
   upsertOrganizationContext,
+  upsertOsp,
 } from "./action";
 import { StringDecoder } from "string_decoder";
 
@@ -95,6 +97,49 @@ export function deleteNdpMutation(organizationId: string) {
     onError: (error, variables, context) => {
       console.error(error);
       toast.error("Failed to remove NDP version. Please try again.");
+    },
+  });
+}
+
+export function upsertOspMutation(organizationId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: upsertOsp,
+    async onSuccess(data, variables, context) {
+      const queryKey: QueryKey = ["organization", organizationId];
+      await queryClient.cancelQueries({ queryKey });
+      queryClient.invalidateQueries({ queryKey });
+      toast.success(
+        `Successfully ${!variables.id ? "created" : "updated"}  the OSP `,
+      );
+    },
+    onError: (error, variables, context) => {
+      console.error(error);
+      toast.error("Failed to save OSP. Please try again.");
+    },
+  });
+}
+
+export function deleteOspMutation(organizationId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: deleteOsp,
+    async onSuccess(data, variables, context) {
+      const queryKey: QueryKey = ["organization", organizationId];
+
+      await queryClient.cancelQueries({ queryKey });
+      queryClient.setQueryData<OrganizationContextData[]>(
+        queryKey,
+        (oldData) => {
+          if (!oldData) return;
+          toast.success(`The OSP was successfully removed from the database.`);
+          return oldData.filter((d) => d.id !== data.id);
+        },
+      );
+    },
+    onError: (error, variables, context) => {
+      console.error(error);
+      toast.error("Failed to remove OSP. Please try again.");
     },
   });
 }

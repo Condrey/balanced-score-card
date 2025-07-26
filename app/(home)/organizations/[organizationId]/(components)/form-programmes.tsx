@@ -36,7 +36,7 @@ export default function FormProgrammes({ form }: FormProgrammesProps) {
   });
   const addValue = (input: StringArraySchema) => {
     append(input);
-    form2.reset()
+    form2.reset();
   };
   return (
     <>
@@ -89,7 +89,10 @@ export default function FormProgrammes({ form }: FormProgrammesProps) {
         {fields.map((field, index) => (
           <li
             key={field.id}
-            className={cn("gap-1 w-fit max-w-sm ", badgeVariants({variant:'secondary'}))}
+            className={cn(
+              "gap-1 w-fit max-w-sm ",
+              badgeVariants({ variant: "secondary" }),
+            )}
           >
             <span className="text-ellipsis line-clamp-1">
               {form.watch(`programmes.${index}.value`)}

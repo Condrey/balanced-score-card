@@ -23,7 +23,9 @@ export async function upsertPosition(input: PositionSchema) {
     salaryScale,
     reportsToId,
   } = positionSchema.parse(input);
-  const formattedDuties = duties.map((d) => d.value).filter(Boolean) as string[];
+  const formattedDuties = duties
+    .map((d) => d.value)
+    .filter(Boolean) as string[];
   return await prisma.position.upsert({
     where: { id },
     create: {

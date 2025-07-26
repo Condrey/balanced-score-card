@@ -1,4 +1,4 @@
-import { badgeVariants } from "@/components/ui/badge";
+import { Badge, badgeVariants } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   FormControl,
@@ -10,7 +10,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import {
-  PositionSchema,
+  NdpSchema,
+  OspSchema,
   stringArraySchema,
   StringArraySchema,
 } from "@/lib/validations/others";
@@ -18,11 +19,11 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusIcon, XIcon } from "lucide-react";
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
 
-interface FormDutiesProps {
-  form: UseFormReturn<PositionSchema>;
+interface FormOspProgrammesProps {
+  form: UseFormReturn<OspSchema>;
 }
 
-export default function FormDuties({ form }: FormDutiesProps) {
+export default function FormOspProgrammes({ form }: FormOspProgrammesProps) {
   const form2 = useForm<StringArraySchema>({
     resolver: zodResolver(stringArraySchema),
     defaultValues: {
@@ -32,7 +33,7 @@ export default function FormDuties({ form }: FormDutiesProps) {
 
   const { append, fields, remove } = useFieldArray({
     control: form.control,
-    name: "duties",
+    name: "programmes",
   });
   const addValue = (input: StringArraySchema) => {
     append(input);
@@ -42,13 +43,13 @@ export default function FormDuties({ form }: FormDutiesProps) {
     <>
       <FormField
         control={form.control}
-        name="duties"
+        name="programmes"
         render={() => (
           <FormItem>
             <FormLabel>
-              Duties{" "}
+              Programmes{" "}
               <span className="text-xs text-muted-foreground">
-                ({form.watch("duties")?.length})
+                ({form.watch("programmes")?.length})
               </span>
             </FormLabel>
             <FormField
@@ -95,7 +96,7 @@ export default function FormDuties({ form }: FormDutiesProps) {
             )}
           >
             <span className="text-ellipsis line-clamp-1">
-              {form.watch(`duties.${index}.value`)}
+              {form.watch(`programmes.${index}.value`)}
             </span>
             <Button
               type="button"

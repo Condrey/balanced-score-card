@@ -9,7 +9,9 @@ import {
 import { NdpData, OrganizationContextData } from "@/lib/types";
 import ButtonAddEditNdp from "./button-add-edit-ndp";
 import ButtonDeleteNdp from "./button-delete-ndp";
-import { Edit3Icon, Trash2Icon } from "lucide-react";
+import { Edit3Icon, PlusIcon, Trash2Icon } from "lucide-react";
+import TableOfOSPs from "./table-of-osps";
+import ButtonAddEditOsp from "./button-add-edit-osp";
 
 interface ListOfNDPsProps {
   ndp: NdpData;
@@ -18,11 +20,11 @@ interface ListOfNDPsProps {
 export default function ListOfNDPs({ ndp, context }: ListOfNDPsProps) {
   return (
     <Card>
-      <CardHeader className="flex gap-3 items-center justify-between">
+      <CardHeader className="flex flex-row gap-3 items-center w-full justify-between">
         <div>
           <CardTitle>NDP {ndp.version}</CardTitle>
           <CardDescription>
-            This is the NPD that is assigned to this FY
+            This is the NDP that is assigned to this FY{context.financialYear}
           </CardDescription>
         </div>
         <div className="flex gap-2 justify-between items-center">
@@ -45,26 +47,36 @@ export default function ListOfNDPs({ ndp, context }: ListOfNDPsProps) {
             message={"There are no strategies added to this NDP yet"}
           />
         ) : (
-          <ol className=" list-disc list-inside">
+          <ol className=" list-decimal list-inside">
             {ndp.programmes.map((programme, index) => (
               <li key={index}>{programme}</li>
             ))}
           </ol>
         )}
       </CardContent>
-      <CardHeader>
-        <CardTitle>OSPs information</CardTitle>
-        <CardDescription>
-          These are the Strategic objectives, Strategies, and Programmes
-        </CardDescription>
+      <CardHeader className="flex flex-row gap-3 items-center justify-between">
+        <div>
+          <CardTitle>OSPs information</CardTitle>
+          <CardDescription>
+            These are the Strategic objectives, Strategies, and Programmes
+          </CardDescription>
+        </div>
+        <ButtonAddEditOsp variant={"secondary"} size="icon" ndp={context.ndp!}>
+          <PlusIcon />
+        </ButtonAddEditOsp>
       </CardHeader>
       <CardContent>
         {!ndp.osps.length ? (
           <EmptyContainer
             message={"Please include the OSPs as they are missing"}
-          ></EmptyContainer>
+          >
+            {" "}
+            <ButtonAddEditOsp variant={"secondary"} ndp={context.ndp!}>
+              Add a new set of OSP
+            </ButtonAddEditOsp>
+          </EmptyContainer>
         ) : (
-          <div></div>
+          <TableOfOSPs osps={ndp.osps} />
         )}
       </CardContent>
     </Card>
