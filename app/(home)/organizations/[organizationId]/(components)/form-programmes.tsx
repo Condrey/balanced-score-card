@@ -75,7 +75,8 @@ export default function FormProgrammes({ form }: FormProgrammesProps) {
                         <PlusIcon className="h-4 w-4" />
                       </Button>
                     </div>
-                  </FormControl>
+                  </FormControl>            <FormMessage />
+
                 </FormItem>
               )}
             />

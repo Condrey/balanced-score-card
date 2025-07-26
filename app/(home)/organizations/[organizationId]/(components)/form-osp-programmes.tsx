@@ -60,7 +60,7 @@ export default function FormOspProgrammes({ form }: FormOspProgrammesProps) {
                   <FormControl>
                     <div className="flex items-center  gap-2">
                       <Input
-                        placeholder="Enter a programme from the NDP"
+                        placeholder="Enter an OSP programme"
                         onKeyPress={(e) =>
                           e.key === "Enter" &&
                           (e.preventDefault(), form2.handleSubmit(addValue)())
@@ -76,7 +76,8 @@ export default function FormOspProgrammes({ form }: FormOspProgrammesProps) {
                         <PlusIcon className="h-4 w-4" />
                       </Button>
                     </div>
-                  </FormControl>
+                  </FormControl>            <FormMessage />
+
                 </FormItem>
               )}
             />

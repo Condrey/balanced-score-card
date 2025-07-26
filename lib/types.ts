@@ -9,7 +9,7 @@ export type PositionData = Prisma.PositionGetPayload<{
 }>;
 
 export const ospDataInclude = {
-  // ndp:true
+  ndp:true
 } satisfies Prisma.OspInclude;
 export type OspData = Prisma.OspGetPayload<{
   include: typeof ospDataInclude;

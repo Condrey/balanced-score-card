@@ -26,7 +26,7 @@ async function organizationById(id: string) {
 export const getOrganizationById = cache(organizationById);
 
 export async function upsertOrganizationContext(
-  input: OrganizationContextSchema,
+  input: OrganizationContextSchema
 ) {
   // TODO: perform auth
   const { id, financialYear, mandate, vision, mission, goal, organizationId } =
@@ -107,11 +107,11 @@ export async function upsertOsp(input: OspSchema) {
     .map((p) => p.value)
     .filter(Boolean) as string[];
   return await prisma.ndp.update({
-    where: { id: ndpId },
+    where: { id: ndpId || undefined },
     data: {
       osps: {
         upsert: {
-          where: { id: id || undefined },
+          where: { id },
           create: {
             strategicObjective,
             strategies: formattedStrategies,

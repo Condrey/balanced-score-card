@@ -4,59 +4,55 @@ import ResponsiveDrawer from "@/components/responsive-drawer";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import LoadingButton from "@/components/ui/loading-button";
-import { NdpData } from "@/lib/types";
+import { OspData } from "@/lib/types";
 import { useState } from "react";
-import { deleteNdpMutation } from "../mutation";
+import { deleteOspMutation } from "../mutation";
 
-interface ButtonDeleteNdpProps extends ButtonProps {
-  ndp: NdpData;
-  organizationId: string;
+interface ButtonDeleteOspProps extends ButtonProps {
+  osp: OspData;
 }
 
-export default function ButtonDeleteNdp({
-  ndp,
-  organizationId,
+export default function ButtonDeleteOsp({
+  osp,
   ...props
-}: ButtonDeleteNdpProps) {
+}: ButtonDeleteOspProps) {
   const [open, setOpen] = useState(false);
   return (
     <>
       <Button
-        title={ndp ? "Edit Ndp" : "Add Ndp"}
+        title={osp ? "Edit Osp" : "Add Osp"}
         onClick={() => setOpen(true)}
         {...props}
       />
-      <DialogDeleteNdp
+      <DialogDeleteOsp
         open={open}
         setOpen={setOpen}
-        ndp={ndp}
-        organizationId={organizationId}
+        osp={osp}
       />
     </>
   );
 }
 
-interface DialogDeleteNdpProps {
+interface DialogDeleteOspProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  ndp: NdpData;
-  organizationId: string;
+  osp: OspData;
 }
-export function DialogDeleteNdp({
+export function DialogDeleteOsp({
   open,
   setOpen,
-  ndp,
-  organizationId,
-}: DialogDeleteNdpProps) {
-  const { isPending, mutate } = deleteNdpMutation(organizationId);
-  const deleteItem = () => mutate(ndp.id, { onSuccess: () => setOpen(false) });
+  osp,
+  
+}: DialogDeleteOspProps) {
+  const { isPending, mutate } = deleteOspMutation();
+  const deleteItem = () => mutate(osp.id, { onSuccess: () => setOpen(false) });
 
   return (
     <ResponsiveDrawer
       open={open}
       setOpen={setOpen}
-      title={`Delete NDP ${ndp.version} version`}
-      description="Please know that this action can not be undone, proceed with caution. This will delete the NDP and all its OSPs"
+      title={`Delete OSP`}
+      description="Please know that this action can not be undone, proceed with caution. This will delete the OSP and all its strategies and programmes."
     >
       <DialogFooter>
         <Button variant={"outline"} onClick={() => setOpen(false)}>

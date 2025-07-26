@@ -11,9 +11,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
-import { NdpData, OspData } from "@/lib/types";
+import { OspData } from "@/lib/types";
 import { ospSchema, OspSchema } from "@/lib/validations/others";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Ndp } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { upsertOspMutation } from "../mutation";
 import FormOspProgrammes from "./form-osp-programmes";
@@ -23,7 +24,7 @@ interface FormAddEditOspProps {
   osp?: OspData;
   open: boolean;
   setOpen: (open: boolean) => void;
-  ndp: NdpData;
+  ndp: Ndp;
 }
 
 export default function FormAddEditOsp({
@@ -42,9 +43,9 @@ export default function FormAddEditOsp({
       strategies: osp?.strategies.map((p) => ({ value: p })) || [],
     },
   });
-  const { mutate, isPending } = upsertOspMutation(ndp.id!);
+  const { mutate, isPending } = upsertOspMutation();
   const onSubmit = (input: OspSchema) =>
-    mutate(input, { onSuccess: () => setOpen(false) });
+    mutate(input, { onSuccess: () =>{form.reset(); setOpen(false)} });
 
   return (
     <ResponsiveDrawer
@@ -56,7 +57,7 @@ export default function FormAddEditOsp({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-4 *:flex-1 w-full md:divide-x md:flex-row"
+          className="flex flex-col gap-4 *:flex-1 w-full border-t md:divide-x md:flex-row"
         >
           <div className="flex flex-col gap-4">
             <FormField
@@ -75,10 +76,11 @@ export default function FormAddEditOsp({
                 </FormItem>
               )}
             />
-            <FormOspProgrammes form={form} />
+            <FormOspStrategies form={form} />
           </div>
           <div className="flex flex-col gap-4 md:ps-4">
-            <FormOspStrategies form={form} />
+                        <FormOspProgrammes form={form} />
+
             <LoadingButton loading={isPending} type="submit" className="w-full">
               {osp ? "Update" : "Create"}
             </LoadingButton>

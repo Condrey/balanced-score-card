@@ -43,13 +43,13 @@ export default function FormOspStrategies({ form }: FormOspStrategiesProps) {
     <>
       <FormField
         control={form.control}
-        name="programmes"
+        name="strategies"
         render={() => (
           <FormItem>
             <FormLabel>
-              Programmes{" "}
+              Strategies{" "}
               <span className="text-xs text-muted-foreground">
-                ({form.watch("programmes")?.length})
+                ({form.watch("strategies")?.length})
               </span>
             </FormLabel>
             <FormField
@@ -60,7 +60,7 @@ export default function FormOspStrategies({ form }: FormOspStrategiesProps) {
                   <FormControl>
                     <div className="flex items-center  gap-2">
                       <Input
-                        placeholder="Enter a programme from the NDP"
+                        placeholder="Enter an OSP strategy"
                         onKeyPress={(e) =>
                           e.key === "Enter" &&
                           (e.preventDefault(), form2.handleSubmit(addValue)())
@@ -76,7 +76,8 @@ export default function FormOspStrategies({ form }: FormOspStrategiesProps) {
                         <PlusIcon className="h-4 w-4" />
                       </Button>
                     </div>
-                  </FormControl>
+                  </FormControl>            <FormMessage />
+
                 </FormItem>
               )}
             />
@@ -96,7 +97,7 @@ export default function FormOspStrategies({ form }: FormOspStrategiesProps) {
             )}
           >
             <span className="text-ellipsis line-clamp-1">
-              {form.watch(`programmes.${index}.value`)}
+              {form.watch(`strategies.${index}.value`)}
             </span>
             <Button
               type="button"

@@ -1,11 +1,12 @@
 import { Button, ButtonProps } from "@/components/ui/button";
-import { OspData, OrganizationContextData, NdpData } from "@/lib/types";
+import { OspData } from "@/lib/types";
+import { Ndp } from "@prisma/client";
 import { useState } from "react";
 import FormAddEditOsp from "./form-add-edit-osp";
 
 interface ButtonAddEditOspProps extends ButtonProps {
   osp?: OspData;
-  ndp: NdpData;
+  ndp: Ndp;
 }
 
 export default function ButtonAddEditOsp({
