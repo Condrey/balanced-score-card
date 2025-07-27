@@ -34,9 +34,10 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Organization, Position } from "@prisma/client";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import LoadingButton from "@/components/ui/loading-button";
 
 interface BSCInitialDataFormProps {
   data: {
@@ -51,6 +52,7 @@ export default function BSCInitialDataForm({
 }: BSCInitialDataFormProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname()
   const schema = z.object({
     position: positionSchema.optional(),
     organization: organizationSchema.required(),
@@ -69,7 +71,10 @@ export default function BSCInitialDataForm({
     },
   });
   function handleSubmit(input: Schema) {
-    router.push(``);
+    const params = new URLSearchParams(searchParams.toString())
+    params.set('position',input.position?.id!)
+    params.set('organization',input.organization?.id!)
+    router.push(pathname+'?'+params.toString());
   }
   return (
     <Form {...form}>
@@ -221,6 +226,9 @@ export default function BSCInitialDataForm({
         ) : (
           <EmptyContainer message="The database has no positions. Please contact the admin for further guidance" />
         )}
+        <LoadingButton loading={form.formState.isSubmitting} className='w-full'>
+            Continue
+        </LoadingButton>
       </form>
     </Form>
   );
