@@ -128,8 +128,7 @@ export function deleteOspMutation() {
       const queryKey: QueryKey = ["organization"];
 
       await queryClient.cancelQueries({ queryKey });
-            queryClient.invalidateQueries({ queryKey });
-
+      queryClient.invalidateQueries({ queryKey });
     },
     onError: (error, variables, context) => {
       console.error(error);

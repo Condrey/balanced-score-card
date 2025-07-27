@@ -96,7 +96,7 @@ export default function FormSupervisor({ form }: FormSupervisorProps) {
                   <CommandGroup>
                     {data.map((d) => (
                       <CommandItem
-                        value={d.id}
+                        value={d.jobTitle}
                         key={d.id}
                         onSelect={() => {
                           form.setValue("reportsToId", d.id);

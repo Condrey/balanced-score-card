@@ -18,8 +18,10 @@ interface TableOfOSPsProps {
 
 export default function TableOfOSPs({ osps }: TableOfOSPsProps) {
   return (
-    <Table  className="border ">
-      <TableCaption  className="caption-top">List of Strategic Objectives, strategies, and programmes.</TableCaption>
+    <Table className="border ">
+      <TableCaption className="caption-top">
+        List of Strategic Objectives, strategies, and programmes.
+      </TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead>#</TableHead>
@@ -31,10 +33,7 @@ export default function TableOfOSPs({ osps }: TableOfOSPsProps) {
       </TableHeader>
       <TableBody>
         {osps.map((value, index) => (
-          <TableRow
-            key={value.id}
-            className="*:place-content-start "
-          >
+          <TableRow key={value.id} className="*:place-content-start ">
             <TableCell>{index + 1}</TableCell>
             <TableCell>{value.strategicObjective}</TableCell>
             <TableCell>

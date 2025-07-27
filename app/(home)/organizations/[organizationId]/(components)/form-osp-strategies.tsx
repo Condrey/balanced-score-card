@@ -76,8 +76,8 @@ export default function FormOspStrategies({ form }: FormOspStrategiesProps) {
                         <PlusIcon className="h-4 w-4" />
                       </Button>
                     </div>
-                  </FormControl>            <FormMessage />
-
+                  </FormControl>{" "}
+                  <FormMessage />
                 </FormItem>
               )}
             />

@@ -8,8 +8,19 @@ export type PositionData = Prisma.PositionGetPayload<{
   include: typeof positionDataInclude;
 }>;
 
+export const bSCDataInclude = {
+  supervisee: true,
+  supervisor: true,
+  behavioralAttributes: true,
+  coreValues: true,
+  performanceObjectives: true,
+} satisfies Prisma.BSCInclude;
+export type BSCData = Prisma.BSCGetPayload<{
+  include: typeof bSCDataInclude;
+}>;
+
 export const ospDataInclude = {
-  ndp:true
+  ndp: true,
 } satisfies Prisma.OspInclude;
 export type OspData = Prisma.OspGetPayload<{
   include: typeof ospDataInclude;

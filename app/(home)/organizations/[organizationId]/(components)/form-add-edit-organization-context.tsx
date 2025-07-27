@@ -49,7 +49,12 @@ export default function FormAddEditOrganizationContext({
   });
   const { mutate, isPending } = upsertOrganizationContextMutation();
   const onSubmit = (input: OrganizationContextSchema) =>
-    mutate(input, { onSuccess: () => {form.reset();setOpen(false)} });
+    mutate(input, {
+      onSuccess: () => {
+        form.reset();
+        setOpen(false);
+      },
+    });
 
   return (
     <ResponsiveDrawer

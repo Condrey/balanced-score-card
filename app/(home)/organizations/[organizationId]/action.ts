@@ -26,7 +26,7 @@ async function organizationById(id: string) {
 export const getOrganizationById = cache(organizationById);
 
 export async function upsertOrganizationContext(
-  input: OrganizationContextSchema
+  input: OrganizationContextSchema,
 ) {
   // TODO: perform auth
   const { id, financialYear, mandate, vision, mission, goal, organizationId } =

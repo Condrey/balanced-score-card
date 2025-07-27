@@ -45,7 +45,12 @@ export default function FormAddEditOsp({
   });
   const { mutate, isPending } = upsertOspMutation();
   const onSubmit = (input: OspSchema) =>
-    mutate(input, { onSuccess: () =>{form.reset(); setOpen(false)} });
+    mutate(input, {
+      onSuccess: () => {
+        form.reset();
+        setOpen(false);
+      },
+    });
 
   return (
     <ResponsiveDrawer
@@ -79,7 +84,7 @@ export default function FormAddEditOsp({
             <FormOspStrategies form={form} />
           </div>
           <div className="flex flex-col gap-4 md:ps-4">
-                        <FormOspProgrammes form={form} />
+            <FormOspProgrammes form={form} />
 
             <LoadingButton loading={isPending} type="submit" className="w-full">
               {osp ? "Update" : "Create"}

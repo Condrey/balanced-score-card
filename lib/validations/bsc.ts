@@ -139,6 +139,7 @@ export const behavioralAttributeSchema = z.object({
 // Complete BSC validation schema
 export const bscSchema = z
   .object({
+    id: z.string().optional(),
     year: z
       .number()
       .min(2020)

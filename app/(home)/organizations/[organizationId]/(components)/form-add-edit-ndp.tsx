@@ -43,7 +43,12 @@ export default function FormAddEditNdp({
   const onSubmit = (input: NdpSchema) =>
     mutate(
       { organizationContextId: context.id, input },
-      { onSuccess: () =>{form.reset(); setOpen(false)} },
+      {
+        onSuccess: () => {
+          form.reset();
+          setOpen(false);
+        },
+      },
     );
 
   return (

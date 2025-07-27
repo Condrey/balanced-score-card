@@ -4,46 +4,46 @@ import ResponsiveDrawer from "@/components/responsive-drawer";
 import { Button, ButtonProps } from "@/components/ui/button";
 import { DialogFooter } from "@/components/ui/dialog";
 import LoadingButton from "@/components/ui/loading-button";
-import { OspData } from "@/lib/types";
+import { BSCData } from "@/lib/types";
 import { useState } from "react";
-import { deleteOspMutation } from "../mutation";
+import { deleteBSCMutation } from "./mutation";
 
-interface ButtonDeleteOspProps extends ButtonProps {
-  osp: OspData;
+interface ButtonDeleteBSCProps extends ButtonProps {
+  bSC: BSCData;
 }
 
-export default function ButtonDeleteOsp({
-  osp,
+export default function ButtonDeleteBSC({
+  bSC,
   ...props
-}: ButtonDeleteOspProps) {
+}: ButtonDeleteBSCProps) {
   const [open, setOpen] = useState(false);
   return (
     <>
       <Button
-        title={osp ? "Edit Osp" : "Add Osp"}
+        title={bSC ? "Edit BSC" : "Add BSC"}
         onClick={() => setOpen(true)}
         {...props}
       />
-      <DialogDeleteOsp open={open} setOpen={setOpen} osp={osp} />
+      <DialogDeleteBSC open={open} setOpen={setOpen} bSC={bSC} />
     </>
   );
 }
 
-interface DialogDeleteOspProps {
+interface DialogDeleteBSCProps {
   open: boolean;
   setOpen: (open: boolean) => void;
-  osp: OspData;
+  bSC: BSCData;
 }
-export function DialogDeleteOsp({ open, setOpen, osp }: DialogDeleteOspProps) {
-  const { isPending, mutate } = deleteOspMutation();
-  const deleteItem = () => mutate(osp.id, { onSuccess: () => setOpen(false) });
+export function DialogDeleteBSC({ open, setOpen, bSC }: DialogDeleteBSCProps) {
+  const { isPending, mutate } = deleteBSCMutation();
+  const deleteItem = () => mutate(bSC.id, { onSuccess: () => setOpen(false) });
 
   return (
     <ResponsiveDrawer
       open={open}
       setOpen={setOpen}
-      title={`Delete OSP`}
-      description="Please know that this action can not be undone, proceed with caution. This will delete the OSP and all its strategies and programmes."
+      title={`Delete this BSC`}
+      description="Please know that this action can not be undone, proceed with caution."
     >
       <DialogFooter>
         <Button variant={"outline"} onClick={() => setOpen(false)}>

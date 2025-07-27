@@ -26,11 +26,12 @@ import {
   getPerformanceLevelDescription,
 } from "@/lib/bsc-calculations";
 
-import { ParticularsSection } from "./sections/particulars-section";
-import { StrategicElementsSection } from "./sections/strategic-elements-section";
-import { PerformancePlanSection } from "./sections/performance-plan-section";
-import { BehavioralAssessmentSection } from "./sections/behavioral-assessment-section";
+import { ParticularsSection } from "./particulars-section";
+import { StrategicElementsSection } from "./strategic-elements-section";
+import { PerformancePlanSection } from "./performance-plan-section";
+import { BehavioralAssessmentSection } from "./behavioral-assessment-section";
 import { BSCPreview } from "./bsc-preview";
+import { BSCData } from "@/lib/types";
 
 const steps = [
   {
@@ -59,7 +60,10 @@ const steps = [
   },
 ];
 
-export function BSCForm() {
+interface BSCFormProps {
+  bSC: BSCData | undefined | null;
+}
+export function BSCForm({ bSC }: BSCFormProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 

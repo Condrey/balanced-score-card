@@ -76,8 +76,8 @@ export default function FormOspProgrammes({ form }: FormOspProgrammesProps) {
                         <PlusIcon className="h-4 w-4" />
                       </Button>
                     </div>
-                  </FormControl>            <FormMessage />
-
+                  </FormControl>{" "}
+                  <FormMessage />
                 </FormItem>
               )}
             />
