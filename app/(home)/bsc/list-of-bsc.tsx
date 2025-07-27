@@ -27,7 +27,7 @@ export default function ListOfBSCs({ bSCs }: ListOfBSCsProps) {
         <ErrorContainer errorMessage="Failed to load bSCs" query={query} />
       ) : status === "success" && !data.length ? (
         <EmptyContainer message={"There are no bSCs added yet."}>
-          <ButtonAddEditBSC variant={"secondary"}>
+          <ButtonAddEditBSC variant={"secondary"} >
             Create a new one
           </ButtonAddEditBSC>
         </EmptyContainer>
@@ -38,7 +38,7 @@ export default function ListOfBSCs({ bSCs }: ListOfBSCsProps) {
           columns={useBSCColumns}
           filterColumn={{ id: "jobTitle", label: "Job title" }}
         >
-          <ButtonAddEditBSC size={"icon"}>
+          <ButtonAddEditBSC size={"icon"} >
             <PlusIcon />
           </ButtonAddEditBSC>
         </DataTable>

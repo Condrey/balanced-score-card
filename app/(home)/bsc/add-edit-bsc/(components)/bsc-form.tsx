@@ -4,7 +4,6 @@ import React from "react";
 
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Card,
   CardContent,
@@ -17,7 +16,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { CheckCircle, FileText, Users, Target, BarChart3 } from "lucide-react";
 
-import { bscSchema, type BSCFormData } from "@/lib/validations/bsc";
+import {  bscSchema, type BSCFormData } from "@/lib/validations/bsc";
 import {
   calculateOverallScore,
   calculatePerformanceScore,
@@ -31,7 +30,10 @@ import { StrategicElementsSection } from "./strategic-elements-section";
 import { PerformancePlanSection } from "./performance-plan-section";
 import { BehavioralAssessmentSection } from "./behavioral-assessment-section";
 import { BSCPreview } from "./bsc-preview";
-import { BSCData } from "@/lib/types";
+import { BSCData, OrganizationContextData, OrganizationData, PositionData } from "@/lib/types";
+import { Organization } from "@prisma/client";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 const steps = [
   {
@@ -62,43 +64,56 @@ const steps = [
 
 interface BSCFormProps {
   bSC: BSCData | undefined | null;
+  organizationContext: OrganizationContextData|null;
+  position:PositionData|null;
 }
-export function BSCForm({ bSC }: BSCFormProps) {
+export function BSCForm({ bSC,organizationContext,position }: BSCFormProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 
-  const form = useForm<BSCFormData>({
-    resolver: zodResolver(bscSchema),
-    defaultValues: {
+  const form = useForm<z.infer<typeof bscSchema>>({
+    resolver:zodResolver(bscSchema),
+
+     defaultValues: {
       year: new Date().getFullYear(),
-      supervisee: {
-        employeeNumber: "",
-        name: "",
-        jobTitle: "",
-        salaryScale: "",
+      supervisee: bSC?.supervisee||{
+        employeeNumber:'',
+        jobTitle: position?.jobTitle||'',
+        salaryScale: position?.reportsTo?.salaryScale||'',
+        name:''
       },
-      supervisor: {
-        employeeNumber: "",
-        name: "",
-        jobTitle: "",
-        salaryScale: "",
+      supervisor: bSC?.supervisor||{
+         employeeNumber:'',
+        jobTitle: position?.reportsTo?.jobTitle||'',
+        salaryScale: position?.reportsTo?.salaryScale||'',
+        name:'',
       },
-      strategicElements: {
-        mandate: "",
-        vision: "",
-        mission: "",
-        goal: "",
-        ndpProgrammes: [],
-        departmentalMandate: "",
-        strategicObjectives: [],
+      strategicElements:  {
+        mandate: bSC?.mandate||position?.departmentalMandate ||'',
+        vision: bSC?.vision|| organizationContext?.vision||"",
+        mission:bSC?.mission||organizationContext?.mission|| "",
+        goal: bSC?.goal|| organizationContext?.goal||"",
+        ndpProgrammes: bSC?bSC.ndpProgrammes.map(n=>({value:n})): [],
+        departmentalMandate: bSC?.departmentalMandate|| "",
+        strategicObjectives: bSC?bSC.strategicObjectives.map(s=>({value:s})): [],
       },
-      performanceObjectives: [],
-      coreValues: {
-        values: [],
-        acronym: "",
+      performanceObjectives: bSC?bSC.performanceObjectives.map(p=>({
+        ...p,
+        score:p.score||0,
+        actions:p.actions.map(a=>({value:a})),
+        expectedResults:p.expectedResults.map(a=>({value:a})),
+        kpis:p.kpis.map(a=>({value:a})),
+        comments:p.comments||'',
+      })):[],
+      coreValues:bSC? {acronym:bSC.coreValues.acronym,values:bSC.coreValues.values.map(v=>({value:v}))}:{
+        acronym:'',values:[]
       },
-      behavioralAttributes: [],
+      behavioralAttributes: bSC?bSC.behavioralAttributes.map(b=>({
+        ...b,commentsJustification:b.commentsJustification!,
+        score:b.score||0
+      })): [],
     },
+   
   });
 
   const watchedData = form.watch();

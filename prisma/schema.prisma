@@ -20,7 +20,7 @@ model Position {
   responsibleFor      Position[] @relation("PositionReportsTo")
   duties              String[]
   createdAt           DateTime   @default(now())
-  updatedAt           DateTime   @updatedAt @default(now())
+  updatedAt           DateTime   @default(now()) @updatedAt
 
   @@map("positions")
 }
@@ -42,7 +42,7 @@ model OrganizationContext {
   vision         String
   mission        String
   goal           String
-  ndp            Ndp  ?         @relation(fields: [ndpId], references: [id], onDelete: Cascade)
+  ndp            Ndp?          @relation(fields: [ndpId], references: [id], onDelete: Cascade)
   Organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String?
   ndpId          String?
@@ -119,7 +119,7 @@ model BSC {
   performanceObjectives PerformanceObjective[]
 
   // Behavioral Assessment
-  coreValues           CoreValue[]
+  coreValues           CoreValue             @relation(fields: [coreValueId], references: [id])
   behavioralAttributes BehavioralAttribute[]
 
   // Calculated Scores
@@ -127,6 +127,7 @@ model BSC {
   behavioralScore  Float            @default(0) // Out of 20%
   overallScore     Float            @default(0) // Total score
   performanceLevel PerformanceLevel @default(UNSATISFACTORY)
+  coreValueId      String
 
   @@map("bscs")
 }
@@ -149,12 +150,11 @@ model PerformanceObjective {
 }
 
 model CoreValue {
-  id    String @id @default(uuid())
-  bscId String
-  bsc   BSC    @relation(fields: [bscId], references: [id], onDelete: Cascade)
+  id String @id @default(uuid())
 
   values  String[]
   acronym String
+  bscs     BSC[]
 
   @@map("core_values")
 }

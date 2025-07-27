@@ -1,8 +1,11 @@
 "use client";
 
-import { Button, ButtonProps } from "@/components/ui/button";
+import { ButtonProps } from "@/components/ui/button";
+import LoadingButton from "@/components/ui/loading-button";
+import { useCustomSearchParams } from "@/hooks/use-custom-search-param";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { useState } from "react";
+import { useTransition } from "react";
 
 interface ButtonAddEditBSCProps extends ButtonProps {}
 
@@ -10,13 +13,21 @@ export default function ButtonAddEditBSC({
   children,
   ...props
 }: ButtonAddEditBSCProps) {
-  const [open, setOpen] = useState(false);
+  const [isPending, startTransition] = useTransition();
+  const { getNavigationLinkWithPathnameWithoutUpdate } =
+    useCustomSearchParams();
+  const newUrl =
+    getNavigationLinkWithPathnameWithoutUpdate("/bsc/add-edit-bsc");
   return (
-    <>
-      <Button onClick={() => setOpen(true)} {...props} asChild />
-      <Link href={"/bsc/add-edit-bsc"} className="flex gap-2 items-center">
+    <LoadingButton
+      onClick={() => startTransition(() => {})}
+      loading={isPending}
+      {...props}
+      asChild
+    >
+      <Link href={newUrl} className={cn("flex gap-2 items-center")}>
         {children}
       </Link>
-    </>
+    </LoadingButton>
   );
 }

@@ -43,8 +43,8 @@ export async function upsertBSC(input: BSCFormData) {
       goal,
       mandate,
       mission,
-      ndpProgrammes,
-      strategicObjectives,
+      ndpProgrammes:ndpProgrammes.map(n=>n.value),
+      strategicObjectives:strategicObjectives.map(s=>s.value),
       vision,
       year,
       supervisor: {
@@ -60,13 +60,22 @@ export async function upsertBSC(input: BSCFormData) {
         },
       },
       coreValues: {
-        createMany: { data: coreValues, skipDuplicates: true },
-      },
+ connectOrCreate: {
+          where: { id: coreValues.id },
+          create: {acronym:coreValues.acronym,values: coreValues.values.map(v=>v.value)},
+        },      },
       behavioralAttributes: {
         createMany: { data: behavioralAttributes, skipDuplicates: true },
       },
       performanceObjectives: {
-        createMany: { data: performanceObjectives, skipDuplicates: true },
+        createMany: { data: performanceObjectives.map(
+          p=>({
+            ...p,
+            actions:p.actions.map(a=>a.value),
+            kpis:p.kpis.map(a=>a.value),
+            expectedResults:p.expectedResults.map(a=>a.value),
+          })
+        ), skipDuplicates: true },
       },
     },
     update: {
@@ -74,8 +83,8 @@ export async function upsertBSC(input: BSCFormData) {
       goal,
       mandate,
       mission,
-      ndpProgrammes,
-      strategicObjectives,
+      ndpProgrammes:ndpProgrammes.map(n=>n.value),
+      strategicObjectives:strategicObjectives.map(s=>s.value),
       vision,
       year,
       supervisor: {
@@ -91,13 +100,22 @@ export async function upsertBSC(input: BSCFormData) {
         },
       },
       coreValues: {
-        createMany: { data: coreValues, skipDuplicates: true },
-      },
+ connectOrCreate: {
+          where: { id: coreValues.id },
+          create: {acronym:coreValues.acronym,values: coreValues.values.map(v=>v.value)},
+        },      },
       behavioralAttributes: {
         createMany: { data: behavioralAttributes, skipDuplicates: true },
       },
       performanceObjectives: {
-        createMany: { data: performanceObjectives, skipDuplicates: true },
+        createMany: { data: performanceObjectives.map(
+          p=>({
+            ...p,
+            actions:p.actions.map(a=>a.value),
+            kpis:p.kpis.map(a=>a.value),
+            expectedResults:p.expectedResults.map(a=>a.value),
+          })
+        ), skipDuplicates: true },
       },
     },
     include: bSCDataInclude,

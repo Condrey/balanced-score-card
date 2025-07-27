@@ -4,39 +4,42 @@ import EmptyContainer from "@/components/query-containers/empty-container";
 import { Button } from "@/components/ui/button";
 
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from "@/components/ui/form";
 
 import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
+    Command,
+    CommandEmpty,
+    CommandGroup,
+    CommandInput,
+    CommandItem,
+    CommandList,
 } from "@/components/ui/command";
+import LoadingButton from "@/components/ui/loading-button";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import {
-  organizationSchema,
-  PositionSchema,
-  positionSchema,
+    organizationSchema,
+    PositionSchema,
+    positionSchema,
 } from "@/lib/validations/others";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Organization, Position } from "@prisma/client";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useTransition } from "react";
 import { useForm } from "react-hook-form";
 import z from "zod";
+import { Input } from "@/components/ui/input";
 
 interface BSCInitialDataFormProps {
   data: {
@@ -44,16 +47,20 @@ interface BSCInitialDataFormProps {
     organizations: Organization[];
     position: Position | null;
     organization: Organization | null;
-  };
+  };    year:string
+
 }
 export default function BSCInitialDataForm({
-  data: { position, positions, organization, organizations },
+  data: { position, positions, organization, organizations, },year
 }: BSCInitialDataFormProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname()
+  const [isPending,startTransition] = useTransition()
   const schema = z.object({
     position: positionSchema.optional(),
     organization: organizationSchema.required(),
+    year:z.string()
   });
   type Schema = z.infer<typeof schema>;
   const form = useForm<Schema>({
@@ -66,14 +73,36 @@ export default function BSCInitialDataForm({
           } as PositionSchema)
         : undefined,
       organization: organization!,
+      year
     },
   });
-  function handleSubmit(input: Schema) {
-    router.push(``);
-  }
+  const handleSubmit=(input: Schema)=> 
+    startTransition(()=>{
+        const params = new URLSearchParams(searchParams.toString())
+    params.set('position',input.position?.id!)
+    params.set('organization',input.organization?.id!)
+    params.set('year',input.year)
+    router.push(pathname+'?'+params.toString());
+    })
+  
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
+        {/* <pre>{JSON.stringify(form.formState.errors,null,2)}</pre> */}
+        <FormField
+
+control={form.control}
+name="year"
+render={({field})=>(
+    <FormItem>
+        <FormLabel>Financial Year</FormLabel>
+        <FormControl>
+            <Input placeholder='e.g., 2025/2026' {...field}/>
+        </FormControl>
+        <FormMessage/>
+    </FormItem>
+)}
+        />
         {!!organizations && organizations.length ? (
           <FormField
             control={form.control}
@@ -194,6 +223,7 @@ export default function BSCInitialDataForm({
                                   duties: _position.duties.map((d) => ({
                                     value: d,
                                   })),
+                                  reportsToId:_position.reportsToId||''
                                 } as PositionSchema);
                               }}
                             >
@@ -221,6 +251,9 @@ export default function BSCInitialDataForm({
         ) : (
           <EmptyContainer message="The database has no positions. Please contact the admin for further guidance" />
         )}
+        <LoadingButton loading={isPending} className='w-full'>
+            Continue
+        </LoadingButton>
       </form>
     </Form>
   );

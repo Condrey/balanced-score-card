@@ -1,7 +1,9 @@
 import { z } from "zod";
+import { stringArraySchema } from "./others";
 
 // Employee validation schema
 export const employeeSchema = z.object({
+    id: z.string().optional(),
   employeeNumber: z
     .string()
     .min(1, "Employee number is required")
@@ -22,7 +24,8 @@ export const employeeSchema = z.object({
 
 // Strategic elements validation schema
 export const strategicElementsSchema = z.object({
-  mandate: z
+     id: z.string().optional(),
+ mandate: z
     .string()
     .min(10, "Mandate must be at least 10 characters")
     .describe("Organizational mandate or purpose"),
@@ -39,23 +42,24 @@ export const strategicElementsSchema = z.object({
     .min(10, "Goal must be at least 10 characters")
     .describe("Primary organizational goal"),
   ndpProgrammes: z
-    .array(z.string().min(1))
+    .array(stringArraySchema)
     .min(1, "At least one NDP programme is required")
     .describe(
-      "National Development Plan programmes the organization contributes to",
+      "National Development Plan programmes the organization contributes to ",
     ),
   departmentalMandate: z
     .string()
     .min(10, "Departmental mandate must be at least 10 characters")
     .describe("Specific mandate of the department"),
   strategicObjectives: z
-    .array(z.string().min(1))
+    .array(stringArraySchema)
     .min(1, "At least one strategic objective is required")
     .describe("Key strategic objectives to be achieved"),
 });
 
 // Performance objective validation schema
 export const performanceObjectiveSchema = z.object({
+    id: z.string().optional(),
   perspective: z
     .enum([
       "STAKEHOLDERS_CLIENTS",
@@ -74,15 +78,15 @@ export const performanceObjectiveSchema = z.object({
     .max(100)
     .describe("Weight/percentage allocation for this objective"),
   actions: z
-    .array(z.string().min(1))
+    .array(stringArraySchema)
     .min(1, "At least one action is required")
     .describe("Specific actions or activities to achieve the objective"),
   expectedResults: z
-    .array(z.string().min(1))
+    .array(stringArraySchema)
     .min(1, "At least one expected result is required")
     .describe("Expected outcomes or results from the actions"),
   kpis: z
-    .array(z.string().min(1))
+    .array(stringArraySchema)
     .min(1, "At least one KPI is required")
     .describe("Key Performance Indicators to measure success"),
   score: z
@@ -99,8 +103,10 @@ export const performanceObjectiveSchema = z.object({
 
 // Core values validation schema
 export const coreValuesSchema = z.object({
+      id: z.string().optional(),
+
   values: z
-    .array(z.string().min(1))
+    .array(stringArraySchema)
     .min(1, "At least one core value is required")
     .describe("List of organizational core values"),
   acronym: z
@@ -110,7 +116,8 @@ export const coreValuesSchema = z.object({
 });
 
 // Behavioral attribute validation schema
-export const behavioralAttributeSchema = z.object({
+export const behavioralAttributeSchema = z.object({    id: z.string().optional(),
+
   attribute: z
     .string()
     .min(2, "Attribute must be at least 2 characters")
@@ -174,46 +181,46 @@ export const bscSchema = z
       .min(1, "At least one behavioral attribute is required")
       .describe("List of behavioral attributes for assessment"),
   })
-  .refine(
-    (data) => {
-      // Validate that performance objectives percentages add up correctly for each perspective
-      const perspectivePercentages = {
-        STAKEHOLDERS_CLIENTS: 25,
-        FINANCIAL_STEWARDSHIP: 15,
-        INTERNAL_PROCESSES: 20,
-        MDA_LG_CAPACITY: 20,
-      };
+  // .refine(
+  //   (data) => {
+  //     // Validate that performance objectives percentages add up correctly for each perspective
+  //     const perspectivePercentages = {
+  //       STAKEHOLDERS_CLIENTS: 25,
+  //       FINANCIAL_STEWARDSHIP: 15,
+  //       INTERNAL_PROCESSES: 20,
+  //       MDA_LG_CAPACITY: 20,
+  //     };
 
-      const groupedObjectives = data.performanceObjectives.reduce(
-        (acc, obj) => {
-          if (!acc[obj.perspective]) acc[obj.perspective] = 0;
-          acc[obj.perspective] += obj.percentage;
-          return acc;
-        },
-        {} as Record<string, number>,
-      );
+  //     const groupedObjectives = data.performanceObjectives.reduce(
+  //       (acc, obj) => {
+  //         if (!acc[obj.perspective]) acc[obj.perspective] = 0;
+  //         acc[obj.perspective] += obj.percentage;
+  //         return acc;
+  //       },
+  //       {} as Record<string, number>,
+  //     );
 
-      for (const [perspective, expectedPercentage] of Object.entries(
-        perspectivePercentages,
-      )) {
-        const actualPercentage = groupedObjectives[perspective] || 0;
-        if (Math.abs(actualPercentage - expectedPercentage) > 0.01) {
-          return false;
-        }
-      }
+  //     for (const [perspective, expectedPercentage] of Object.entries(
+  //       perspectivePercentages,
+  //     )) {
+  //       const actualPercentage = groupedObjectives[perspective] || 0;
+  //       if (Math.abs(actualPercentage - expectedPercentage) > 0.01) {
+  //         return false;
+  //       }
+  //     }
 
-      // Validate that behavioral attributes percentages add up to 20%
-      const totalBehavioralPercentage = data.behavioralAttributes.reduce(
-        (sum, attr) => sum + attr.percentage,
-        0,
-      );
-      return Math.abs(totalBehavioralPercentage - 20) < 0.01;
-    },
-    {
-      message:
-        "Percentage allocations must match required distributions: Stakeholders/Clients (25%), Financial Stewardship (15%), Internal Processes (20%), MDA/LG Capacity (20%), and Behavioral Attributes (20%)",
-    },
-  );
+  //     // Validate that behavioral attributes percentages add up to 20%
+  //     const totalBehavioralPercentage = data.behavioralAttributes.reduce(
+  //       (sum, attr) => sum + attr.percentage,
+  //       0,
+  //     );
+  //     return Math.abs(totalBehavioralPercentage - 20) < 0.01;
+  //   },
+  //   {
+  //     message:
+  //       "Percentage allocations must match required distributions: Stakeholders/Clients (25%), Financial Stewardship (15%), Internal Processes (20%), MDA/LG Capacity (20%), and Behavioral Attributes (20%)",
+  //   },
+  // );
 
 // Type exports for use in components
 export type BSCFormData = z.infer<typeof bscSchema>;
