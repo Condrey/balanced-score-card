@@ -1,4 +1,4 @@
-import { Badge, badgeVariants } from "@/components/ui/badge";
+import { badgeVariants } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   FormControl,
@@ -92,7 +92,7 @@ export default function FormProgrammes({ form }: FormProgrammesProps) {
             key={field.id}
             className={cn(
               "gap-1 w-fit max-w-sm ",
-              badgeVariants({ variant: "secondary" }),
+              badgeVariants({ variant: "secondary" })
             )}
           >
             <span className="text-ellipsis line-clamp-1">

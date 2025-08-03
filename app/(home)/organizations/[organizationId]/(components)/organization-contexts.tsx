@@ -1,18 +1,18 @@
+import EmptyContainer from "@/components/query-containers/empty-container";
 import {
-  CardDescription,
   Card,
+  CardContent,
+  CardDescription,
   CardHeader,
   CardTitle,
-  CardContent,
 } from "@/components/ui/card";
-import { Tabs, TabsTrigger, TabsList, TabsContent } from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { OrganizationContextData } from "@/lib/types";
-import ButtonAddEditOrganizationContext from "./button-add-edit-organization-context";
 import { Edit3Icon, PlusIcon, Trash2Icon } from "lucide-react";
+import ButtonAddEditNdp from "./button-add-edit-ndp";
+import ButtonAddEditOrganizationContext from "./button-add-edit-organization-context";
 import ButtonDeleteOrganizationContext from "./button-delete-organization-context";
 import ListOfNDPs from "./list-of-ndps";
-import EmptyContainer from "@/components/query-containers/empty-container";
-import ButtonAddEditNdp from "./button-add-edit-ndp";
 
 interface OrganizationContextsProps {
   contexts: OrganizationContextData[];
@@ -46,6 +46,7 @@ export default function OrganizationContexts({
           ndp,
           id,
           organizationId,
+          coreValue,
         } = ctx;
         const ctxValues = [
           { label: "Financial Year", value: financialYear },
@@ -100,6 +101,22 @@ export default function OrganizationContexts({
                 ))}
               </CardContent>
             </Card>
+            {/* Core value  */}
+            {!coreValue ? (
+              <EmptyContainer
+                message={
+                  "It is evident that you do not have a core value submitted for this particular year. Please add"
+                }
+                className="border p-3 border-destructive text-destructive"
+              >
+                <ButtonAddEditNdp context={ctx} variant="secondary">
+                  Create the NDP
+                </ButtonAddEditNdp>
+              </EmptyContainer>
+            ) : (
+              <ListOfNDPs ndp={ndp!} context={ctx} />
+            )}
+            {/* National development programmes  */}
             {!ndp ? (
               <EmptyContainer
                 message={

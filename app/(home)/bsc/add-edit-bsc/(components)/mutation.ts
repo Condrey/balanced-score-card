@@ -16,7 +16,9 @@ export function upsertBSCMutation() {
           toast.success("BSC updated successfully");
           return oldData.map((p) => (p.id === data.id ? data : p));
         }
-        toast.success("BSC created successfully");
+        toast.success(
+          `BSC for ${variables.supervisee.name} created successfully`
+        );
         return [data, ...oldData];
       });
       queryClient.invalidateQueries({ queryKey });

@@ -7,6 +7,7 @@ import { UseFormReturn } from "react-hook-form";
 import { getAllPositions } from "./action";
 
 import { Button } from "@/components/ui/button";
+
 import {
   Command,
   CommandEmpty,
@@ -75,7 +76,7 @@ export default function FormSupervisor({ form }: FormSupervisorProps) {
                   role="combobox"
                   className={cn(
                     "w-full justify-between",
-                    !field.value && "text-muted-foreground",
+                    !field.value && "text-muted-foreground"
                   )}
                 >
                   {field.value
@@ -106,7 +107,7 @@ export default function FormSupervisor({ form }: FormSupervisorProps) {
                         <Check
                           className={cn(
                             "ml-auto",
-                            d.id === field.value ? "opacity-100" : "opacity-0",
+                            d.id === field.value ? "opacity-100" : "opacity-0"
                           )}
                         />
                       </CommandItem>

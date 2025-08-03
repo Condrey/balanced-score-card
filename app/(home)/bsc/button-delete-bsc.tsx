@@ -6,7 +6,7 @@ import { DialogFooter } from "@/components/ui/dialog";
 import LoadingButton from "@/components/ui/loading-button";
 import { BSCData } from "@/lib/types";
 import { useState } from "react";
-import { deleteBSCMutation } from "./mutation";
+import { deleteBSCMutation } from "./add-edit-bsc/(components)/mutation";
 
 interface ButtonDeleteBSCProps extends ButtonProps {
   bSC: BSCData;

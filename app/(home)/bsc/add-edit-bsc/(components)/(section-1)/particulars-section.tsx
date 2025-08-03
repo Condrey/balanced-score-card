@@ -25,7 +25,7 @@ export function ParticularsSection({ form }: ParticularsSectionProps) {
           name="year"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Year of Planning and Review</FormLabel>
+              <FormLabel>Financial Year of Planning and Review</FormLabel>
               <FormControl>
                 <Input
                   placeholder="Please enter year of planning and review"

@@ -46,6 +46,8 @@ model OrganizationContext {
   Organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   organizationId String?
   ndpId          String?
+  coreValue      CoreValue?    @relation(fields: [coreValueId], references: [id])
+  coreValueId    String?
 
   @@map("organization_contexts")
 }
@@ -96,7 +98,7 @@ model Employee {
 
 model BSC {
   id        String   @id @default(uuid())
-  year      Int
+  year      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -150,11 +152,11 @@ model PerformanceObjective {
 }
 
 model CoreValue {
-  id String @id @default(uuid())
-
-  values  String[]
-  acronym String
-  bscs     BSC[]
+  id                   String                @id @default(uuid())
+  values               String[]
+  acronym              String
+  bscs                 BSC[]
+  organizationContexts OrganizationContext[]
 
   @@map("core_values")
 }

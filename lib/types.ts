@@ -35,6 +35,7 @@ export type NdpData = Prisma.NdpGetPayload<{
 
 export const organizationContextDataInclude = {
   ndp: { include: ndpDataInclude },
+  coreValue: true,
 } satisfies Prisma.OrganizationContextInclude;
 export type OrganizationContextData = Prisma.OrganizationContextGetPayload<{
   include: typeof organizationContextDataInclude;

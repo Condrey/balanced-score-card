@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { type UseFormReturn, useFieldArray } from "react-hook-form";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -9,11 +9,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
   Table,
   TableBody,
@@ -22,8 +25,11 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Plus, X } from "lucide-react";
 import type { BSCFormData } from "@/lib/validations/bsc";
+import { X } from "lucide-react";
+import { type UseFormReturn, useFieldArray } from "react-hook-form";
+import Assessments from "./assessments";
+import FormCoreValues from "./form-core-values";
 
 interface BehavioralAssessmentSectionProps {
   form: UseFormReturn<BSCFormData>;
@@ -32,52 +38,10 @@ interface BehavioralAssessmentSectionProps {
 export function BehavioralAssessmentSection({
   form,
 }: BehavioralAssessmentSectionProps) {
-  const {
-    fields: valueFields,
-    append: appendValue,
-    remove: removeValue,
-  } = useFieldArray({
-    control: form.control,
-    name: "coreValues.values",
-  });
-
-  const {
-    fields: attributeFields,
-    append: appendAttribute,
-    remove: removeAttribute,
-  } = useFieldArray({
+  const { fields: attributeFields, remove: removeAttribute } = useFieldArray({
     control: form.control,
     name: "behavioralAttributes",
   });
-
-  const [newValue, setNewValue] = useState("");
-  const [newAttribute, setNewAttribute] = useState({
-    attribute: "",
-    percentage: 0,
-    description: "",
-    score: 0,
-    commentsJustification: "",
-  });
-
-  const addValue = () => {
-    if (newValue.trim()) {
-      appendValue(newValue.trim());
-      setNewValue("");
-    }
-  };
-
-  const addAttribute = () => {
-    if (newAttribute.attribute && newAttribute.description) {
-      appendAttribute(newAttribute);
-      setNewAttribute({
-        attribute: "",
-        percentage: 0,
-        description: "",
-        score: 0,
-        commentsJustification: "",
-      });
-    }
-  };
 
   const getTotalBehavioralPercentage = () => {
     return attributeFields.reduce((sum, _, index) => {
@@ -93,66 +57,37 @@ export function BehavioralAssessmentSection({
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader>
+        <CardHeader className="bg-secondary mb-2">
           <CardTitle>Core Values</CardTitle>
           <CardDescription>
             Define organizational core values and their acronym
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="flex gap-2">
-            <Input
-              value={newValue}
-              onChange={(e) => setNewValue(e.target.value)}
-              placeholder="Enter core value"
-              onKeyPress={(e) =>
-                e.key === "Enter" && (e.preventDefault(), addValue())
-              }
-            />
-            <Button type="button" onClick={addValue} size="icon">
-              <Plus className="h-4 w-4" />
-            </Button>
-          </div>
-
-          <div className="flex flex-wrap gap-2">
-            {valueFields.map((field, index) => (
-              <Badge
-                key={field.id}
-                variant="secondary"
-                className="flex items-center gap-1"
-              >
-                {form.watch(`coreValues.values.${index}`)}
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  className="h-4 w-4 p-0 hover:bg-destructive hover:text-destructive-foreground"
-                  onClick={() => removeValue(index)}
-                >
-                  <X className="h-3 w-3" />
-                </Button>
-              </Badge>
-            ))}
-          </div>
-
-          <div>
-            <Label htmlFor="coreValues.acronym">Acronym</Label>
-            <Input
-              id="coreValues.acronym"
-              {...form.register("coreValues.acronym")}
-              placeholder="Enter acronym for core values"
-            />
-            {form.formState.errors.coreValues?.acronym && (
-              <p className="text-sm text-destructive mt-1">
-                {form.formState.errors.coreValues.acronym.message}
-              </p>
+          {/* core values  */}
+          <FormCoreValues form={form} />
+          <FormField
+            control={form.control}
+            name="coreValues.acronym"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Acronym</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Enter acronym for core values"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
             )}
-          </div>
+          />
         </CardContent>
       </Card>
 
+      {/* assessments  */}
       <Card>
-        <CardHeader>
+        <CardHeader className="bg-secondary mb-2">
           <CardTitle>Behavioral Attributes Assessment</CardTitle>
           <CardDescription>
             Total allocation must equal 20%
@@ -165,95 +100,7 @@ export function BehavioralAssessmentSection({
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid gap-4">
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <Label>Behavioral Attribute</Label>
-                <Input
-                  value={newAttribute.attribute}
-                  onChange={(e) =>
-                    setNewAttribute((prev) => ({
-                      ...prev,
-                      attribute: e.target.value,
-                    }))
-                  }
-                  placeholder="Enter behavioral attribute"
-                />
-              </div>
-
-              <div>
-                <Label>Percentage</Label>
-                <Input
-                  type="number"
-                  min="0"
-                  max="20"
-                  step="0.1"
-                  value={newAttribute.percentage}
-                  onChange={(e) =>
-                    setNewAttribute((prev) => ({
-                      ...prev,
-                      percentage: Number.parseFloat(e.target.value) || 0,
-                    }))
-                  }
-                  placeholder="Enter percentage"
-                />
-              </div>
-            </div>
-
-            <div>
-              <Label>Description</Label>
-              <Textarea
-                value={newAttribute.description}
-                onChange={(e) =>
-                  setNewAttribute((prev) => ({
-                    ...prev,
-                    description: e.target.value,
-                  }))
-                }
-                placeholder="Describe the behavioral attribute"
-                rows={2}
-              />
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <Label>Score (0-100)</Label>
-                <Input
-                  type="number"
-                  min="0"
-                  max="100"
-                  value={newAttribute.score}
-                  onChange={(e) =>
-                    setNewAttribute((prev) => ({
-                      ...prev,
-                      score: Number.parseFloat(e.target.value) || 0,
-                    }))
-                  }
-                  placeholder="Enter score"
-                />
-              </div>
-
-              <div>
-                <Label>Comments & Justification</Label>
-                <Textarea
-                  value={newAttribute.commentsJustification}
-                  onChange={(e) =>
-                    setNewAttribute((prev) => ({
-                      ...prev,
-                      commentsJustification: e.target.value,
-                    }))
-                  }
-                  placeholder="Provide comments and justification"
-                  rows={2}
-                />
-              </div>
-            </div>
-
-            <Button type="button" onClick={addAttribute} className="w-full">
-              <Plus className="h-4 w-4 mr-2" />
-              Add Behavioral Attribute
-            </Button>
-          </div>
+          <Assessments form={form} />
         </CardContent>
       </Card>
 
@@ -280,16 +127,16 @@ export function BehavioralAssessmentSection({
                 <TableBody>
                   {attributeFields.map((field, index) => {
                     const attribute = form.watch(
-                      `behavioralAttributes.${index}.attribute`,
+                      `behavioralAttributes.${index}.attribute`
                     );
                     const description = form.watch(
-                      `behavioralAttributes.${index}.description`,
+                      `behavioralAttributes.${index}.description`
                     );
                     const percentage = form.watch(
-                      `behavioralAttributes.${index}.percentage`,
+                      `behavioralAttributes.${index}.percentage`
                     );
                     const score = form.watch(
-                      `behavioralAttributes.${index}.score`,
+                      `behavioralAttributes.${index}.score`
                     );
 
                     return (

@@ -1,5 +1,6 @@
 "use client";
 
+import { Badge } from "@/components/ui/badge";
 import {
   Card,
   CardContent,
@@ -7,10 +8,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import type { BSCFormData } from "@/lib/validations/bsc";
 import { PERSPECTIVE_ALLOCATIONS } from "@/lib/bsc-calculations";
+import type { BSCFormData } from "@/lib/validations/bsc";
 
 interface BSCPreviewProps {
   data: Partial<BSCFormData>;
@@ -20,7 +20,7 @@ export function BSCPreview({ data }: BSCPreviewProps) {
   if (!data.supervisee?.name && !data.supervisor?.name) {
     return (
       <Card>
-        <CardHeader>
+        <CardHeader className="bg-secondary mb-2">
           <CardTitle className="text-lg">BSC Preview</CardTitle>
           <CardDescription>Complete the form to see a preview</CardDescription>
         </CardHeader>

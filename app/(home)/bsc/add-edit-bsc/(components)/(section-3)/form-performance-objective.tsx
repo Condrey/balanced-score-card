@@ -1,7 +1,16 @@
 import { NumberInput } from "@/components/number-input/number-input";
+import { badgeVariants } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import {
+  Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -16,6 +25,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { PERSPECTIVE_ALLOCATIONS } from "@/lib/bsc-calculations";
+import { cn } from "@/lib/utils";
 import {
   BSCFormData,
   performanceObjectiveSchema,
@@ -23,7 +33,7 @@ import {
 } from "@/lib/validations/bsc";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PerspectiveType } from "@prisma/client";
-import { PlusIcon } from "lucide-react";
+import { PlusIcon, XIcon } from "lucide-react";
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
 import FormActionsPerformanceObjectives from "./form-actions-performance-objectives";
 import FormExpectedResultsPerformanceObjectives from "./form-expected-results-performance-objectives";
@@ -31,10 +41,14 @@ import FormKpisPerformanceObjectives from "./form-kpis-performance-objectives";
 
 interface FormPerformanceObjectivesProps {
   form: UseFormReturn<BSCFormData>;
+  isPending: boolean;
+  isError: boolean;
 }
 
 export default function FormPerformanceObjectives({
   form,
+  isPending,
+  isError,
 }: FormPerformanceObjectivesProps) {
   const form2 = useForm<PerformanceObjectiveSchema>({
     resolver: zodResolver(performanceObjectiveSchema),
@@ -51,7 +65,7 @@ export default function FormPerformanceObjectives({
     },
   });
 
-  const { append, fields, remove } = useFieldArray({
+  const { append, fields, remove, update } = useFieldArray({
     control: form.control,
     name: "performanceObjectives",
   });
@@ -62,7 +76,7 @@ export default function FormPerformanceObjectives({
     form2.reset();
   };
   return (
-    <>
+    <Form {...form2}>
       <FormField
         control={form.control}
         name="performanceObjectives"
@@ -158,6 +172,7 @@ export default function FormPerformanceObjectives({
                           {...field}
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -174,6 +189,7 @@ export default function FormPerformanceObjectives({
                           {...field}
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -187,11 +203,53 @@ export default function FormPerformanceObjectives({
                 <PlusIcon className="h-4 w-4 mr-2" />
                 Add Performance Objective
               </Button>
+              <Card className="bg-sidebar">
+                <CardHeader>
+                  <CardDescription>
+                    {watchedValues.length} objective(s) available
+                  </CardDescription>
+                </CardHeader>
+                <CardFooter>
+                  {watchedValues.map((wv, index) => (
+                    <div
+                      key={index}
+                      className={cn(
+                        badgeVariants({
+                          variant: "secondary",
+                          className: "space-x-2",
+                        })
+                      )}
+                    >
+                      {wv.perspective}{" "}
+                      <Button
+                        type="button"
+                        variant={"destructive"}
+                        size={"icon"}
+                        className="size-4 p-0"
+                        title="Delete this objective"
+                        onClick={() => remove(index)}
+                      >
+                        <XIcon />
+                        <span className="sr-only">Delete this objective</span>
+                      </Button>
+                    </div>
+                  ))}
+                </CardFooter>
+              </Card>
             </div>
-            <FormMessage />
+            {isPending && (
+              <FormDescription>
+                Ai is helping with your performance objectives...
+              </FormDescription>
+            )}
+            <FormMessage>
+              {isError &&
+                !form.watch("performanceObjectives").length &&
+                "Ai could not help with your performance objectives."}
+            </FormMessage>{" "}
           </FormItem>
         )}
       />
-    </>
+    </Form>
   );
 }

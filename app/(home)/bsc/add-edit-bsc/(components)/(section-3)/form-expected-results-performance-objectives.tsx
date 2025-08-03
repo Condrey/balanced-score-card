@@ -7,6 +7,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 import { PerformanceObjectiveSchema } from "@/lib/validations/bsc";
 import { stringArraySchema, StringArraySchema } from "@/lib/validations/others";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,12 +38,12 @@ export default function FormExpectedResultsPerformanceObjectives({
     form2.reset();
   };
   return (
-    <div>
+    <div className={cn(!!watchedValues.length && "border")}>
       <FormField
         control={form.control}
         name="expectedResults"
         render={() => (
-          <FormItem>
+          <FormItem className={cn(!!watchedValues.length && "bg-muted p-1")}>
             <FormLabel>
               Expected Results{" "}
               <span className="text-xs text-muted-foreground">
@@ -83,19 +84,24 @@ export default function FormExpectedResultsPerformanceObjectives({
         )}
       />
 
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-2 p-1">
         {fields.map((_, index) => (
           <FormField
+            key={index}
             control={form.control}
             name={`expectedResults.${index}`}
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <div className="gap-1.5 items-center w-fit max-w-sm flex ">
+                  <div className="gap-1.5 flex w-fit max-w-sm items-center ">
                     <Input
-                      placeholder={`Action for action ${index + 1}`}
+                      placeholder={`Result for number ${index + 1}`}
                       value={field.value.value}
-                      onChange={(e) => update(index, { value: e.target.value })}
+                      onChange={(e) =>
+                        form.setValue(`expectedResults.${index}`, {
+                          value: e.target.value,
+                        })
+                      }
                     />
                     <Button
                       type="button"
