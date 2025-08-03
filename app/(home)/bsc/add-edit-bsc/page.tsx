@@ -41,6 +41,7 @@ export default async function Page({ searchParams }: PageProps) {
         bSC={bSc}
         organizationContext={organizationContext}
         position={position}
+        year={year}
       />
     </main>
   );

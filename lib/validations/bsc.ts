@@ -93,7 +93,6 @@ export const performanceObjectiveSchema = z.object({
     .number()
     .min(0)
     .max(100)
-    .default(0)
     .describe("Actual performance score achieved"),
   comments: z
     .string()
@@ -135,7 +134,6 @@ export const behavioralAttributeSchema = z.object({    id: z.string().optional()
     .number()
     .min(0)
     .max(100)
-    .default(0)
     .describe("Score achieved for this behavioral attribute"),
   commentsJustification: z
     .string()
@@ -148,9 +146,8 @@ export const bscSchema = z
   .object({
     id: z.string().optional(),
     year: z
-      .number()
-      .min(2020)
-      .max(2050)
+      .string()
+      .min(1)
       .describe("Year of planning and review for this BSC"),
 
     // Supervisee and Supervisor
@@ -181,51 +178,51 @@ export const bscSchema = z
       .min(1, "At least one behavioral attribute is required")
       .describe("List of behavioral attributes for assessment"),
   })
-  // .refine(
-  //   (data) => {
-  //     // Validate that performance objectives percentages add up correctly for each perspective
-  //     const perspectivePercentages = {
-  //       STAKEHOLDERS_CLIENTS: 25,
-  //       FINANCIAL_STEWARDSHIP: 15,
-  //       INTERNAL_PROCESSES: 20,
-  //       MDA_LG_CAPACITY: 20,
-  //     };
+  .refine(
+    (data) => {
+      // Validate that performance objectives percentages add up correctly for each perspective
+      const perspectivePercentages = {
+        STAKEHOLDERS_CLIENTS: 25,
+        FINANCIAL_STEWARDSHIP: 15,
+        INTERNAL_PROCESSES: 20,
+        MDA_LG_CAPACITY: 20,
+      };
 
-  //     const groupedObjectives = data.performanceObjectives.reduce(
-  //       (acc, obj) => {
-  //         if (!acc[obj.perspective]) acc[obj.perspective] = 0;
-  //         acc[obj.perspective] += obj.percentage;
-  //         return acc;
-  //       },
-  //       {} as Record<string, number>,
-  //     );
+      const groupedObjectives = data.performanceObjectives.reduce(
+        (acc, obj) => {
+          if (!acc[obj.perspective]) acc[obj.perspective] = 0;
+          acc[obj.perspective] += obj.percentage;
+          return acc;
+        },
+        {} as Record<string, number>,
+      );
 
-  //     for (const [perspective, expectedPercentage] of Object.entries(
-  //       perspectivePercentages,
-  //     )) {
-  //       const actualPercentage = groupedObjectives[perspective] || 0;
-  //       if (Math.abs(actualPercentage - expectedPercentage) > 0.01) {
-  //         return false;
-  //       }
-  //     }
+      for (const [perspective, expectedPercentage] of Object.entries(
+        perspectivePercentages,
+      )) {
+        const actualPercentage = groupedObjectives[perspective] || 0;
+        if (Math.abs(actualPercentage - expectedPercentage) > 0.01) {
+          return false;
+        }
+      }
 
-  //     // Validate that behavioral attributes percentages add up to 20%
-  //     const totalBehavioralPercentage = data.behavioralAttributes.reduce(
-  //       (sum, attr) => sum + attr.percentage,
-  //       0,
-  //     );
-  //     return Math.abs(totalBehavioralPercentage - 20) < 0.01;
-  //   },
-  //   {
-  //     message:
-  //       "Percentage allocations must match required distributions: Stakeholders/Clients (25%), Financial Stewardship (15%), Internal Processes (20%), MDA/LG Capacity (20%), and Behavioral Attributes (20%)",
-  //   },
-  // );
+      // Validate that behavioral attributes percentages add up to 20%
+      const totalBehavioralPercentage = data.behavioralAttributes.reduce(
+        (sum, attr) => sum + attr.percentage,
+        0,
+      );
+      return Math.abs(totalBehavioralPercentage - 20) < 0.01;
+    },
+    {
+      message:
+        "Percentage allocations must match required distributions: Stakeholders/Clients (25%), Financial Stewardship (15%), Internal Processes (20%), MDA/LG Capacity (20%), and Behavioral Attributes (20%)",
+    },
+  );
 
 // Type exports for use in components
 export type BSCFormData = z.infer<typeof bscSchema>;
 export type EmployeeData = z.infer<typeof employeeSchema>;
-export type PerformanceObjectiveData = z.infer<
+export type PerformanceObjectiveSchema = z.infer<
   typeof performanceObjectiveSchema
 >;
 export type BehavioralAttributeData = z.infer<typeof behavioralAttributeSchema>;

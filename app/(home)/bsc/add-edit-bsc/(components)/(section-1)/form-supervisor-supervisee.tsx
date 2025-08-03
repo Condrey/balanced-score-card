@@ -1,0 +1,153 @@
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { BSCFormData } from "@/lib/validations/bsc";
+import { UseFormReturn } from "react-hook-form";
+
+interface FormSupervisorSuperviseeProps {
+  form: UseFormReturn<BSCFormData>;
+}
+
+export default function FormSupervisorSupervisee({
+  form,
+}: FormSupervisorSuperviseeProps) {
+  return (
+    <div className="grid md:grid-cols-2 gap-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Supervisee Particulars</CardTitle>
+          <CardDescription>
+            Details of the employee being appraised
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <FormField
+            control={form.control}
+            name="supervisee.employeeNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Employee Number</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter employee number" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="supervisee.name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Full name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter full name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="supervisee.jobTitle"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Job title</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter job title" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="supervisee.salaryScale"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Salary Scale</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter salary Scale" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-lg">Supervisor Particulars</CardTitle>
+          <CardDescription>Details of the supervising officer</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <FormField
+            control={form.control}
+            name="supervisor.employeeNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Employee Number</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter employee number" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="supervisor.name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Full name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter full name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="supervisor.jobTitle"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Job title</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter job title" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="supervisor.salaryScale"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Salary Scale</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter salary Scale" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </CardContent>
+      </Card>
+    </div>
+  );
+}
