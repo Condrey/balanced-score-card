@@ -7,11 +7,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { NdpData, OrganizationContextData } from "@/lib/types";
+import { Edit3Icon, PlusIcon, Trash2Icon } from "lucide-react";
+import ButtonAddEditOsp from "../(osp)/button-add-edit-osp";
+import TableOfOSPs from "../(osp)/table-of-osps";
 import ButtonAddEditNdp from "./button-add-edit-ndp";
 import ButtonDeleteNdp from "./button-delete-ndp";
-import { Edit3Icon, PlusIcon, Trash2Icon } from "lucide-react";
-import TableOfOSPs from "./table-of-osps";
-import ButtonAddEditOsp from "./button-add-edit-osp";
 
 interface ListOfNDPsProps {
   ndp: NdpData;
@@ -61,8 +61,8 @@ export default function ListOfNDPs({ ndp, context }: ListOfNDPsProps) {
             These are the Strategic objectives, Strategies, and Programmes
           </CardDescription>
         </div>
-        <ButtonAddEditOsp variant={"secondary"} size="icon" ndp={context.ndp!}>
-          <PlusIcon />
+        <ButtonAddEditOsp ndp={context.ndp!}>
+          <PlusIcon /> new
         </ButtonAddEditOsp>
       </CardHeader>
       <CardContent>

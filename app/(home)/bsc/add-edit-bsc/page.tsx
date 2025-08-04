@@ -16,10 +16,7 @@ export default async function Page({ searchParams }: PageProps) {
   const positionId = decodeURIComponent(_searchParams.position || "");
   const bscId = decodeURIComponent(_searchParams.bsc || "");
   const year = decodeURIComponent(_searchParams.year || "");
-  if (
-    !_searchParams.position ||
-    !_searchParams.organization
-  ) {
+  if (!_searchParams.position || !_searchParams.organization) {
     return (
       <BSCFormInitialData
         organizationId={organizationId}

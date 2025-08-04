@@ -1,6 +1,8 @@
+import { NumberInput } from "@/components/number-input/number-input";
 import { badgeVariants } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
+  Form,
   FormControl,
   FormField,
   FormItem,
@@ -10,7 +12,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import {
-  BSCFormData,
+  CoreValuesSchema,
   stringScoreSchema,
   StringScoreSchema,
 } from "@/lib/validations/bsc";
@@ -20,7 +22,7 @@ import { PlusIcon, XIcon } from "lucide-react";
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
 
 interface FormCoreValuesProps {
-  form: UseFormReturn<BSCFormData>;
+  form: UseFormReturn<CoreValuesSchema>;
 }
 
 export default function FormCoreValues({ form }: FormCoreValuesProps) {
@@ -28,16 +30,16 @@ export default function FormCoreValues({ form }: FormCoreValuesProps) {
     resolver: zodResolver(stringScoreSchema),
     defaultValues: {
       id: "",
-      score: undefined,
       value: "",
+      score: undefined,
     },
   });
 
   const { append, fields, remove } = useFieldArray({
     control: form.control,
-    name: "coreValues.values",
+    name: "values",
   });
-  const watchedValues = form.watch("coreValues.values");
+  const watchedValues = form.watch("values");
   const addValue = (input: StringScoreSchema) => {
     append({ ...input, id: cuid() });
     form2.reset();
@@ -46,7 +48,7 @@ export default function FormCoreValues({ form }: FormCoreValuesProps) {
     <>
       <FormField
         control={form.control}
-        name="coreValues.values"
+        name="values"
         render={() => (
           <FormItem>
             <FormLabel>
@@ -55,35 +57,51 @@ export default function FormCoreValues({ form }: FormCoreValuesProps) {
                 ({watchedValues?.length})
               </span>
             </FormLabel>
-            <FormField
-              control={form2.control}
-              name="value"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className="flex items-center  gap-2">
-                      <Input
-                        placeholder="Enter core value"
-                        onKeyPress={(e) =>
-                          e.key === "Enter" &&
-                          (e.preventDefault(), form2.handleSubmit(addValue)())
-                        }
-                        {...field}
-                      />
-                      <Button
-                        type="button"
-                        onClick={() => form2.handleSubmit(addValue)()}
-                        size="icon"
-                        variant={"outline"}
-                      >
-                        <PlusIcon className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </FormControl>
-                </FormItem>
-              )}
-            />
-
+            <Form {...form2}>
+              {/* <pre>{JSON.stringify(form2.formState.errors, null, 2)}</pre> */}
+              <div className="flex items-center  gap-2">
+                <FormField
+                  control={form2.control}
+                  name="value"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Input placeholder="Enter core value" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form2.control}
+                  name="score"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <NumberInput
+                          max={20}
+                          placeholder="Enter score"
+                          onKeyPress={(e) =>
+                            e.key === "Enter" &&
+                            (e.preventDefault(), form2.handleSubmit(addValue)())
+                          }
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <Button
+                  type="button"
+                  onClick={() => form2.handleSubmit(addValue)()}
+                  size="icon"
+                  variant={"outline"}
+                >
+                  <PlusIcon className="h-4 w-4" />
+                </Button>
+              </div>
+            </Form>
             <FormMessage />
           </FormItem>
         )}
@@ -99,7 +117,8 @@ export default function FormCoreValues({ form }: FormCoreValuesProps) {
             )}
           >
             <span className="text-ellipsis line-clamp-1">
-              {form.watch(`coreValues.values.${index}.value`)}
+              {form.watch(`values.${index}.value`)} (
+              {form.watch(`values.${index}.score`)}%)
             </span>
             <Button
               type="button"

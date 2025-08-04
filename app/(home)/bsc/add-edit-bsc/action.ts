@@ -53,5 +53,5 @@ async function bscOrganizationContextPositionByIds({
   return { bSc, position, organizationContext };
 }
 export const getBscOrganizationContextPositionByIds = cache(
-  bscOrganizationContextPositionByIds
+  bscOrganizationContextPositionByIds,
 );

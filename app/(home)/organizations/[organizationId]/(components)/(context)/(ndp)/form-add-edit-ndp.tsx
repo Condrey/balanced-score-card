@@ -15,8 +15,8 @@ import { NdpData, OrganizationContextData } from "@/lib/types";
 import { ndpSchema, NdpSchema } from "@/lib/validations/others";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { upsertNdpMutation } from "../mutation";
-import FormProgrammes from "./form-programmes";
+import { upsertNdpMutation } from "../../../mutation";
+import FormProgrammes from "../../form-programmes";
 
 interface FormAddEditNdpProps {
   ndp?: NdpData;

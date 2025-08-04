@@ -33,6 +33,7 @@ import {
 } from "@/lib/validations/bsc";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PerspectiveType } from "@prisma/client";
+import cuid from "cuid";
 import { PlusIcon, XIcon } from "lucide-react";
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
 import FormActionsPerformanceObjectives from "./form-actions-performance-objectives";
@@ -72,7 +73,7 @@ export default function FormPerformanceObjectives({
   const watchedValues = form.watch("performanceObjectives");
 
   const addValue = (input: PerformanceObjectiveSchema) => {
-    append(input);
+    append({ ...input, id: cuid() });
     form2.reset();
   };
   return (
@@ -105,7 +106,7 @@ export default function FormPerformanceObjectives({
                               <SelectItem key={key} value={key}>
                                 {label}
                               </SelectItem>
-                            )
+                            ),
                           )}
                         </SelectContent>
                       </Select>
@@ -217,7 +218,7 @@ export default function FormPerformanceObjectives({
                         badgeVariants({
                           variant: "secondary",
                           className: "space-x-2",
-                        })
+                        }),
                       )}
                     >
                       {wv.perspective}{" "}

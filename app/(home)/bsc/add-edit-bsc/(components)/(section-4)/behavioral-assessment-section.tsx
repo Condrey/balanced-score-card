@@ -127,16 +127,16 @@ export function BehavioralAssessmentSection({
                 <TableBody>
                   {attributeFields.map((field, index) => {
                     const attribute = form.watch(
-                      `behavioralAttributes.${index}.attribute`
+                      `behavioralAttributes.${index}.attribute`,
                     );
                     const description = form.watch(
-                      `behavioralAttributes.${index}.description`
+                      `behavioralAttributes.${index}.description`,
                     );
                     const percentage = form.watch(
-                      `behavioralAttributes.${index}.percentage`
+                      `behavioralAttributes.${index}.percentage`,
                     );
                     const score = form.watch(
-                      `behavioralAttributes.${index}.score`
+                      `behavioralAttributes.${index}.score`,
                     );
 
                     return (

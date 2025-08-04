@@ -92,7 +92,7 @@ export default function FormOspProgrammes({ form }: FormOspProgrammesProps) {
             key={field.id}
             className={cn(
               "gap-1 w-fit max-w-sm ",
-              badgeVariants({ variant: "secondary" })
+              badgeVariants({ variant: "secondary" }),
             )}
           >
             <span className="text-ellipsis line-clamp-1">

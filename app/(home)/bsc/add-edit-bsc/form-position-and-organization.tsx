@@ -4,33 +4,33 @@ import EmptyContainer from "@/components/query-containers/empty-container";
 import { Button } from "@/components/ui/button";
 
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 
 import {
-    Command,
-    CommandEmpty,
-    CommandGroup,
-    CommandInput,
-    CommandItem,
-    CommandList,
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
 } from "@/components/ui/command";
 import LoadingButton from "@/components/ui/loading-button";
 import {
-    Popover,
-    PopoverContent,
-    PopoverTrigger,
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import {
-    organizationSchema,
-    PositionSchema,
-    positionSchema,
+  organizationSchema,
+  PositionSchema,
+  positionSchema,
 } from "@/lib/validations/others";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Organization, Position } from "@prisma/client";
@@ -47,20 +47,21 @@ interface BSCInitialDataFormProps {
     organizations: Organization[];
     position: Position | null;
     organization: Organization | null;
-  };    year:string
-
+  };
+  year: string;
 }
 export default function BSCInitialDataForm({
-  data: { position, positions, organization, organizations, },year
+  data: { position, positions, organization, organizations },
+  year,
 }: BSCInitialDataFormProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const pathname = usePathname()
-  const [isPending,startTransition] = useTransition()
+  const pathname = usePathname();
+  const [isPending, startTransition] = useTransition();
   const schema = z.object({
     position: positionSchema.optional(),
     organization: organizationSchema.required(),
-    year:z.string()
+    year: z.string(),
   });
   type Schema = z.infer<typeof schema>;
   const form = useForm<Schema>({
@@ -73,35 +74,34 @@ export default function BSCInitialDataForm({
           } as PositionSchema)
         : undefined,
       organization: organization!,
-      year
+      year,
     },
   });
-  const handleSubmit=(input: Schema)=> 
-    startTransition(()=>{
-        const params = new URLSearchParams(searchParams.toString())
-    params.set('position',input.position?.id!)
-    params.set('organization',input.organization?.id!)
-    params.set('year',input.year)
-    router.push(pathname+'?'+params.toString());
-    })
-  
+  const handleSubmit = (input: Schema) =>
+    startTransition(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("position", input.position?.id!);
+      params.set("organization", input.organization?.id!);
+      params.set("year", input.year);
+      router.push(pathname + "?" + params.toString());
+    });
+
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
         {/* <pre>{JSON.stringify(form.formState.errors,null,2)}</pre> */}
         <FormField
-
-control={form.control}
-name="year"
-render={({field})=>(
-    <FormItem>
-        <FormLabel>Financial Year</FormLabel>
-        <FormControl>
-            <Input placeholder='e.g., 2025/2026' {...field}/>
-        </FormControl>
-        <FormMessage/>
-    </FormItem>
-)}
+          control={form.control}
+          name="year"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Financial Year</FormLabel>
+              <FormControl>
+                <Input placeholder="e.g., 2025/2026" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
         />
         {!!organizations && organizations.length ? (
           <FormField
@@ -149,8 +149,10 @@ render={({field})=>(
                                 form.setValue("organization", org);
                               }}
                             >
-                              {org.name} <span className='text-muted-foreground text-xs align-baseline inline'>
-                                ({org.voteName})</span>
+                              {org.name}{" "}
+                              <span className="text-muted-foreground text-xs align-baseline inline">
+                                ({org.voteName})
+                              </span>
                               <Check
                                 className={cn(
                                   "ml-auto",
@@ -223,11 +225,14 @@ render={({field})=>(
                                   duties: _position.duties.map((d) => ({
                                     value: d,
                                   })),
-                                  reportsToId:_position.reportsToId||''
+                                  reportsToId: _position.reportsToId || "",
                                 } as PositionSchema);
                               }}
                             >
-                              {_position.jobTitle} <span className='text-muted-foreground text-xs align-baseline inline'>({_position.salaryScale})</span>
+                              {_position.jobTitle}{" "}
+                              <span className="text-muted-foreground text-xs align-baseline inline">
+                                ({_position.salaryScale})
+                              </span>
                               <Check
                                 className={cn(
                                   "ml-auto",
@@ -251,8 +256,8 @@ render={({field})=>(
         ) : (
           <EmptyContainer message="The database has no positions. Please contact the admin for further guidance" />
         )}
-        <LoadingButton loading={isPending} className='w-full'>
-            Continue
+        <LoadingButton loading={isPending} className="w-full">
+          Continue
         </LoadingButton>
       </form>
     </Form>

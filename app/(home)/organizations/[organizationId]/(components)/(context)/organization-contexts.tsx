@@ -9,10 +9,12 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { OrganizationContextData } from "@/lib/types";
 import { Edit3Icon, PlusIcon, Trash2Icon } from "lucide-react";
-import ButtonAddEditNdp from "./button-add-edit-ndp";
+import ButtonAddEditCoreValue from "./(core-values)/button-add-edit-core-value";
+import CoreValuesContainer from "./(core-values)/core-values-container";
+import ButtonAddEditNdp from "./(ndp)/button-add-edit-ndp";
+import ListOfNDPs from "./(ndp)/list-of-ndps";
 import ButtonAddEditOrganizationContext from "./button-add-edit-organization-context";
 import ButtonDeleteOrganizationContext from "./button-delete-organization-context";
-import ListOfNDPs from "./list-of-ndps";
 
 interface OrganizationContextsProps {
   contexts: OrganizationContextData[];
@@ -74,7 +76,6 @@ export default function OrganizationContexts({
                     organizationId={organizationId!}
                     context={ctx}
                     size="icon"
-                    variant={"secondary"}
                   >
                     <Edit3Icon />
                   </ButtonAddEditOrganizationContext>
@@ -105,16 +106,19 @@ export default function OrganizationContexts({
             {!coreValue ? (
               <EmptyContainer
                 message={
-                  "It is evident that you do not have a core value submitted for this particular year. Please add"
+                  "It is evident that you do not have a set of core values submitted for this particular financial year. Please add"
                 }
                 className="border p-3 border-destructive text-destructive"
               >
-                <ButtonAddEditNdp context={ctx} variant="secondary">
-                  Create the NDP
-                </ButtonAddEditNdp>
+                <ButtonAddEditCoreValue context={ctx} variant="secondary">
+                  Create the Core values
+                </ButtonAddEditCoreValue>
               </EmptyContainer>
             ) : (
-              <ListOfNDPs ndp={ndp!} context={ctx} />
+              <CoreValuesContainer
+                organizationContext={ctx}
+                coreValue={coreValue}
+              />
             )}
             {/* National development programmes  */}
             {!ndp ? (

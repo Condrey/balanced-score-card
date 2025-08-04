@@ -19,7 +19,8 @@ interface BSCFormInitialDataProps {
 
 export default function BSCFormInitialData({
   positionId,
-  organizationId,year
+  organizationId,
+  year,
 }: BSCFormInitialDataProps) {
   const [_, setOpen] = useState(true);
   const query = useQuery({
@@ -27,9 +28,14 @@ export default function BSCFormInitialData({
     queryFn: () => getPositionsAndOrganizations({ positionId, organizationId }),
   });
   const { status, data } = query;
-const currentYear = getCurrentFinancialYear()
+  const currentYear = getCurrentFinancialYear();
   return (
-    <ResponsiveDrawer open={true} setOpen={setOpen} title="Preliminary Values" description="Please set up these preliminary values before proceeding further.">
+    <ResponsiveDrawer
+      open={true}
+      setOpen={setOpen}
+      title="Preliminary Values"
+      description="Please set up these preliminary values before proceeding further."
+    >
       {status === "pending" ? (
         <EmptyContainer
           message={
@@ -44,16 +50,15 @@ const currentYear = getCurrentFinancialYear()
           query={query}
         />
       ) : (
-        <BSCInitialDataForm data={data} year={year||currentYear} />
+        <BSCInitialDataForm data={data} year={year || currentYear} />
       )}
     </ResponsiveDrawer>
   );
 }
 
-function  getCurrentFinancialYear(){
-    const today = new Date()
-    const year = getYear(today)
-    const month = getMonth(today)
-        return month>=6? `${year}/${year+1}`:`${year-1}/${year}`
-   
+function getCurrentFinancialYear() {
+  const today = new Date();
+  const year = getYear(today);
+  const month = getMonth(today);
+  return month >= 6 ? `${year}/${year + 1}` : `${year - 1}/${year}`;
 }

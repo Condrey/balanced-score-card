@@ -17,7 +17,7 @@ export function upsertBSCMutation() {
           return oldData.map((p) => (p.id === data.id ? data : p));
         }
         toast.success(
-          `BSC for ${variables.supervisee.name} created successfully`
+          `BSC for ${variables.supervisee.name} created successfully`,
         );
         return [data, ...oldData];
       });

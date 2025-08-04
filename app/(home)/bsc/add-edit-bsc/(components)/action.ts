@@ -3,11 +3,13 @@
 import prisma from "@/lib/prisma";
 import { bSCDataInclude } from "@/lib/types";
 import { BSCFormData, bscSchema } from "@/lib/validations/bsc";
+import cuid from "cuid";
 
 export async function upsertBSC(input: BSCFormData) {
   // TODO: perform auth
   const {
     id,
+    organizationId,
     behavioralAttributes,
     coreValues,
     performanceObjectives,
@@ -24,12 +26,11 @@ export async function upsertBSC(input: BSCFormData) {
     supervisor,
     year,
   } = bscSchema.parse(input);
-  // const formattedDuties = duties
-  //   .map((d) => d.value)
-  //   .filter(Boolean) as string[];
+
   return await prisma.bSC.upsert({
-    where: { id },
+    where: { id: id || cuid() },
     create: {
+      organization: { connect: { id: organizationId } },
       departmentalMandate,
       goal,
       mandate,
@@ -55,7 +56,9 @@ export async function upsertBSC(input: BSCFormData) {
           where: { id: coreValues.id },
           create: {
             acronym: coreValues.acronym,
-            values: coreValues.values.map((v) => v.value),
+            values: {
+              createMany: { data: coreValues.values, skipDuplicates: true },
+            },
           },
         },
       },
@@ -75,6 +78,7 @@ export async function upsertBSC(input: BSCFormData) {
       },
     },
     update: {
+      organization: { connect: { id: organizationId } },
       departmentalMandate,
       goal,
       mandate,
@@ -100,7 +104,9 @@ export async function upsertBSC(input: BSCFormData) {
           where: { id: coreValues.id },
           create: {
             acronym: coreValues.acronym,
-            values: coreValues.values.map((v) => v.value),
+            values: {
+              createMany: { data: coreValues.values, skipDuplicates: true },
+            },
           },
         },
       },

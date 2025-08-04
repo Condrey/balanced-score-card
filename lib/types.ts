@@ -8,12 +8,20 @@ export type PositionData = Prisma.PositionGetPayload<{
   include: typeof positionDataInclude;
 }>;
 
+export const coreValueDataInclude = {
+  values: true,
+} satisfies Prisma.CoreValueInclude;
+export type CoreValueData = Prisma.CoreValueGetPayload<{
+  include: typeof coreValueDataInclude;
+}>;
+
 export const bSCDataInclude = {
   supervisee: true,
   supervisor: true,
-  behavioralAttributes: true,
-  coreValues: true,
+  behavioralAttributes: { orderBy: { createdAt: "asc" } },
+  coreValues: { include: { values: true } },
   performanceObjectives: true,
+  organization: true,
 } satisfies Prisma.BSCInclude;
 export type BSCData = Prisma.BSCGetPayload<{
   include: typeof bSCDataInclude;
@@ -33,9 +41,16 @@ export type NdpData = Prisma.NdpGetPayload<{
   include: typeof ndpDataInclude;
 }>;
 
+export const behavioralAttributeDataInclude =
+  {} satisfies Prisma.BehavioralAttributeInclude;
+export type BehavioralAttributeData = Prisma.BehavioralAttributeGetPayload<{
+  include: typeof behavioralAttributeDataInclude;
+}>;
+
 export const organizationContextDataInclude = {
   ndp: { include: ndpDataInclude },
-  coreValue: true,
+  coreValue: { include: { values: true } },
+  behavioralAttributes: { orderBy: { createdAt: "asc" } },
 } satisfies Prisma.OrganizationContextInclude;
 export type OrganizationContextData = Prisma.OrganizationContextGetPayload<{
   include: typeof organizationContextDataInclude;

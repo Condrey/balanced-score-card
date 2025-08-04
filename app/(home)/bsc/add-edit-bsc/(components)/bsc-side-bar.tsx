@@ -19,10 +19,10 @@ interface BscSideBarProps {
 export default function BscSideBar({ form }: BscSideBarProps) {
   const watchedData = form.watch();
   const performanceScore = calculatePerformanceScore(
-    watchedData.performanceObjectives || []
+    watchedData.performanceObjectives || [],
   );
   const behavioralScore = calculateBehavioralScore(
-    watchedData.behavioralAttributes || []
+    watchedData.behavioralAttributes || [],
   );
   const overallScore = calculateOverallScore(performanceScore, behavioralScore);
   const performanceLevel = getPerformanceLevel(overallScore);
@@ -68,8 +68,8 @@ export default function BscSideBar({ form }: BscSideBarProps) {
                 overallScore >= 80
                   ? "default"
                   : overallScore >= 60
-                  ? "secondary"
-                  : "destructive"
+                    ? "secondary"
+                    : "destructive"
               }
             >
               {getPerformanceLevelDescription(performanceLevel)}

@@ -19,7 +19,7 @@ import {
 } from "@/lib/validations/others";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { upsertOrganizationContextMutation } from "../mutation";
+import { upsertOrganizationContextMutation } from "../../mutation";
 
 interface FormAddEditOrganizationContextProps {
   organizationContext?: OrganizationContextData;

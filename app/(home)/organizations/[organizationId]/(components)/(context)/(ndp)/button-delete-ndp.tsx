@@ -6,7 +6,7 @@ import { DialogFooter } from "@/components/ui/dialog";
 import LoadingButton from "@/components/ui/loading-button";
 import { NdpData } from "@/lib/types";
 import { useState } from "react";
-import { deleteNdpMutation } from "../mutation";
+import { deleteNdpMutation } from "../../../mutation";
 
 interface ButtonDeleteNdpProps extends ButtonProps {
   ndp: NdpData;

@@ -45,7 +45,7 @@ export const strategicElementsSchema = z.object({
     .array(stringArraySchema)
     .min(1, "At least one NDP programme is required")
     .describe(
-      "National Development Plan programmes the organization contributes to "
+      "National Development Plan programmes the organization contributes to ",
     ),
   departmentalMandate: z
     .string()
@@ -101,10 +101,14 @@ export const performanceObjectiveSchema = z.object({
 });
 
 // Core values validation schema
+export const stringScoreSchema = stringArraySchema.extend({
+  score: z.number().min(1, "Please enter a number greater than 1"),
+});
+export type StringScoreSchema = z.infer<typeof stringScoreSchema>;
 export const coreValuesSchema = z.object({
   id: z.string().optional(),
   values: z
-    .array(stringArraySchema)
+    .array(stringScoreSchema)
     .min(1, "At least one core value is required")
     .describe("List of organizational core values"),
   acronym: z
@@ -144,6 +148,7 @@ export const behavioralAttributeSchema = z.object({
 // Complete BSC validation schema
 export const bscSchema = z.object({
   id: z.string().optional(),
+  organizationId: z.string().optional(),
   year: z
     .string()
     .min(1)
@@ -151,15 +156,15 @@ export const bscSchema = z.object({
 
   // Supervisee and Supervisor
   supervisee: employeeSchema.describe(
-    "Details of the employee being appraised"
+    "Details of the employee being appraised",
   ),
   supervisor: employeeSchema.describe(
-    "Details of the supervising officer conducting the appraisal"
+    "Details of the supervising officer conducting the appraisal",
   ),
 
   // Strategic Elements
   strategicElements: strategicElementsSchema.describe(
-    "Strategic elements and organizational context"
+    "Strategic elements and organizational context",
   ),
 
   // Performance Objectives
@@ -170,7 +175,7 @@ export const bscSchema = z.object({
 
   // Behavioral Assessment
   coreValues: coreValuesSchema.describe(
-    "Organizational core values and their acronym"
+    "Organizational core values and their acronym",
   ),
   behavioralAttributes: z
     .array(behavioralAttributeSchema)

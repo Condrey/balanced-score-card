@@ -50,6 +50,7 @@ export function BSCForm({
     resolver: zodResolver(bscSchema),
     defaultValues: {
       id: "",
+      organizationId: organizationContext?.organizationId || "",
       year: year,
       supervisee: bSC?.supervisee || {
         id: position?.id || "",
@@ -91,26 +92,39 @@ export function BSCForm({
         ? {
             id: bSC.coreValues.id || "",
             acronym: bSC.coreValues.acronym,
-            values: bSC.coreValues.values.map((v) => ({ value: v })),
+            values: bSC.coreValues.values,
           }
-        : {
-            id: "",
-            acronym: "",
-            values: [],
-          },
+        : organizationContext?.coreValue
+          ? {
+              id: organizationContext.coreValue.id || "",
+              acronym: organizationContext.coreValue.acronym,
+              values: organizationContext.coreValue.values,
+            }
+          : {
+              id: "",
+              acronym: "",
+              values: [],
+            },
       behavioralAttributes: bSC
         ? bSC.behavioralAttributes.map((b) => ({
             ...b,
             commentsJustification: b.commentsJustification!,
             score: b.score || 0,
+            description: b.description || "",
           }))
-        : [],
+        : organizationContext
+          ? organizationContext.behavioralAttributes?.map((bA) => ({
+              ...bA,
+              description: bA.description || "",
+              commentsJustification: bA.commentsJustification!,
+            }))
+          : [],
     },
   });
 
   const onSubmit = async (data: BSCFormData) => {
     mutate(data, {
-      onSuccess: () => router.push("/bsc"),
+      // onSuccess: () => router.push("/bsc"),
     });
   };
 

@@ -228,7 +228,7 @@ export default function Assessments({ form }: AssessmentsProps) {
                     {watchedValues.length} attribute(s) available
                   </CardDescription>
                 </CardHeader>
-                <CardFooter className="flex-wrap gap-2 space-y-2">
+                <CardFooter>
                   {watchedValues.map((wv, index) => (
                     <div
                       key={index}

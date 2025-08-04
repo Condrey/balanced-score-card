@@ -6,7 +6,7 @@ import { DialogFooter } from "@/components/ui/dialog";
 import LoadingButton from "@/components/ui/loading-button";
 import { OrganizationContextData } from "@/lib/types";
 import { useState } from "react";
-import { deleteOrganizationContextMutation } from "../mutation";
+import { deleteOrganizationContextMutation } from "../../mutation";
 
 interface ButtonDeleteOrganizationContextProps extends ButtonProps {
   organizationContext: OrganizationContextData;

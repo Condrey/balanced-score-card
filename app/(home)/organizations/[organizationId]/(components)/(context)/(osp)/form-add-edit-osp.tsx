@@ -16,7 +16,7 @@ import { ospSchema, OspSchema } from "@/lib/validations/others";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Ndp } from "@prisma/client";
 import { useForm } from "react-hook-form";
-import { upsertOspMutation } from "../mutation";
+import { upsertOspMutation } from "../../../mutation";
 import FormOspProgrammes from "./form-osp-programmes";
 import FormOspStrategies from "./form-osp-strategies";
 

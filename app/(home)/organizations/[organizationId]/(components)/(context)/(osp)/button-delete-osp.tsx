@@ -6,7 +6,7 @@ import { DialogFooter } from "@/components/ui/dialog";
 import LoadingButton from "@/components/ui/loading-button";
 import { OspData } from "@/lib/types";
 import { useState } from "react";
-import { deleteOspMutation } from "../mutation";
+import { deleteOspMutation } from "../../../mutation";
 
 interface ButtonDeleteOspProps extends ButtonProps {
   osp: OspData;

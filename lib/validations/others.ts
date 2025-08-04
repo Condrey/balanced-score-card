@@ -2,6 +2,7 @@ import { OrganizationStructure } from "@prisma/client";
 import z from "zod";
 
 export const stringArraySchema = z.object({
+  id: z.string().optional(),
   value: z.string(),
 });
 export type StringArraySchema = z.infer<typeof stringArraySchema>;

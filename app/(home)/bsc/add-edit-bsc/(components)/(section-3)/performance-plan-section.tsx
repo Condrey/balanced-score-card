@@ -53,7 +53,7 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
     const usage: Record<string, number> = {};
     fields.forEach((field, index) => {
       const perspective = form.watch(
-        `performanceObjectives.${index}.perspective`
+        `performanceObjectives.${index}.perspective`,
       );
       const percentage =
         form.watch(`performanceObjectives.${index}.percentage`) || 0;
@@ -103,8 +103,8 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
                         isComplete
                           ? "text-green-600"
                           : isOver
-                          ? "text-red-600"
-                          : "text-orange-600"
+                            ? "text-red-600"
+                            : "text-orange-600"
                       }`}
                     >
                       {used.toFixed(1)}% / {percentage}%
@@ -114,8 +114,8 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
                         isComplete
                           ? "default"
                           : isOver
-                          ? "destructive"
-                          : "secondary"
+                            ? "destructive"
+                            : "secondary"
                       }
                       className="text-xs place-self-center items-center"
                     >
@@ -123,7 +123,7 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
                     </Badge>
                   </div>
                 );
-              }
+              },
             )}
           </div>
         </CardContent>
@@ -183,16 +183,16 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
                 <TableBody>
                   {fields.map((field, index) => {
                     const perspective = form.watch(
-                      `performanceObjectives.${index}.perspective`
+                      `performanceObjectives.${index}.perspective`,
                     );
                     const objective = form.watch(
-                      `performanceObjectives.${index}.objective`
+                      `performanceObjectives.${index}.objective`,
                     );
                     const percentage = form.watch(
-                      `performanceObjectives.${index}.percentage`
+                      `performanceObjectives.${index}.percentage`,
                     );
                     const score = form.watch(
-                      `performanceObjectives.${index}.score`
+                      `performanceObjectives.${index}.score`,
                     );
 
                     return (

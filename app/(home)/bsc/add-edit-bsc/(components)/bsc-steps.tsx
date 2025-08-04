@@ -45,8 +45,8 @@ export default function BscSteps({
                     isCompleted
                       ? "bg-green-100"
                       : isCurrent
-                      ? "bg-primary/10"
-                      : "bg-muted"
+                        ? "bg-primary/10"
+                        : "bg-muted"
                   }`}
                 >
                   {isCompleted ? (

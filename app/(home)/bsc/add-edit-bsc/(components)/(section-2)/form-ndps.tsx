@@ -17,6 +17,7 @@ import { BSCFormData } from "@/lib/validations/bsc";
 import { stringArraySchema, StringArraySchema } from "@/lib/validations/others";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
+import cuid from "cuid";
 import { PlusIcon, StarsIcon, XIcon } from "lucide-react";
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
 
@@ -37,7 +38,8 @@ export default function FormNdps({ form }: FormNdpsProps) {
   });
   const form2 = useForm<StringArraySchema>({
     resolver: zodResolver(stringArraySchema),
-    defaultValues: {
+    values: {
+      id: "",
       value: "",
     },
   });
@@ -55,7 +57,7 @@ export default function FormNdps({ form }: FormNdpsProps) {
   if (isSuccess) {
     form.setValue(
       "strategicElements.ndpProgrammes",
-      data.map((d) => ({ value: d }))
+      data.map((d) => ({ value: d, id: cuid() })),
     );
   }
   if (isError) {
@@ -81,14 +83,14 @@ export default function FormNdps({ form }: FormNdpsProps) {
               <LoadingButton
                 loading={isPending}
                 type="button"
-                title="Let Ai select your Ndp programmes for you"
+                title="Let Ai get Ndp Programmes for you"
                 onClick={getAiUserNdps}
                 variant={"ghost"}
                 size={"icon"}
               >
                 <StarsIcon />
                 <span className="sr-only">
-                  Let Ai select your Ndp programmes for you
+                  Let Ai get Ndp Programmes for you
                 </span>
               </LoadingButton>
             </FormLabel>
@@ -120,13 +122,13 @@ export default function FormNdps({ form }: FormNdpsProps) {
                     </FormControl>
                     {isPending && (
                       <FormDescription>
-                        Ai is selecting Ndps that applies to you...
+                        Ai is getting your NDP programmes...
                       </FormDescription>
                     )}
                     <FormMessage>
                       {isError &&
                         !form.watch("strategicElements.ndpProgrammes").length &&
-                        "Ai encountered an error while getting your Ndps."}
+                        "Ai encountered an error while abstracting your strategic objectives."}
                     </FormMessage>
                   </FormItem>
                 )}
@@ -143,7 +145,7 @@ export default function FormNdps({ form }: FormNdpsProps) {
             key={field.id}
             className={cn(
               "gap-1 w-fit max-w-sm ",
-              badgeVariants({ variant: "secondary" })
+              badgeVariants({ variant: "secondary" }),
             )}
           >
             <span className="text-ellipsis line-clamp-1">

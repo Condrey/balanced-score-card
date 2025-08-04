@@ -15,8 +15,8 @@ import { useQuery } from "@tanstack/react-query";
 import { Edit3Icon } from "lucide-react";
 import ButtonAddEditOrganization from "../../button-add-edit-organization";
 import { getOrganizationById } from "../action";
-import ButtonAddEditOrganizationContext from "./button-add-edit-organization-context";
-import OrganizationContexts from "./organization-contexts";
+import ButtonAddEditOrganizationContext from "./(context)/button-add-edit-organization-context";
+import OrganizationContexts from "./(context)/organization-contexts";
 
 interface OrganizationContainerProps {
   initialData: OrganizationData;

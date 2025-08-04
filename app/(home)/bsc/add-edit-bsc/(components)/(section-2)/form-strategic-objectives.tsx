@@ -17,6 +17,7 @@ import { BSCFormData } from "@/lib/validations/bsc";
 import { stringArraySchema, StringArraySchema } from "@/lib/validations/others";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
+import cuid from "cuid";
 import { PlusIcon, StarsIcon, XIcon } from "lucide-react";
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
 
@@ -40,6 +41,7 @@ export default function FormStrategicObjectives({
   const form2 = useForm<StringArraySchema>({
     resolver: zodResolver(stringArraySchema),
     defaultValues: {
+      id: "",
       value: "",
     },
   });
@@ -57,7 +59,7 @@ export default function FormStrategicObjectives({
   if (isSuccess) {
     form.setValue(
       "strategicElements.strategicObjectives",
-      data.map((d) => ({ value: d }))
+      data.map((d) => ({ value: d, id: cuid() })),
     );
   }
   if (isError) {
@@ -146,12 +148,12 @@ export default function FormStrategicObjectives({
             key={field.id}
             className={cn(
               "gap-1 w-fit max-w-sm ",
-              badgeVariants({ variant: "secondary" })
+              badgeVariants({ variant: "secondary" }),
             )}
           >
             <span className="text-ellipsis line-clamp-1">
               {form.watch(
-                `strategicElements.strategicObjectives.${index}.value`
+                `strategicElements.strategicObjectives.${index}.value`,
               )}
             </span>
             <Button

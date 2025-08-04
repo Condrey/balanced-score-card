@@ -9,7 +9,6 @@ import {
   upsertOrganizationContext,
   upsertOsp,
 } from "./action";
-import { StringDecoder } from "string_decoder";
 
 export function upsertOrganizationContextMutation() {
   const queryClient = useQueryClient();
@@ -20,7 +19,9 @@ export function upsertOrganizationContextMutation() {
       await queryClient.cancelQueries({ queryKey });
       queryClient.invalidateQueries({ queryKey });
       toast.success(
-        `Successfully ${!variables.id ? "created" : "updated"}  the ${variables.financialYear} context`,
+        `Successfully ${!variables.id ? "created" : "updated"}  the ${
+          variables.financialYear
+        } context`,
       );
     },
     onError: (error, variables, context) => {
@@ -65,7 +66,9 @@ export function upsertNdpMutation(organizationId: string) {
       await queryClient.cancelQueries({ queryKey });
       queryClient.invalidateQueries({ queryKey });
       toast.success(
-        `Successfully ${!variables.input.id ? "created" : "updated"}  the NDP ${variables.input.version} version`,
+        `Successfully ${!variables.input.id ? "created" : "updated"}  the NDP ${
+          variables.input.version
+        } version`,
       );
     },
     onError: (error, variables, context) => {
