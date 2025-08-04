@@ -60,6 +60,39 @@ export const useBSCColumns: ColumnDef<BSCData>[] = [
       );
     },
   },
+
+  {
+    accessorKey: "organization",
+    header({ column }) {
+      return <DataTableColumnHeader column={column} title="Vote/ site" />;
+    },
+    cell({ row }) {
+      const org = row.original.organization;
+      if (!org) {
+        return <Badge variant={"destructive"}>Not added</Badge>;
+      }
+      const { icon, label } = organizationStructures[org.structure];
+      const Icon = icon;
+      return (
+        <div>
+          <div className="line-clamp-1 text-ellipsis">{org.name}</div>
+          <div className="flex gap-2 items-center tex-xs text-muted-foreground">
+            <Icon className="size-3" />
+            {label}
+          </div>
+        </div>
+      );
+    },
+  },
+  {
+    accessorKey: "year",
+    header({ column }) {
+      return <DataTableColumnHeader column={column} title="Financial Year" />;
+    },
+    cell({ row }) {
+      return <span>{row.original.year}</span>;
+    },
+  },
   {
     accessorKey: "createdAt",
     header({ column }) {
@@ -79,38 +112,6 @@ export const useBSCColumns: ColumnDef<BSCData>[] = [
               {format(updated, "PPPp")} (updated)
             </div>
           )}
-        </div>
-      );
-    },
-  },
-  {
-    accessorKey: "year",
-    header({ column }) {
-      return <DataTableColumnHeader column={column} title="Financial Year" />;
-    },
-    cell({ row }) {
-      return <DropdownMenuBSC bSC={row.original} />;
-    },
-  },
-  {
-    accessorKey: "organization",
-    header({ column }) {
-      return <DataTableColumnHeader column={column} title="Vote/ site" />;
-    },
-    cell({ row }) {
-      const org = row.original.organization;
-      if (!org) {
-        return <Badge variant={"destructive"}>Not added</Badge>;
-      }
-      const { icon, label } = organizationStructures[org.structure];
-      const Icon = icon;
-      return (
-        <div>
-          <div>{org.name}</div>
-          <div className="flex gap-2 items-center">
-            <Icon />
-            {label}
-          </div>
         </div>
       );
     },
