@@ -14,12 +14,17 @@ import LoadingButton from "@/components/ui/loading-button";
 import kyInstance from "@/lib/ky";
 import { cn } from "@/lib/utils";
 import { BSCFormData } from "@/lib/validations/bsc";
-import { stringArraySchema, StringArraySchema } from "@/lib/validations/others";
+import {
+  OrganizationContextPropsSchema,
+  stringArraySchema,
+  StringArraySchema,
+} from "@/lib/validations/others";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import cuid from "cuid";
 import { PlusIcon, StarsIcon, XIcon } from "lucide-react";
+import { useEffect } from "react";
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
+import z from "zod";
 
 interface FormStrategicObjectivesProps {
   form: UseFormReturn<BSCFormData>;
@@ -28,19 +33,33 @@ interface FormStrategicObjectivesProps {
 export default function FormStrategicObjectives({
   form,
 }: FormStrategicObjectivesProps) {
+  const organizationId = form.watch("organizationId")!;
+  const financialYear = form.watch("year");
+  const position = form.watch("supervisee.jobTitle");
+  const outputSchema = z.array(stringArraySchema);
+  type OutputSchema = z.infer<typeof outputSchema>;
+  const superviseeId = form.watch("supervisee.id");
+  const ndpProgrammes = form.watch("strategicElements.ndpProgrammes");
+
   const query = useQuery({
-    queryKey: ["userObjectives", form.getValues("supervisee.id")],
+    queryKey: ["userObjectives", superviseeId],
     refetchOnWindowFocus: false,
+    staleTime: Infinity,
     queryFn: async () =>
       kyInstance
-        .get("/api/form/user-objectives", {
-          json: form.watch(),
+        .post("/api/form/user-objectives", {
+          json: {
+            organizationId,
+            financialYear,
+            position,
+            ndpProgrammes,
+          } satisfies OrganizationContextPropsSchema,
         })
-        .json<string[]>(),
+        .json<OutputSchema>(),
   });
   const form2 = useForm<StringArraySchema>({
     resolver: zodResolver(stringArraySchema),
-    defaultValues: {
+    values: {
       id: "",
       value: "",
     },
@@ -55,13 +74,12 @@ export default function FormStrategicObjectives({
     append(input);
     form2.reset();
   };
-  const { data, isError, isPending, isSuccess, error } = query;
-  if (isSuccess) {
-    form.setValue(
-      "strategicElements.strategicObjectives",
-      data.map((d) => ({ value: d, id: cuid() })),
-    );
-  }
+  const { data, isError, isPending, isSuccess, isFetching, error } = query;
+  useEffect(() => {
+    if (isSuccess && data) {
+      form.setValue("strategicElements.strategicObjectives", data);
+    }
+  }, [isSuccess, data, form]);
   if (isError) {
     console.error(error);
   }
@@ -83,7 +101,7 @@ export default function FormStrategicObjectives({
                 </span>
               </span>
               <LoadingButton
-                loading={isPending}
+                loading={isFetching}
                 type="button"
                 title="Let Ai abstract strategic objectives for you"
                 onClick={getAiUserObjectives}
@@ -122,7 +140,7 @@ export default function FormStrategicObjectives({
                         </Button>
                       </div>
                     </FormControl>
-                    {isPending && (
+                    {isFetching && (
                       <FormDescription>
                         Ai is abstracting strategic objectives according to your
                         NDP programmes...
@@ -148,12 +166,12 @@ export default function FormStrategicObjectives({
             key={field.id}
             className={cn(
               "gap-1 w-fit max-w-sm ",
-              badgeVariants({ variant: "secondary" }),
+              badgeVariants({ variant: "secondary" })
             )}
           >
             <span className="text-ellipsis line-clamp-1">
               {form.watch(
-                `strategicElements.strategicObjectives.${index}.value`,
+                `strategicElements.strategicObjectives.${index}.value`
               )}
             </span>
             <Button

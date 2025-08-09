@@ -3,7 +3,7 @@ import { stringArraySchema } from "./others";
 
 // Employee validation schema
 export const employeeSchema = z.object({
-  id: z.string().optional(),
+  id: z.string().optional().describe("this should be a random uuid() number"),
   employeeNumber: z
     .string()
     .min(1, "Employee number is required")
@@ -24,7 +24,7 @@ export const employeeSchema = z.object({
 
 // Strategic elements validation schema
 export const strategicElementsSchema = z.object({
-  id: z.string().optional(),
+  id: z.string().optional().describe("this should be a random uuid() number"),
   mandate: z
     .string()
     .min(10, "Mandate must be at least 10 characters")
@@ -45,7 +45,7 @@ export const strategicElementsSchema = z.object({
     .array(stringArraySchema)
     .min(1, "At least one NDP programme is required")
     .describe(
-      "National Development Plan programmes the organization contributes to ",
+      "National Development Plan programmes the organization contributes to "
     ),
   departmentalMandate: z
     .string()
@@ -58,46 +58,68 @@ export const strategicElementsSchema = z.object({
 });
 
 // Performance objective validation schema
-export const performanceObjectiveSchema = z.object({
-  id: z.string().optional(),
-  perspective: z
-    .enum([
+export const performanceObjectiveSchema = z
+  .object({
+    id: z.string().optional().describe("this should be a random uuid() number"),
+    perspective: z.enum([
       "STAKEHOLDERS_CLIENTS",
       "FINANCIAL_STEWARDSHIP",
       "INTERNAL_PROCESSES",
       "MDA_LG_CAPACITY",
-    ])
-    .describe("Performance perspective category"),
-  objective: z
-    .string()
-    .min(5, "Objective must be at least 5 characters")
-    .describe("Specific performance objective to be achieved"),
-  percentage: z
-    .number()
-    .min(0)
-    .max(100)
-    .describe("Weight/percentage allocation for this objective"),
-  actions: z
-    .array(stringArraySchema)
-    .min(1, "At least one action is required")
-    .describe("Specific actions or activities to achieve the objective"),
-  expectedResults: z
-    .array(stringArraySchema)
-    .min(1, "At least one expected result is required")
-    .describe("Expected outcomes or results from the actions"),
-  kpis: z
-    .array(stringArraySchema)
-    .min(1, "At least one KPI is required")
-    .describe("Key Performance Indicators to measure success"),
-  score: z
-    .number()
-    .min(0)
-    .max(100)
-    .describe("Actual performance score achieved"),
-  comments: z
-    .string()
-    .optional()
-    .describe("Comments on actual performance and achievements"),
+    ]).describe(`Performance perspective category.
+      1. STAKEHOLDERS_CLIENTS: focuses on how the MDA/LGs provide value to their clients and stakeholders and determines the level of satisfaction with the services, score of 25%
+      2. FINANCIAL_STEWARDSHIP: Focuses on plans and strategies that help increase revenue and manage financial risks, score of 15%
+      3. INTERNAL_PROCESSES: Focuses on how MDA/LGs executes its core business processes, operations and systems, score of 20%
+      4. MDA_LG_CAPACITY: Focuses on the potential and the ability of the MDA/LG to deliver on its mandate, score or 20%`),
+    objective: z
+      .string()
+      .min(5, "Objective must be at least 5 characters")
+      .describe(
+        "S.M.A.R.T Specific performance objective to be achieved for the perspective"
+      ),
+    percentage: z
+      .number()
+      .min(0)
+      .max(100)
+      .describe(
+        "Weight/percentage allocation for this objective's perspective."
+      ),
+    actions: z
+      .array(stringArraySchema)
+      .min(1, "At least one action is required")
+      .describe(
+        "Specific actions or activities to achieve the objective implemented in routine basis to support the achievements of the desired KPIs and outcomes. It is in present continuous tense"
+      ),
+    expectedResults: z
+      .array(stringArraySchema)
+      .min(1, "At least one expected result is required")
+      .describe(
+        "This refers to defined outcomes arising from the achievement of performance objectives and shall be stated in past tense."
+      ),
+    kpis: z.array(stringArraySchema).min(1, "At least one KPI is required")
+      .describe(`
+      -shall consist of qualitative and quantitative measures, and shall have a target embedded.
+      -Generation shall be guided by the Metadata structure
+      -They shall be simple, straightforward,relevant, actionable, and easy to measure.
+      - When giving measurements, you can talk in terms of percentages
+      `),
+    score: z
+      .number()
+      .min(0)
+      .max(100)
+      .describe("Actual performance score achieved"),
+    comments: z
+      .string()
+      .optional()
+      .describe("Comments on actual performance and achievements"),
+  })
+  .describe("This is the performance objective object.");
+export const performanceObjectiveArraySchema = z.object({
+  performanceObjectives: z
+    .array(performanceObjectiveSchema)
+    .describe(
+      "Create at least 2 performance objectives for a perspective, there should not be more than three performance objectives for each perspective. The total weight of each objective shall be distributed to performance objectives developed under each perspective."
+    ),
 });
 
 // Core values validation schema
@@ -106,7 +128,7 @@ export const stringScoreSchema = stringArraySchema.extend({
 });
 export type StringScoreSchema = z.infer<typeof stringScoreSchema>;
 export const coreValuesSchema = z.object({
-  id: z.string().optional(),
+  id: z.string().optional().describe("this should be a random uuid() number"),
   values: z
     .array(stringScoreSchema)
     .min(1, "At least one core value is required")
@@ -119,8 +141,7 @@ export const coreValuesSchema = z.object({
 
 // Behavioral attribute validation schema
 export const behavioralAttributeSchema = z.object({
-  id: z.string().optional(),
-
+  id: z.string().optional().describe("this should be a random uuid() number"),
   attribute: z
     .string()
     .min(2, "Attribute must be at least 2 characters")
@@ -147,8 +168,11 @@ export const behavioralAttributeSchema = z.object({
 
 // Complete BSC validation schema
 export const bscSchema = z.object({
-  id: z.string().optional(),
-  organizationId: z.string().optional(),
+  id: z.string().optional().describe("this should be a random uuid() number"),
+  organizationId: z
+    .string()
+    .optional()
+    .describe("this should be a random uuid() number"),
   year: z
     .string()
     .min(1)
@@ -156,15 +180,15 @@ export const bscSchema = z.object({
 
   // Supervisee and Supervisor
   supervisee: employeeSchema.describe(
-    "Details of the employee being appraised",
+    "Details of the employee being appraised"
   ),
   supervisor: employeeSchema.describe(
-    "Details of the supervising officer conducting the appraisal",
+    "Details of the supervising officer conducting the appraisal"
   ),
 
   // Strategic Elements
   strategicElements: strategicElementsSchema.describe(
-    "Strategic elements and organizational context",
+    "Strategic elements and organizational context"
   ),
 
   // Performance Objectives
@@ -175,7 +199,7 @@ export const bscSchema = z.object({
 
   // Behavioral Assessment
   coreValues: coreValuesSchema.describe(
-    "Organizational core values and their acronym",
+    "Organizational core values and their acronym"
   ),
   behavioralAttributes: z
     .array(behavioralAttributeSchema)
@@ -188,6 +212,9 @@ export type BSCFormData = z.infer<typeof bscSchema>;
 export type EmployeeData = z.infer<typeof employeeSchema>;
 export type PerformanceObjectiveSchema = z.infer<
   typeof performanceObjectiveSchema
+>;
+export type PerformanceObjectiveArraySchema = z.infer<
+  typeof performanceObjectiveArraySchema
 >;
 export type CoreValuesSchema = z.infer<typeof coreValuesSchema>;
 export type BehavioralAttributeSchema = z.infer<

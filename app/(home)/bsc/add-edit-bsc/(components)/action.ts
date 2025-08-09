@@ -3,7 +3,6 @@
 import prisma from "@/lib/prisma";
 import { bSCDataInclude } from "@/lib/types";
 import { BSCFormData, bscSchema } from "@/lib/validations/bsc";
-import cuid from "cuid";
 
 export async function upsertBSC(input: BSCFormData) {
   // TODO: perform auth
@@ -28,7 +27,7 @@ export async function upsertBSC(input: BSCFormData) {
   } = bscSchema.parse(input);
 
   return await prisma.bSC.upsert({
-    where: { id: id || cuid() },
+    where: { id },
     create: {
       organization: { connect: { id: organizationId } },
       departmentalMandate,
@@ -62,20 +61,21 @@ export async function upsertBSC(input: BSCFormData) {
           },
         },
       },
-      behavioralAttributes: {
-        createMany: { data: behavioralAttributes, skipDuplicates: true },
-      },
-      performanceObjectives: {
-        createMany: {
-          data: performanceObjectives.map((p) => ({
-            ...p,
-            actions: p.actions.map((a) => a.value),
-            kpis: p.kpis.map((a) => a.value),
-            expectedResults: p.expectedResults.map((a) => a.value),
-          })),
-          skipDuplicates: true,
-        },
-      },
+      // behavioralAttributes: {
+      //   createMany: { data: behavioralAttributes, skipDuplicates: true },
+      // },
+      // performanceObjectives: {
+      //   createMany: {
+      //     data: performanceObjectives.map((p) => ({
+      //       ...p,
+      //       id: p.id || "",
+      //       actions: p.actions.map((a) => a.value),
+      //       kpis: p.kpis.map((a) => a.value),
+      //       expectedResults: p.expectedResults.map((a) => a.value),
+      //     })),
+      //     skipDuplicates: true,
+      //   },
+      // },
     },
     update: {
       organization: { connect: { id: organizationId } },

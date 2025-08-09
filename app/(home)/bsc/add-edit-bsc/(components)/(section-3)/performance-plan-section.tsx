@@ -1,7 +1,6 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,22 +9,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import LoadingButton from "@/components/ui/loading-button";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import { PERSPECTIVE_ALLOCATIONS } from "@/lib/bsc-calculations";
 import kyInstance from "@/lib/ky";
 import type {
   BSCFormData,
-  PerformanceObjectiveSchema,
+  PerformanceObjectiveArraySchema,
 } from "@/lib/validations/bsc";
+import { OrganizationContextPropsSchema } from "@/lib/validations/others";
 import { useQuery } from "@tanstack/react-query";
-import { StarsIcon, X } from "lucide-react";
+import { StarsIcon } from "lucide-react";
+import { useEffect } from "react";
 import { type UseFormReturn, useFieldArray } from "react-hook-form";
 import FormPerformanceObjectives from "./form-performance-objective";
 
@@ -34,15 +27,25 @@ interface PerformancePlanSectionProps {
 }
 
 export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
+  const organizationId = form.watch("organizationId")!;
+  const financialYear = form.watch("year");
+  const position = form.watch("supervisee.id")!;
+  const superviseeId = form.watch("supervisee.id");
+
   const query = useQuery({
-    queryKey: ["performanceObjectives", form.getValues("supervisee.id")],
+    queryKey: ["performanceObjectives", superviseeId],
     refetchOnWindowFocus: false,
+    staleTime: Infinity,
     queryFn: async () =>
       kyInstance
-        .get("/api/form/user-performance-objectives", {
-          json: form.watch(),
+        .post("/api/form/user-performance-objectives", {
+          json: {
+            financialYear,
+            organizationId,
+            position,
+          } satisfies OrganizationContextPropsSchema,
         })
-        .json<PerformanceObjectiveSchema[]>(),
+        .json<PerformanceObjectiveArraySchema>(),
   });
   const { fields, remove } = useFieldArray({
     control: form.control,
@@ -53,7 +56,7 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
     const usage: Record<string, number> = {};
     fields.forEach((field, index) => {
       const perspective = form.watch(
-        `performanceObjectives.${index}.perspective`,
+        `performanceObjectives.${index}.perspective`
       );
       const percentage =
         form.watch(`performanceObjectives.${index}.percentage`) || 0;
@@ -63,10 +66,14 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
   };
 
   const perspectiveUsage = getPerspectiveUsage();
-  const { data, isError, isPending, isSuccess, error } = query;
-  if (isSuccess) {
-    form.setValue("performanceObjectives", data);
-  }
+  const watchedValues = form.watch("performanceObjectives");
+
+  const { data, isError, isPending, isFetching, isSuccess, error } = query;
+  useEffect(() => {
+    if (isSuccess && data) {
+      form.setValue("performanceObjectives", data.performanceObjectives);
+    }
+  }, [isSuccess, data, form]);
   if (isError) {
     console.error(error);
   }
@@ -103,8 +110,8 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
                         isComplete
                           ? "text-green-600"
                           : isOver
-                            ? "text-red-600"
-                            : "text-orange-600"
+                          ? "text-red-600"
+                          : "text-orange-600"
                       }`}
                     >
                       {used.toFixed(1)}% / {percentage}%
@@ -114,8 +121,8 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
                         isComplete
                           ? "default"
                           : isOver
-                            ? "destructive"
-                            : "secondary"
+                          ? "destructive"
+                          : "secondary"
                       }
                       className="text-xs place-self-center items-center"
                     >
@@ -123,7 +130,7 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
                     </Badge>
                   </div>
                 );
-              },
+              }
             )}
           </div>
         </CardContent>
@@ -138,7 +145,7 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
             </CardDescription>
           </div>
           <LoadingButton
-            loading={isPending}
+            loading={isFetching}
             type="button"
             title="Use Ai to create your performance objectives"
             onClick={getAiPerformanceObjectives}
@@ -159,75 +166,6 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
           />
         </CardContent>
       </Card>
-
-      {fields.length > 0 && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Performance Objectives Summary</CardTitle>
-            <CardDescription>
-              Review and manage all performance objectives
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Perspective</TableHead>
-                    <TableHead>Objective</TableHead>
-                    <TableHead>%</TableHead>
-                    <TableHead>Score</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {fields.map((field, index) => {
-                    const perspective = form.watch(
-                      `performanceObjectives.${index}.perspective`,
-                    );
-                    const objective = form.watch(
-                      `performanceObjectives.${index}.objective`,
-                    );
-                    const percentage = form.watch(
-                      `performanceObjectives.${index}.percentage`,
-                    );
-                    const score = form.watch(
-                      `performanceObjectives.${index}.score`,
-                    );
-
-                    return (
-                      <TableRow key={field.id}>
-                        <TableCell>
-                          <Badge variant="outline">
-                            {PERSPECTIVE_ALLOCATIONS[
-                              perspective as keyof typeof PERSPECTIVE_ALLOCATIONS
-                            ]?.label || perspective}
-                          </Badge>
-                        </TableCell>
-                        <TableCell className="max-w-xs truncate">
-                          {objective}
-                        </TableCell>
-                        <TableCell>{percentage}%</TableCell>
-                        <TableCell>{score}</TableCell>
-                        <TableCell>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => remove(index)}
-                          >
-                            <X className="h-4 w-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 }

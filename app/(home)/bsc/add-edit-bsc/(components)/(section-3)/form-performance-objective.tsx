@@ -106,7 +106,7 @@ export default function FormPerformanceObjectives({
                               <SelectItem key={key} value={key}>
                                 {label}
                               </SelectItem>
-                            ),
+                            )
                           )}
                         </SelectContent>
                       </Select>
@@ -210,7 +210,7 @@ export default function FormPerformanceObjectives({
                     {watchedValues.length} objective(s) available
                   </CardDescription>
                 </CardHeader>
-                <CardFooter>
+                <CardFooter className="flex flex-wrap space-x-2 space-y-2">
                   {watchedValues.map((wv, index) => (
                     <div
                       key={index}
@@ -218,7 +218,7 @@ export default function FormPerformanceObjectives({
                         badgeVariants({
                           variant: "secondary",
                           className: "space-x-2",
-                        }),
+                        })
                       )}
                     >
                       {wv.perspective}{" "}

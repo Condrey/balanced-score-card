@@ -14,27 +14,36 @@ import LoadingButton from "@/components/ui/loading-button";
 import kyInstance from "@/lib/ky";
 import { cn } from "@/lib/utils";
 import { BSCFormData } from "@/lib/validations/bsc";
-import { stringArraySchema, StringArraySchema } from "@/lib/validations/others";
+import { OrganizationContextPropsSchema, organizationContextPropsSchema, stringArraySchema, StringArraySchema } from "@/lib/validations/others";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
-import cuid from "cuid";
 import { PlusIcon, StarsIcon, XIcon } from "lucide-react";
+import { useEffect } from "react";
 import { useFieldArray, useForm, UseFormReturn } from "react-hook-form";
+import z from "zod";
 
 interface FormNdpsProps {
   form: UseFormReturn<BSCFormData>;
 }
 
 export default function FormNdps({ form }: FormNdpsProps) {
+  const organizationId = form.watch("organizationId")!;
+  const financialYear = form.watch("year");
+  const position = form.watch("supervisee.jobTitle");
+  const outputSchema = z.array(stringArraySchema);
+  type OutputSchema = z.infer<typeof outputSchema>;
+  const superviseeId = form.watch("supervisee.id");
+
   const query = useQuery({
-    queryKey: ["userNdps", form.getValues("supervisee.id")],
+    queryKey: ["userNdps", superviseeId],
     refetchOnWindowFocus: false,
+    staleTime: Infinity,
     queryFn: async () =>
       kyInstance
-        .get("/api/form/user-ndps", {
-          json: form.watch(),
+        .post("/api/form/user-ndps", {
+          json: { organizationId, financialYear, position }  satisfies OrganizationContextPropsSchema,
         })
-        .json<string[]>(),
+        .json<OutputSchema>(),
   });
   const form2 = useForm<StringArraySchema>({
     resolver: zodResolver(stringArraySchema),
@@ -53,13 +62,12 @@ export default function FormNdps({ form }: FormNdpsProps) {
     append(input);
     form2.reset();
   };
-  const { data, isError, isPending, isSuccess, error } = query;
-  if (isSuccess) {
-    form.setValue(
-      "strategicElements.ndpProgrammes",
-      data.map((d) => ({ value: d, id: cuid() })),
-    );
-  }
+  const { data, isError, isFetching, isSuccess, error, isPending } = query;
+  useEffect(() => {
+    if (isSuccess && data) {
+      form.setValue("strategicElements.ndpProgrammes", data);
+    }
+  }, [isSuccess, data, form]);
   if (isError) {
     console.error(error);
   }
@@ -81,7 +89,7 @@ export default function FormNdps({ form }: FormNdpsProps) {
                 </span>
               </span>
               <LoadingButton
-                loading={isPending}
+                loading={isFetching}
                 type="button"
                 title="Let Ai get Ndp Programmes for you"
                 onClick={getAiUserNdps}
@@ -145,7 +153,7 @@ export default function FormNdps({ form }: FormNdpsProps) {
             key={field.id}
             className={cn(
               "gap-1 w-fit max-w-sm ",
-              badgeVariants({ variant: "secondary" }),
+              badgeVariants({ variant: "secondary" })
             )}
           >
             <span className="text-ellipsis line-clamp-1">

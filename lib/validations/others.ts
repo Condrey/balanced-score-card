@@ -2,7 +2,7 @@ import { OrganizationStructure } from "@prisma/client";
 import z from "zod";
 
 export const stringArraySchema = z.object({
-  id: z.string().optional(),
+  id: z.string().optional().describe("this should be a random uuid() number"),
   value: z.string(),
 });
 export type StringArraySchema = z.infer<typeof stringArraySchema>;
@@ -71,3 +71,14 @@ export const ndpSchema = z.object({
   // osps: z.array(ospSchema).min(1, "Please provide at least one osp"),
 });
 export type NdpSchema = z.infer<typeof ndpSchema>;
+
+// Miscellaneous
+export const organizationContextPropsSchema = z.object({
+  organizationId: z.string().min(1, "The organization id is missing"),
+  financialYear: z.string().min(1, "Financial year is required."),
+  position: z.string().min(1, "Please provide a position."),
+  ndpProgrammes: z.array(stringArraySchema).optional(),
+});
+export type OrganizationContextPropsSchema = z.infer<
+  typeof organizationContextPropsSchema
+>;
