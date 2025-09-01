@@ -59,9 +59,24 @@ export async function POST(req: Request, res: Response) {
       const fileName = sanitizeFilename(
         `bsc ${bsc.supervisee.name} ${bsc.year}.docx`,
       );
-      const outputPath = path.join(downloadsPath, fileName);
+      // Decide path depending on environment
+      let outputPath;
+
+      if (process.env.VERCEL) {
+        // Running on Vercel → use /tmp
+        outputPath = path.join("/tmp", fileName);
+      } else {
+        // Running locally → save to Downloads
+        const downloadsPath = path.join(os.homedir(), "Downloads");
+        if (!fs.existsSync(downloadsPath)) {
+          fs.mkdirSync(downloadsPath, { recursive: true });
+        }
+        outputPath = path.join(downloadsPath, fileName);
+      }
+
       try {
         fs.writeFileSync(outputPath, Buffer.from(result));
+        console.log(`✅ BSC saved at: ${outputPath}`);
       } catch (error) {
         console.error("Error saving BSC document:", error);
         return Response.json(
