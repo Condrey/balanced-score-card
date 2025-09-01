@@ -61,7 +61,7 @@ export async function POST(req: Request, res: Response) {
       );
       const outputPath = path.join(downloadsPath, fileName);
       try {
-        fs.writeFileSync(outputPath, result);
+        fs.writeFileSync(outputPath, Buffer.from(result));
       } catch (error) {
         console.error("Error saving BSC document:", error);
         return Response.json(
