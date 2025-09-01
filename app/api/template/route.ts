@@ -41,52 +41,63 @@ export async function POST(req: Request, res: Response) {
         index: index + 1,
       })),
     };
-
-    // Render DOCX using Carbone
-    carbone.render(templatePath, data, {}, (err, result) => {
-      if (err) {
-        return Response.json(
-          { message: "BSC generation failed", error: err },
-          { status: 200, statusText: `Internal Server Error, ${err}` },
-        );
-      }
-
-      // Save output file
-      const downloadsPath = path.join(os.homedir(), "Downloads");
-      if (!fs.existsSync(downloadsPath))
-        fs.mkdirSync(downloadsPath, { recursive: true });
-
-      const fileName = sanitizeFilename(
-        `bsc ${bsc.supervisee.name} ${bsc.year}.docx`,
-      );
-      // Decide path depending on environment
-      let outputPath;
-
-      if (process.env.VERCEL) {
-        // Running on Vercel → use /tmp
-        outputPath = path.join("/tmp", fileName);
-      } else {
-        // Running locally → save to Downloads
-        const downloadsPath = path.join(os.homedir(), "Downloads");
-        if (!fs.existsSync(downloadsPath)) {
-          fs.mkdirSync(downloadsPath, { recursive: true });
+    return new Promise((resolve) => {
+      carbone.render("templatePath.docx", bsc, {}, (err, result) => {
+        if (err) {
+          return resolve(
+            new Response(
+              JSON.stringify({ message: "BSC generation failed", error: err }),
+              { status: 500 },
+            ),
+          );
         }
-        outputPath = path.join(downloadsPath, fileName);
-      }
 
-      try {
-        fs.writeFileSync(outputPath, Buffer.from(result));
-        console.log(`✅ BSC saved at: ${outputPath}`);
-      } catch (error) {
-        console.error("Error saving BSC document:", error);
-        return Response.json(
-          { message: "BSC generation failed", error },
-          { status: 200, statusText: `${error}` },
+        const fileName = sanitizeFilename(
+          `bsc ${bsc.supervisee.name} ${bsc.year}.docx`,
         );
-      }
+
+        if (process.env.VERCEL) {
+          // ✅ On Vercel: stream file as download
+          return resolve(
+            new Response(Buffer.from(result), {
+              status: 200,
+              headers: {
+                "Content-Type":
+                  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+                "Content-Disposition": `attachment; filename="${fileName}"`,
+              },
+            }),
+          );
+        } else {
+          // ✅ Locally: write to Downloads
+          const downloadsPath = path.join(os.homedir(), "Downloads");
+          if (!fs.existsSync(downloadsPath)) {
+            fs.mkdirSync(downloadsPath, { recursive: true });
+          }
+          const outputPath = path.join(downloadsPath, fileName);
+
+          try {
+            fs.writeFileSync(outputPath, Buffer.from(result));
+            console.log(`✅ BSC saved locally: ${outputPath}`);
+          } catch (error) {
+            console.error("❌ Error saving BSC:", error);
+            return resolve(
+              new Response(
+                JSON.stringify({ message: "BSC generation failed", error }),
+                { status: 500 },
+              ),
+            );
+          }
+
+          return resolve(
+            new Response(
+              JSON.stringify({ message: "BSC generated", file: outputPath }),
+              { status: 200 },
+            ),
+          );
+        }
+      });
     });
-    const msg = `BSC generated successfully for ${bsc.supervisee.name}`;
-    return Response.json("success", { status: 200, statusText: msg });
   } catch (error) {
     console.error("Error generating BSC:", error);
     return Response.json(
