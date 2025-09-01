@@ -47,7 +47,7 @@ export default function DropdownMenuPosition({
           <DropdownMenuGroup>
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => startTransition(() => {})}>
-              <Link href={newUrl} className="w-full flex">
+              <Link href={newUrl} className="flex w-full">
                 <ArrowUpRightIcon className="mr-2" /> View Position
               </Link>
             </DropdownMenuItem>

@@ -93,7 +93,7 @@ export default function FormStrategicObjectives({
         name="strategicElements.strategicObjectives"
         render={() => (
           <FormItem>
-            <FormLabel className="flex gap-2 items-center justify-between">
+            <FormLabel className="flex items-center justify-between gap-2">
               <span>
                 Strategic Objectives{" "}
                 <span className="text-xs text-muted-foreground">
@@ -121,7 +121,7 @@ export default function FormStrategicObjectives({
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <div className="flex items-center  gap-2">
+                      <div className="flex items-center gap-2">
                         <Input
                           placeholder="Enter strategic objective"
                           onKeyPress={(e) =>
@@ -160,25 +160,25 @@ export default function FormStrategicObjectives({
         )}
       />
 
-      <ol className="flex flex-col gap-2 list-decimal list-inside">
+      <ol className="flex list-inside list-decimal flex-col gap-2">
         {fields.map((field, index) => (
           <li
             key={field.id}
             className={cn(
-              "gap-1 w-fit max-w-sm ",
-              badgeVariants({ variant: "secondary" })
+              "w-fit max-w-sm gap-1",
+              badgeVariants({ variant: "secondary" }),
             )}
           >
-            <span className="text-ellipsis line-clamp-1">
+            <span className="line-clamp-1 text-ellipsis">
               {form.watch(
-                `strategicElements.strategicObjectives.${index}.value`
+                `strategicElements.strategicObjectives.${index}.value`,
               )}
             </span>
             <Button
               type="button"
               variant="ghost"
               size="sm"
-              className="h-4 w-4 flex-inline p-0 hover:bg-destructive hover:text-destructive-foreground"
+              className="flex-inline h-4 w-4 p-0 hover:bg-destructive hover:text-destructive-foreground"
               onClick={() => remove(index)}
             >
               <XIcon className="h-3 w-3" />

@@ -15,13 +15,13 @@ export default function BscProgressBar({
   return (
     <Card>
       <CardHeader className="px-3 py-2">
-        <div className="flex justify-between items-center">
+        <div className="flex items-center justify-between">
           <span className="text-sm font-medium">Progress</span>
           <span className="text-sm text-muted-foreground">
             {Math.round(progress)}% Complete
           </span>
         </div>
-        <Progress value={progress} className="h-1.5 " />
+        <Progress value={progress} className="h-1.5" />
       </CardHeader>
     </Card>
   );

@@ -45,7 +45,7 @@ export const strategicElementsSchema = z.object({
     .array(stringArraySchema)
     .min(1, "At least one NDP programme is required")
     .describe(
-      "National Development Plan programmes the organization contributes to "
+      "National Development Plan programmes the organization contributes to ",
     ),
   departmentalMandate: z
     .string()
@@ -75,33 +75,40 @@ export const performanceObjectiveSchema = z
       .string()
       .min(5, "Objective must be at least 5 characters")
       .describe(
-        "S.M.A.R.T Specific performance objective to be achieved for the perspective"
+        `S.M.A.R.T Specific performance objective to be achieved for the perspective
+        The objective must have a score in brackets e.g., Improve service delivery (7%)`,
       ),
     percentage: z
       .number()
       .min(0)
       .max(100)
       .describe(
-        "Weight/percentage allocation for this objective's perspective."
+        `Weight/percentage allocation for this objective's perspective.
+        This is the score alloted to this particular objective. e.g., 7`,
       ),
     actions: z
       .array(stringArraySchema)
       .min(1, "At least one action is required")
       .describe(
-        "Specific actions or activities to achieve the objective implemented in routine basis to support the achievements of the desired KPIs and outcomes. It is in present continuous tense"
+        `Specific actions or activities to achieve the objective implemented in routine basis to support the achievements of the desired KPIs and outcomes. 
+        It is in present continuous tense.
+        e.g., Improving attendance to duty.`,
       ),
     expectedResults: z
       .array(stringArraySchema)
       .min(1, "At least one expected result is required")
       .describe(
-        "This refers to defined outcomes arising from the achievement of performance objectives and shall be stated in past tense."
+        `This refers to defined outcomes arising from the achievement of performance objectives and shall be stated in past tense.
+        e.g., Customer satisfaction, Increased purchasing power in the community.
+        You can even include a percentage measure.
+        `,
       ),
     kpis: z.array(stringArraySchema).min(1, "At least one KPI is required")
       .describe(`
       -shall consist of qualitative and quantitative measures, and shall have a target embedded.
       -Generation shall be guided by the Metadata structure
-      -They shall be simple, straightforward,relevant, actionable, and easy to measure.
-      - When giving measurements, you can talk in terms of percentages
+            e.g., Customer satisfaction index, % of poverty level, Budget absorption rate.
+            NB: Do not give the value of the percentage.
       `),
     score: z
       .number()
@@ -118,7 +125,7 @@ export const performanceObjectiveArraySchema = z.object({
   performanceObjectives: z
     .array(performanceObjectiveSchema)
     .describe(
-      "Create at least 2 performance objectives for a perspective, there should not be more than three performance objectives for each perspective. The total weight of each objective shall be distributed to performance objectives developed under each perspective."
+      "Create at least 2 performance objectives for a perspective, there should not be more than three performance objectives for each perspective. The total weight of each objective shall be distributed to performance objectives developed under each perspective.",
     ),
 });
 
@@ -180,15 +187,15 @@ export const bscSchema = z.object({
 
   // Supervisee and Supervisor
   supervisee: employeeSchema.describe(
-    "Details of the employee being appraised"
+    "Details of the employee being appraised",
   ),
   supervisor: employeeSchema.describe(
-    "Details of the supervising officer conducting the appraisal"
+    "Details of the supervising officer conducting the appraisal",
   ),
 
   // Strategic Elements
   strategicElements: strategicElementsSchema.describe(
-    "Strategic elements and organizational context"
+    "Strategic elements and organizational context",
   ),
 
   // Performance Objectives
@@ -199,7 +206,7 @@ export const bscSchema = z.object({
 
   // Behavioral Assessment
   coreValues: coreValuesSchema.describe(
-    "Organizational core values and their acronym"
+    "Organizational core values and their acronym",
   ),
   behavioralAttributes: z
     .array(behavioralAttributeSchema)

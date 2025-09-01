@@ -33,7 +33,7 @@ export const useOrganizationColumns: ColumnDef<OrganizationData>[] = [
     },
     cell({ row }) {
       return (
-        <div className="text-muted-foreground max-w-fit mx-auto w-full">
+        <div className="mx-auto w-full max-w-fit text-muted-foreground">
           {row.original.voteName}
         </div>
       );
@@ -51,7 +51,7 @@ export const useOrganizationColumns: ColumnDef<OrganizationData>[] = [
       const { label, icon } = organizationStructures[structure];
       const Icon = icon;
       return (
-        <div className="w-full max-w-fit mx-auto">
+        <div className="mx-auto w-full max-w-fit">
           <Badge
             variant={
               structure === OrganizationStructure.CITY
@@ -61,7 +61,7 @@ export const useOrganizationColumns: ColumnDef<OrganizationData>[] = [
                   : "default"
             }
           >
-            <Icon className="size-4 mr-2" />
+            <Icon className="mr-2 size-4" />
             {label}
           </Badge>
         </div>

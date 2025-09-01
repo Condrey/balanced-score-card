@@ -6,6 +6,8 @@ import { organizationStructures } from "@/lib/enums";
 import { BSCData } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
+import { Copy } from "lucide-react";
+import { toast } from "sonner";
 import DropdownMenuBSC from "./dropdown-menu-bsc";
 
 export const useBSCColumns: ColumnDef<BSCData>[] = [
@@ -28,8 +30,8 @@ export const useBSCColumns: ColumnDef<BSCData>[] = [
         row.original.supervisee;
       return (
         <div className="">
-          <div className=" line-clamp-1 text-ellipsis">{name}</div>
-          <div className="text-xs text-muted-foreground line-clamp-1 text-ellipsis">
+          <div className="line-clamp-1 text-ellipsis">{name}</div>
+          <div className="line-clamp-1 text-ellipsis text-xs text-muted-foreground">
             {jobTitle}
           </div>
           <div className="text-xs text-muted-foreground">
@@ -49,8 +51,8 @@ export const useBSCColumns: ColumnDef<BSCData>[] = [
         row.original.supervisor;
       return (
         <div className="">
-          <div className=" line-clamp-1 text-ellipsis">{name}</div>
-          <div className="text-xs text-muted-foreground line-clamp-1 text-ellipsis">
+          <div className="line-clamp-1 text-ellipsis">{name}</div>
+          <div className="line-clamp-1 text-ellipsis text-xs text-muted-foreground">
             {jobTitle}
           </div>
           <div className="text-xs text-muted-foreground">
@@ -76,7 +78,7 @@ export const useBSCColumns: ColumnDef<BSCData>[] = [
       return (
         <div>
           <div className="line-clamp-1 text-ellipsis">{org.name}</div>
-          <div className="flex gap-2 items-center tex-xs text-muted-foreground">
+          <div className="tex-xs flex items-center gap-2 text-muted-foreground">
             <Icon className="size-3" />
             {label}
           </div>
@@ -104,11 +106,11 @@ export const useBSCColumns: ColumnDef<BSCData>[] = [
       const updated = bsc.updatedAt;
       return (
         <div>
-          <div className="text-xs line-clamp-1 text-ellipsis">
+          <div className="line-clamp-1 text-ellipsis text-xs">
             {format(created, "PPPp")}
           </div>
           {updated > created && (
-            <div className="text-xs line-clamp-2 text-ellipsis">
+            <div className="line-clamp-2 text-ellipsis text-xs">
               {format(updated, "PPPp")} (updated)
             </div>
           )}
@@ -122,7 +124,21 @@ export const useBSCColumns: ColumnDef<BSCData>[] = [
       return <DataTableColumnHeader column={column} title="Action" />;
     },
     cell({ row }) {
-      return <DropdownMenuBSC bSC={row.original} />;
+      return (
+        <>
+          <button
+            onClick={() => {
+              toast("copied!");
+              navigator.clipboard.writeText(
+                JSON.stringify(row.original, null, 2),
+              );
+            }}
+          >
+            <Copy />
+          </button>
+          <DropdownMenuBSC bSC={row.original} />
+        </>
+      );
     },
   },
 ];

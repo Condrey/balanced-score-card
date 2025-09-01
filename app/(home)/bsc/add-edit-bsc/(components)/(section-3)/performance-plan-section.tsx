@@ -56,7 +56,7 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
     const usage: Record<string, number> = {};
     fields.forEach((field, index) => {
       const perspective = form.watch(
-        `performanceObjectives.${index}.perspective`
+        `performanceObjectives.${index}.perspective`,
       );
       const percentage =
         form.watch(`performanceObjectives.${index}.percentage`) || 0;
@@ -90,7 +90,7 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-1 ">
+          <div className="grid grid-cols-2 gap-1 md:grid-cols-4">
             {Object.entries(PERSPECTIVE_ALLOCATIONS).map(
               ([key, { label, percentage }]) => {
                 const used = perspectiveUsage[key] || 0;
@@ -100,9 +100,9 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
                 return (
                   <div
                     key={key}
-                    className="text-center p-3 border border-dashed bg-card flex flex-col justify-between rounded-lg"
+                    className="flex flex-col justify-between rounded-lg border border-dashed bg-card p-3 text-center"
                   >
-                    <div className="text-sm font-medium line-clamp-2 text-ellipsis">
+                    <div className="line-clamp-2 text-ellipsis text-sm font-medium">
                       {label}
                     </div>
                     <div
@@ -110,8 +110,8 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
                         isComplete
                           ? "text-green-600"
                           : isOver
-                          ? "text-red-600"
-                          : "text-orange-600"
+                            ? "text-red-600"
+                            : "text-orange-600"
                       }`}
                     >
                       {used.toFixed(1)}% / {percentage}%
@@ -121,23 +121,23 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
                         isComplete
                           ? "default"
                           : isOver
-                          ? "destructive"
-                          : "secondary"
+                            ? "destructive"
+                            : "secondary"
                       }
-                      className="text-xs place-self-center items-center"
+                      className="items-center place-self-center text-xs"
                     >
                       {isComplete ? "Complete" : isOver ? "Over" : "Incomplete"}
                     </Badge>
                   </div>
                 );
-              }
+              },
             )}
           </div>
         </CardContent>
       </Card>
 
       <Card>
-        <CardHeader className="bg-secondary mb-2 flex justify-between flex-row items-center gap-2 ">
+        <CardHeader className="mb-2 flex flex-row items-center justify-between gap-2 bg-secondary">
           <div>
             <CardTitle>Add Performance Objective</CardTitle>
             <CardDescription>

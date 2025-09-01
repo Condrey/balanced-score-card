@@ -22,7 +22,7 @@ export default function ListOfPositions({ positions }: ListOfPositionsProps) {
   });
   const { data, status } = query;
   return (
-    <div className="space-y-4  ">
+    <div className="space-y-4">
       {status === "error" ? (
         <ErrorContainer errorMessage="Failed to load positions" query={query} />
       ) : status === "success" && !data.length ? (

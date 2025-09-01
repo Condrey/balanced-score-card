@@ -30,7 +30,7 @@ export default function PositionContainer({
   });
   const { data: position, status } = query;
   return (
-    <div className="flex flex-col w-full gap-4">
+    <div className="flex w-full flex-col gap-4">
       {status === "error" ? (
         <ErrorContainer
           errorMessage="Failed to fetch position details"
@@ -39,9 +39,9 @@ export default function PositionContainer({
       ) : status === "success" && !position ? (
         <EmptyContainer message="No position details found. Please check the ID or try again later." />
       ) : (
-        <div className="flex gap-3 flex-wrap max-w-7xl w-full mx-auto">
+        <div className="mx-auto flex w-full max-w-7xl flex-wrap gap-3">
           <Card className="max-w-lg">
-            <CardHeader className="flex flex-row gap-2 justify-between">
+            <CardHeader className="flex flex-row justify-between gap-2">
               <div>
                 <CardTitle>
                   {" "}
@@ -59,7 +59,7 @@ export default function PositionContainer({
                 variant="secondary"
                 size="icon"
                 position={position || initialData}
-                className=" flex-none shrink-0"
+                className="flex-none shrink-0"
               >
                 <Edit3Icon />
               </ButtonAddEditPosition>{" "}
@@ -69,15 +69,15 @@ export default function PositionContainer({
               <CardTitle className=" ">
                 Job Purpose/ Departmental Mandate
               </CardTitle>
-              <CardDescription className="text-justify hyphens-auto">
+              <CardDescription className="hyphens-auto text-justify">
                 {position?.departmentalMandate}
               </CardDescription>
             </CardHeader>
             <CardContent>
               <CardTitle className="underline">Duties and activities</CardTitle>
-              <ol className="list-[lower-roman] list-inside mt-2 space-y-2 ">
+              <ol className="mt-2 list-inside list-[lower-roman] space-y-2">
                 {position?.duties.map((duty, index) => (
-                  <li key={index} className=" text-justify hyphens-auto  ">
+                  <li key={index} className="hyphens-auto text-justify">
                     {duty}
                   </li>
                 ))}
@@ -85,9 +85,9 @@ export default function PositionContainer({
             </CardContent>
           </Card>
           <div className="space-y-6">
-            <Card className="max-w-lg bg-green-500 dark:bg-green-300/20 text:green-50  ">
+            <Card className="text:green-50 max-w-lg bg-green-500 dark:bg-green-300/20">
               <CardHeader>
-                <CardTitle className=" text-muted-foreground uppercase">
+                <CardTitle className="uppercase text-muted-foreground">
                   Reports to
                 </CardTitle>
               </CardHeader>
@@ -105,9 +105,9 @@ export default function PositionContainer({
                 )}
               </CardContent>
             </Card>
-            <Card className="max-w-lg bg-red-500 dark:bg-red-300/20 text:red-50  ">
+            <Card className="text:red-50 max-w-lg bg-red-500 dark:bg-red-300/20">
               <CardHeader>
-                <CardTitle className=" text-muted-foreground uppercase">
+                <CardTitle className="uppercase text-muted-foreground">
                   Responsible for
                 </CardTitle>
               </CardHeader>

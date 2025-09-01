@@ -14,7 +14,12 @@ import LoadingButton from "@/components/ui/loading-button";
 import kyInstance from "@/lib/ky";
 import { cn } from "@/lib/utils";
 import { BSCFormData } from "@/lib/validations/bsc";
-import { OrganizationContextPropsSchema, organizationContextPropsSchema, stringArraySchema, StringArraySchema } from "@/lib/validations/others";
+import {
+  OrganizationContextPropsSchema,
+  organizationContextPropsSchema,
+  stringArraySchema,
+  StringArraySchema,
+} from "@/lib/validations/others";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useQuery } from "@tanstack/react-query";
 import { PlusIcon, StarsIcon, XIcon } from "lucide-react";
@@ -41,7 +46,11 @@ export default function FormNdps({ form }: FormNdpsProps) {
     queryFn: async () =>
       kyInstance
         .post("/api/form/user-ndps", {
-          json: { organizationId, financialYear, position }  satisfies OrganizationContextPropsSchema,
+          json: {
+            organizationId,
+            financialYear,
+            position,
+          } satisfies OrganizationContextPropsSchema,
         })
         .json<OutputSchema>(),
   });
@@ -81,7 +90,7 @@ export default function FormNdps({ form }: FormNdpsProps) {
         name="strategicElements.ndpProgrammes"
         render={() => (
           <FormItem>
-            <FormLabel className="flex gap-2 items-center justify-between">
+            <FormLabel className="flex items-center justify-between gap-2">
               <span>
                 NDP programmes{" "}
                 <span className="text-xs text-muted-foreground">
@@ -109,7 +118,7 @@ export default function FormNdps({ form }: FormNdpsProps) {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <div className="flex items-center  gap-2">
+                      <div className="flex items-center gap-2">
                         <Input
                           placeholder="Enter NDP programme"
                           onKeyPress={(e) =>
@@ -147,23 +156,23 @@ export default function FormNdps({ form }: FormNdpsProps) {
         )}
       />
 
-      <ol className="flex flex-col gap-2 list-decimal list-inside">
+      <ol className="flex list-inside list-decimal flex-col gap-2">
         {fields.map((field, index) => (
           <li
             key={field.id}
             className={cn(
-              "gap-1 w-fit max-w-sm ",
-              badgeVariants({ variant: "secondary" })
+              "w-fit max-w-sm gap-1",
+              badgeVariants({ variant: "secondary" }),
             )}
           >
-            <span className="text-ellipsis line-clamp-1">
+            <span className="line-clamp-1 text-ellipsis">
               {form.watch(`strategicElements.ndpProgrammes.${index}.value`)}
             </span>
             <Button
               type="button"
               variant="ghost"
               size="sm"
-              className="h-4 w-4 flex-inline p-0 hover:bg-destructive hover:text-destructive-foreground"
+              className="flex-inline h-4 w-4 p-0 hover:bg-destructive hover:text-destructive-foreground"
               onClick={() => remove(index)}
             >
               <XIcon className="h-3 w-3" />

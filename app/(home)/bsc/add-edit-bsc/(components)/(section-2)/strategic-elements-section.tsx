@@ -55,7 +55,7 @@ export function StrategicElementsSection({
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader className="bg-secondary mb-2">
+        <CardHeader className="mb-2 bg-secondary">
           <CardTitle>Organizational Context</CardTitle>
           <CardDescription>
             Define the strategic foundation of your organization
@@ -137,7 +137,7 @@ export function StrategicElementsSection({
             name="strategicElements.departmentalMandate"
             render={({ field }) => (
               <FormItem>
-                <FormLabel className="flex justify-between gap-2  items-center">
+                <FormLabel className="flex items-center justify-between gap-2">
                   <span>Your Departmental Mandate</span>
                   <LoadingButton
                     loading={isPending}
@@ -178,7 +178,7 @@ export function StrategicElementsSection({
       </Card>
 
       <Card>
-        <CardHeader className="bg-secondary mb-2">
+        <CardHeader className="mb-2 bg-secondary">
           <CardTitle>National Development Plan (NDP) Programmes</CardTitle>
           <CardDescription>
             Add NDP programmes from your organization that applies to your
@@ -191,7 +191,7 @@ export function StrategicElementsSection({
       </Card>
 
       <Card>
-        <CardHeader className="bg-secondary mb-2">
+        <CardHeader className="mb-2 bg-secondary">
           <CardTitle>Strategic Objectives</CardTitle>
           <CardDescription>
             Define key strategic objectives to be achieved

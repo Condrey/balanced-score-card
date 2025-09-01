@@ -48,8 +48,8 @@ export function AppSidebar() {
   return (
     <Suspense
       fallback={
-        <div className="flex items-center justify-center h-full">
-          <Loader2Icon className="animate-spin size-6" />
+        <div className="flex h-full items-center justify-center">
+          <Loader2Icon className="size-6 animate-spin" />
         </div>
       }
     >
@@ -107,7 +107,7 @@ const ListItem = ({
           {!isPending ? (
             <Icon className="size-4" />
           ) : (
-            <Loader2Icon className="animate-spin size-4" />
+            <Loader2Icon className="size-4 animate-spin" />
           )}
           <span>{item.title}</span>
         </Link>

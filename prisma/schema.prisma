@@ -84,7 +84,7 @@ enum OrganizationStructure {
 
 model Employee {
   id             String     @id @default(uuid())
-  employeeNumber String     @unique
+  employeeNumber String
   name           String
   jobTitle       String
   salaryScale    String
@@ -98,6 +98,7 @@ model Employee {
   supervisedBSCs BSC[] @relation("Supervisee")
   supervisorBSCs BSC[] @relation("Supervisor")
 
+  @@unique([employeeNumber, createdAt])
   @@map("employees")
 }
 

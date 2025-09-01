@@ -31,7 +31,7 @@ export default function BscSideBar({ form }: BscSideBarProps) {
     <div className="space-y-6">
       <BSCPreview data={watchedData} />
       <Card>
-        <CardHeader className="bg-secondary mb-2">
+        <CardHeader className="mb-2 bg-secondary">
           <CardTitle className="text-lg">Score Summary</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
@@ -57,7 +57,7 @@ export default function BscSideBar({ form }: BscSideBarProps) {
           </div>
 
           <div className="border-t pt-4">
-            <div className="flex justify-between items-center mb-2">
+            <div className="mb-2 flex items-center justify-between">
               <span className="font-medium">Overall Score</span>
               <span className="text-xl font-bold">
                 {overallScore.toFixed(1)}%

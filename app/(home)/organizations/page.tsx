@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <div className="p-4 space-y-4 size-full">
-      <h1 className="text-xl font-bold tracking-tighter uppercase">
+    <div className="size-full space-y-4 p-4">
+      <h1 className="text-xl font-bold uppercase tracking-tighter">
         Organizations
       </h1>
       <Suspense fallback={<DataTableLoadingSkeleton />}>

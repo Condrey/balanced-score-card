@@ -65,10 +65,10 @@ export default function FormAddEditPosition({
     >
       <Form {...form}>
         <form
-          className="flex gap-2 *:flex-1 border-t flex-col md:flex-row md:divide-x "
+          className="flex flex-col gap-2 border-t *:flex-1 md:flex-row md:divide-x"
           onSubmit={form.handleSubmit(onSubmit)}
         >
-          <div className="flex flex-col  gap-4">
+          <div className="flex flex-col gap-4">
             <FormField
               control={form.control}
               name="jobTitle"
@@ -113,7 +113,7 @@ export default function FormAddEditPosition({
               )}
             />
           </div>
-          <div className="flex flex-col md:ps-2   gap-4">
+          <div className="flex flex-col gap-4 md:ps-2">
             <FormDuties form={form} />
             <LoadingButton loading={isPending} type="submit" className="w-full">
               {position ? "Update" : "Create"}

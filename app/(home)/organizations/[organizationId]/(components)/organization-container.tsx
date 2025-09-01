@@ -47,14 +47,14 @@ export default function OrganizationContainer({
   const organizationContexts = organization?.organizationContexts;
   return (
     <div>
-      <Card className="max-w-lg ">
-        <CardHeader className="flex flex-row gap-2 justify-between">
+      <Card className="max-w-lg">
+        <CardHeader className="flex flex-row justify-between gap-2">
           <div>
             <CardTitle className="flex items-center">
-              <Icon className="inline-block mr-2" />
+              <Icon className="mr-2 inline-block" />
               {organization?.voteName} - {organization?.name}
             </CardTitle>
-            <CardDescription className="text-muted-foreground text-xs">
+            <CardDescription className="text-xs text-muted-foreground">
               {label}
             </CardDescription>
           </div>

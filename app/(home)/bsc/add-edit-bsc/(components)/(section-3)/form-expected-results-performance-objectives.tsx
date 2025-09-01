@@ -56,7 +56,7 @@ export default function FormExpectedResultsPerformanceObjectives({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <div className="flex items-center  gap-0.5">
+                    <div className="flex items-center gap-0.5">
                       <Input
                         placeholder="Enter expected result"
                         onKeyPress={(e) =>
@@ -93,7 +93,7 @@ export default function FormExpectedResultsPerformanceObjectives({
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <div className="gap-1.5 flex w-fit max-w-sm items-center ">
+                  <div className="flex w-fit max-w-sm items-center gap-1.5">
                     <Input
                       placeholder={`Result for number ${index + 1}`}
                       value={field.value.value}
@@ -107,7 +107,7 @@ export default function FormExpectedResultsPerformanceObjectives({
                       type="button"
                       variant="ghost"
                       size="sm"
-                      className="h-4 w-4 flex-inline p-0 hover:bg-destructive hover:text-destructive-foreground"
+                      className="flex-inline h-4 w-4 p-0 hover:bg-destructive hover:text-destructive-foreground"
                       onClick={() => remove(index)}
                     >
                       <XIcon className="h-3 w-3" />

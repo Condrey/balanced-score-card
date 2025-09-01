@@ -51,7 +51,7 @@ export default function ListOfBehavioralAttributes({
                 "--Please edit to add description.--"}
             </TableCell>
             <TableCell>
-              <div className=" gap-1.5 flex items-center flex-row">
+              <div className="flex flex-row items-center gap-1.5">
                 <ButtonAddEditBehavioralAttribute
                   size={"icon"}
                   variant={"secondary"}

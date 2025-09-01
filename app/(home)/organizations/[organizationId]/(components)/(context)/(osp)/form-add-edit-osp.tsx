@@ -62,7 +62,7 @@ export default function FormAddEditOsp({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="flex flex-col gap-4 *:flex-1 w-full border-t md:divide-x md:flex-row"
+          className="flex w-full flex-col gap-4 border-t *:flex-1 md:flex-row md:divide-x"
         >
           <div className="flex flex-col gap-4">
             <FormField

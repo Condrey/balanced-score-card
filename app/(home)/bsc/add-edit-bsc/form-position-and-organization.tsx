@@ -150,7 +150,7 @@ export default function BSCInitialDataForm({
                               }}
                             >
                               {org.name}{" "}
-                              <span className="text-muted-foreground text-xs align-baseline inline">
+                              <span className="inline align-baseline text-xs text-muted-foreground">
                                 ({org.voteName})
                               </span>
                               <Check
@@ -230,7 +230,7 @@ export default function BSCInitialDataForm({
                               }}
                             >
                               {_position.jobTitle}{" "}
-                              <span className="text-muted-foreground text-xs align-baseline inline">
+                              <span className="inline align-baseline text-xs text-muted-foreground">
                                 ({_position.salaryScale})
                               </span>
                               <Check

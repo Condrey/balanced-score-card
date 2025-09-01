@@ -46,7 +46,7 @@ export default function BscFooter({
     }
   };
   return (
-    <div className="flex justify-between mt-8">
+    <div className="mt-8 flex justify-between">
       <Button
         type="button"
         variant="outline"

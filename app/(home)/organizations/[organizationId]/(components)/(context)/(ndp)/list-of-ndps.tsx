@@ -20,14 +20,14 @@ interface ListOfNDPsProps {
 export default function ListOfNDPs({ ndp, context }: ListOfNDPsProps) {
   return (
     <Card>
-      <CardHeader className="flex flex-row gap-3 items-center w-full justify-between">
+      <CardHeader className="flex w-full flex-row items-center justify-between gap-3">
         <div>
           <CardTitle>NDP {ndp.version}</CardTitle>
           <CardDescription>
             This is the NDP that is assigned to this FY{context.financialYear}
           </CardDescription>
         </div>
-        <div className="flex gap-2 justify-between items-center">
+        <div className="flex items-center justify-between gap-2">
           <ButtonAddEditNdp context={context} ndp={ndp} size="icon">
             <Edit3Icon />
           </ButtonAddEditNdp>
@@ -47,14 +47,14 @@ export default function ListOfNDPs({ ndp, context }: ListOfNDPsProps) {
             message={"There are no strategies added to this NDP yet"}
           />
         ) : (
-          <ol className=" list-decimal list-inside">
+          <ol className="list-inside list-decimal">
             {ndp.programmes.map((programme, index) => (
               <li key={index}>{programme}</li>
             ))}
           </ol>
         )}
       </CardContent>
-      <CardHeader className="flex flex-row gap-3 items-center justify-between">
+      <CardHeader className="flex flex-row items-center justify-between gap-3">
         <div>
           <CardTitle>OSPs information</CardTitle>
           <CardDescription>

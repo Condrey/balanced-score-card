@@ -22,7 +22,7 @@ export default function ListOfBSCs({ bSCs }: ListOfBSCsProps) {
   });
   const { data, status } = query;
   return (
-    <div className="space-y-4  ">
+    <div className="space-y-4">
       {status === "error" ? (
         <ErrorContainer errorMessage="Failed to load bSCs" query={query} />
       ) : status === "success" && !data.length ? (

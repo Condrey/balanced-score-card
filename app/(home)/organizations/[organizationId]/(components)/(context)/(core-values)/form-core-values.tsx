@@ -59,7 +59,7 @@ export default function FormCoreValues({ form }: FormCoreValuesProps) {
             </FormLabel>
             <Form {...form2}>
               {/* <pre>{JSON.stringify(form2.formState.errors, null, 2)}</pre> */}
-              <div className="flex items-center  gap-2">
+              <div className="flex items-center gap-2">
                 <FormField
                   control={form2.control}
                   name="value"
@@ -107,16 +107,16 @@ export default function FormCoreValues({ form }: FormCoreValuesProps) {
         )}
       />
 
-      <div className="flex flex-wrap  gap-2">
+      <div className="flex flex-wrap gap-2">
         {fields.map((field, index) => (
           <span
             key={field.id}
             className={cn(
-              "gap-1 w-fit max-w-sm ",
+              "w-fit max-w-sm gap-1",
               badgeVariants({ variant: "secondary" }),
             )}
           >
-            <span className="text-ellipsis line-clamp-1">
+            <span className="line-clamp-1 text-ellipsis">
               {form.watch(`values.${index}.value`)} (
               {form.watch(`values.${index}.score`)}%)
             </span>
@@ -124,7 +124,7 @@ export default function FormCoreValues({ form }: FormCoreValuesProps) {
               type="button"
               variant="ghost"
               size="sm"
-              className="h-4 w-4 flex-inline p-0 hover:bg-destructive hover:text-destructive-foreground"
+              className="flex-inline h-4 w-4 p-0 hover:bg-destructive hover:text-destructive-foreground"
               onClick={() => remove(index)}
             >
               <XIcon className="h-3 w-3" />

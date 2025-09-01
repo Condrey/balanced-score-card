@@ -20,7 +20,7 @@ export default function BscSteps({
   setCurrentStep,
 }: BscStepsProps) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+    <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-4">
       {steps.map((step, index) => {
         const Icon = step.icon;
         const isCompleted = completedSteps.includes(index);
@@ -31,17 +31,17 @@ export default function BscSteps({
             key={step.id}
             className={`cursor-pointer transition-all ${
               isCurrent
-                ? "ring-2 ring-primary bg-muted "
-                : "text-muted-foreground opacity-80 "
+                ? "bg-muted ring-2 ring-primary"
+                : "text-muted-foreground opacity-80"
             } ${
-              isCompleted ? "bg-green-50 border-green-200 text-green-950" : ""
+              isCompleted ? "border-green-200 bg-green-50 text-green-950" : ""
             }`}
             onClick={() => setCurrentStep(index)}
           >
             <CardContent className="p-4">
               <div className="flex items-center gap-3">
                 <div
-                  className={`p-2 rounded-full ${
+                  className={`rounded-full p-2 ${
                     isCompleted
                       ? "bg-green-100"
                       : isCurrent
@@ -59,11 +59,11 @@ export default function BscSteps({
                     />
                   )}
                 </div>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-medium text-sm line-clamp-1 text-ellipsis">
+                <div className="min-w-0 flex-1">
+                  <h3 className="line-clamp-1 text-ellipsis text-sm font-medium">
                     {step.title}
                   </h3>
-                  <p className="text-xs text-muted-foreground truncate">
+                  <p className="truncate text-xs text-muted-foreground">
                     {step.description}
                   </p>
                 </div>

@@ -43,7 +43,7 @@ export default function FormSupervisor({ form }: FormSupervisorProps) {
   if (status === "pending")
     return (
       <EmptyContainer message={"Fetching supervisors..."} className="min-h-fit">
-        <Loader2Icon className="animate-spin size-4" />
+        <Loader2Icon className="size-4 animate-spin" />
       </EmptyContainer>
     );
   if (status === "error")

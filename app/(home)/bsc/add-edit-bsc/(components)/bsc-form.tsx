@@ -19,6 +19,7 @@ import { Form } from "@/components/ui/form";
 import { BSCData, OrganizationContextData, PositionData } from "@/lib/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { ParticularsSection } from "./(section-1)/particulars-section";
 import { StrategicElementsSection } from "./(section-2)/strategic-elements-section";
 import { PerformancePlanSection } from "./(section-3)/performance-plan-section";
@@ -123,6 +124,13 @@ export function BSCForm({
   });
 
   const onSubmit = async (data: BSCFormData) => {
+    toast("submitted", {
+      description: (
+        <pre className="max-h-40 overflow-y-auto">
+          {JSON.stringify(data, null, 2)}
+        </pre>
+      ),
+    });
     mutate(data, {
       // onSuccess: () => router.push("/bsc"),
     });
@@ -130,9 +138,21 @@ export function BSCForm({
 
   return (
     <Form {...form}>
-      <div className="container mx-auto pb-8 px-4">
-        <div className="max-w-6xl mx-auto space-y-6">
+      <div className="container mx-auto px-4 pb-8">
+        <div className="mx-auto max-w-6xl space-y-6">
           <div className="space-y-4">
+            {process.env.NODE_ENV === "development" && (
+              <button
+                onClick={() => {
+                  toast.success("Copied successfully.");
+                  navigator.clipboard.writeText(
+                    JSON.stringify(form.watch(), null, 2),
+                  );
+                }}
+              >
+                Copy data
+              </button>
+            )}
             {/* <pre>{JSON.stringify(form.formState.errors, null, 2)}</pre> */}
             {/* Progress bar  */}
             <BscProgressBar currentStep={currentStep} steps={steps.length} />
@@ -145,17 +165,17 @@ export function BSCForm({
             />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
             <div className="lg:col-span-2">
               <Card className="">
-                <CardHeader className="bg-secondary mb-2">
+                <CardHeader className="mb-2 bg-secondary">
                   <CardTitle className="flex items-center gap-2">
                     {/* special way to create item from iterable  */}
                     {React.createElement(steps[currentStep].icon, {
                       className: "h-5 w-5",
                     })}
                     {steps[currentStep].title}{" "}
-                    <span className="text-sm text-muted-foreground place-items-baseline">
+                    <span className="place-items-baseline text-sm text-muted-foreground">
                       (section {currentStep + 1} of {steps.length})
                     </span>
                   </CardTitle>

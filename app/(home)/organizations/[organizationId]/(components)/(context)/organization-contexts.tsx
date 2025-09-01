@@ -24,12 +24,12 @@ export default function OrganizationContexts({
 }: OrganizationContextsProps) {
   return (
     <Tabs defaultValue={contexts[0].financialYear}>
-      <TabsList className="w-full flex justify-start gap-2  my-4">
+      <TabsList className="my-4 flex w-full justify-start gap-2">
         <ButtonAddEditOrganizationContext
           size="sm"
           organizationId={contexts[0].organizationId!}
         >
-          <PlusIcon className="size-4 " />
+          <PlusIcon className="size-4" />
           FY
         </ButtonAddEditOrganizationContext>
         {contexts.map((ctx) => (
@@ -61,10 +61,10 @@ export default function OrganizationContexts({
           <TabsContent
             key={id}
             value={financialYear}
-            className="space-y-4 *:w-full *:max-w-5xl *:mx-auto"
+            className="space-y-4 *:mx-auto *:w-full *:max-w-5xl"
           >
             <Card className="">
-              <CardHeader className="w-full flex flex-row items-center justify-between gap-3">
+              <CardHeader className="flex w-full flex-row items-center justify-between gap-3">
                 <div>
                   <CardTitle>BSC STRATEGIC ELEMENTS</CardTitle>
                   <CardDescription>
@@ -92,9 +92,9 @@ export default function OrganizationContexts({
                 {ctxValues.map(({ label, value }) => (
                   <p
                     key={label}
-                    className="line-clamp-4 md:line-clamp-2 text-ellipsis text-justify hyphens-auto"
+                    className="line-clamp-4 text-ellipsis hyphens-auto text-justify md:line-clamp-2"
                   >
-                    <span className="text-muted-foreground uppercase">
+                    <span className="uppercase text-muted-foreground">
                       {label}:{" "}
                     </span>{" "}
                     {value}
@@ -108,7 +108,7 @@ export default function OrganizationContexts({
                 message={
                   "It is evident that you do not have a set of core values submitted for this particular financial year. Please add"
                 }
-                className="border p-3 border-destructive text-destructive"
+                className="border border-destructive p-3 text-destructive"
               >
                 <ButtonAddEditCoreValue context={ctx} variant="secondary">
                   Create the Core values
@@ -126,7 +126,7 @@ export default function OrganizationContexts({
                 message={
                   "Please note that you have not added any NDP strategy and objectives. Please add"
                 }
-                className="border p-3 border-destructive text-destructive"
+                className="border border-destructive p-3 text-destructive"
               >
                 <ButtonAddEditNdp context={ctx} variant="secondary">
                   Create the NDP

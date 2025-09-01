@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { deleteBSC, upsertBSC } from "./action";
 
 const queryKey: QueryKey = ["bSCs"];
+
 export function upsertBSCMutation() {
   const queryClient = useQueryClient();
   return useMutation({

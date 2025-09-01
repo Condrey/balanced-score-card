@@ -72,7 +72,7 @@ export default function Assessments({ form }: AssessmentsProps) {
         render={({ field }) => (
           <FormItem>
             <div className="grid gap-4">
-              <div className="grid md:grid-cols-2   gap-4">
+              <div className="grid gap-4 md:grid-cols-2">
                 <FormField
                   control={form2.control}
                   name="attribute"
@@ -107,7 +107,7 @@ export default function Assessments({ form }: AssessmentsProps) {
                               className="h-9"
                             />
                             <CommandList>
-                              <CommandEmpty className="max-w-[200px] text-center text-muted-foreground text-xs flex flex-row justify-center">
+                              <CommandEmpty className="flex max-w-[200px] flex-row justify-center text-center text-xs text-muted-foreground">
                                 No attribute found. Please add core values to
                                 populate!
                               </CommandEmpty>
@@ -177,7 +177,7 @@ export default function Assessments({ form }: AssessmentsProps) {
                 )}
               />
 
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid gap-4 md:grid-cols-2">
                 <FormField
                   control={form2.control}
                   name="score"
@@ -219,10 +219,10 @@ export default function Assessments({ form }: AssessmentsProps) {
                 onClick={() => form2.handleSubmit(addValue)()}
                 className="w-full"
               >
-                <PlusIcon className="h-4 w-4 mr-2" />
+                <PlusIcon className="mr-2 h-4 w-4" />
                 Add Behavioral Attribute
               </Button>
-              <Card className=" bg-sidebar">
+              <Card className="bg-sidebar">
                 <CardHeader>
                   <CardDescription>
                     {watchedValues.length} attribute(s) available

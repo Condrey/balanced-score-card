@@ -46,7 +46,7 @@ export async function GET(req: Request, res: Response) {
     const { duties, departmentalMandate } = position;
     return Response.json(
       { ndp, position },
-      { statusText: "Success", status: 200 }
+      { statusText: "Success", status: 200 },
     );
   } catch (e) {
     console.error(e);

@@ -33,14 +33,14 @@ export function DataTablePagination<TData>({
   const totalRows = table.getFilteredRowModel().rows.length;
   return (
     <div className="flex flex-col items-center justify-between gap-4 px-2 sm:flex-row sm:gap-2">
-      <div className="flex-1 hidden sm:flex text-sm text-muted-foreground">
+      <div className="hidden flex-1 text-sm text-muted-foreground sm:flex">
         {selectedRows === 0
           ? `${totalRows.toLocaleString()} item${totalRows === 1 ? "" : "s"}.`
           : `${selectedRows.toLocaleString()} of ${totalRows.toLocaleString()} item${totalRows === 1 ? "" : "s"} selected.`}
       </div>
-      <div className="flex flex-wrap justify-between items-center space-x-6 md:flex-nowrap lg:space-x-8">
-        <div className="flex sm:items-center space-x-2">
-          <p className="text-sm hidden sm:flex font-medium">Items per page</p>
+      <div className="flex flex-wrap items-center justify-between space-x-6 md:flex-nowrap lg:space-x-8">
+        <div className="flex space-x-2 sm:items-center">
+          <p className="hidden text-sm font-medium sm:flex">Items per page</p>
           <Select
             defaultValue={"5"}
             value={`${table.getState().pagination.pageSize}`}

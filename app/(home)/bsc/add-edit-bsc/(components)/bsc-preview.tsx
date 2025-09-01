@@ -20,12 +20,12 @@ export function BSCPreview({ data }: BSCPreviewProps) {
   if (!data.supervisee?.name && !data.supervisor?.name) {
     return (
       <Card>
-        <CardHeader className="bg-secondary mb-2">
+        <CardHeader className="mb-2 bg-secondary">
           <CardTitle className="text-lg">BSC Preview</CardTitle>
           <CardDescription>Complete the form to see a preview</CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-muted-foreground text-sm">
+          <p className="text-sm text-muted-foreground">
             Start filling out the form to see a preview of your BSC.
           </p>
         </CardContent>
@@ -42,8 +42,8 @@ export function BSCPreview({ data }: BSCPreviewProps) {
       <CardContent className="space-y-4">
         {data.supervisee?.name && (
           <div>
-            <h4 className="font-medium text-sm mb-2">Supervisee</h4>
-            <div className="text-sm space-y-1">
+            <h4 className="mb-2 text-sm font-medium">Supervisee</h4>
+            <div className="space-y-1 text-sm">
               <p>
                 <span className="font-medium">Name:</span>{" "}
                 {data.supervisee.name}
@@ -62,8 +62,8 @@ export function BSCPreview({ data }: BSCPreviewProps) {
 
         {data.supervisor?.name && (
           <div>
-            <h4 className="font-medium text-sm mb-2">Supervisor</h4>
-            <div className="text-sm space-y-1">
+            <h4 className="mb-2 text-sm font-medium">Supervisor</h4>
+            <div className="space-y-1 text-sm">
               <p>
                 <span className="font-medium">Name:</span>{" "}
                 {data.supervisor.name}
@@ -78,7 +78,7 @@ export function BSCPreview({ data }: BSCPreviewProps) {
 
         {data.year && (
           <div>
-            <h4 className="font-medium text-sm mb-2">Review Year</h4>
+            <h4 className="mb-2 text-sm font-medium">Review Year</h4>
             <Badge variant="outline">{data.year}</Badge>
           </div>
         )}
@@ -87,8 +87,8 @@ export function BSCPreview({ data }: BSCPreviewProps) {
 
         {data.strategicElements?.mandate && (
           <div>
-            <h4 className="font-medium text-sm mb-2">Strategic Elements</h4>
-            <div className="text-xs space-y-2">
+            <h4 className="mb-2 text-sm font-medium">Strategic Elements</h4>
+            <div className="space-y-2 text-xs">
               <p>
                 <span className="font-medium">Vision:</span>{" "}
                 {data.strategicElements.vision?.substring(0, 100)}...
@@ -104,13 +104,13 @@ export function BSCPreview({ data }: BSCPreviewProps) {
         {data.performanceObjectives &&
           data.performanceObjectives.length > 0 && (
             <div>
-              <h4 className="font-medium text-sm mb-2">
+              <h4 className="mb-2 text-sm font-medium">
                 Performance Objectives
               </h4>
               <div className="space-y-2">
                 {data.performanceObjectives.map((obj, index) => (
-                  <div key={index} className="text-xs p-2 bg-muted rounded">
-                    <div className="flex justify-between items-start mb-1">
+                  <div key={index} className="rounded bg-muted p-2 text-xs">
+                    <div className="mb-1 flex items-start justify-between">
                       <Badge variant="outline" className="text-xs">
                         {
                           PERSPECTIVE_ALLOCATIONS[
@@ -129,10 +129,10 @@ export function BSCPreview({ data }: BSCPreviewProps) {
 
         {data.behavioralAttributes && data.behavioralAttributes.length > 0 && (
           <div>
-            <h4 className="font-medium text-sm mb-2">Behavioral Attributes</h4>
+            <h4 className="mb-2 text-sm font-medium">Behavioral Attributes</h4>
             <div className="space-y-1">
               {data.behavioralAttributes.map((attr, index) => (
-                <div key={index} className="text-xs flex justify-between">
+                <div key={index} className="flex justify-between text-xs">
                   <span className="truncate">{attr.attribute}</span>
                   <span className="font-medium">{attr.percentage}%</span>
                 </div>

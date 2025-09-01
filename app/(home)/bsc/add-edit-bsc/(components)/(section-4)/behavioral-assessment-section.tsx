@@ -57,7 +57,7 @@ export function BehavioralAssessmentSection({
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader className="bg-secondary mb-2">
+        <CardHeader className="mb-2 bg-secondary">
           <CardTitle>Core Values</CardTitle>
           <CardDescription>
             Define organizational core values and their acronym
@@ -87,7 +87,7 @@ export function BehavioralAssessmentSection({
 
       {/* assessments  */}
       <Card>
-        <CardHeader className="bg-secondary mb-2">
+        <CardHeader className="mb-2 bg-secondary">
           <CardTitle>Behavioral Attributes Assessment</CardTitle>
           <CardDescription>
             Total allocation must equal 20%
@@ -166,8 +166,8 @@ export function BehavioralAssessmentSection({
               </Table>
             </div>
 
-            <div className="mt-4 p-4 bg-muted rounded-lg">
-              <div className="flex justify-between items-center">
+            <div className="mt-4 rounded-lg bg-muted p-4">
+              <div className="flex items-center justify-between">
                 <span className="font-medium">
                   Total Behavioral Percentage:
                 </span>

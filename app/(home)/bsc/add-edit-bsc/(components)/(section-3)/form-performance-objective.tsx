@@ -1,6 +1,5 @@
 import { NumberInput } from "@/components/number-input/number-input";
-import { badgeVariants } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Card,
   CardDescription,
@@ -16,6 +15,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import {
   Select,
   SelectContent,
@@ -84,7 +88,7 @@ export default function FormPerformanceObjectives({
         render={() => (
           <FormItem>
             <div className="space-y-4">
-              <div className="grid md:grid-cols-2 gap-4">
+              <div className="grid gap-4 md:grid-cols-2">
                 <FormField
                   control={form2.control}
                   name="perspective"
@@ -106,7 +110,7 @@ export default function FormPerformanceObjectives({
                               <SelectItem key={key} value={key}>
                                 {label}
                               </SelectItem>
-                            )
+                            ),
                           )}
                         </SelectContent>
                       </Select>
@@ -152,13 +156,13 @@ export default function FormPerformanceObjectives({
                 )}
               />
 
-              <div className="grid md:grid-cols-3 *:flex-1 gap-4 ">
+              <div className="grid gap-4 *:flex-1 md:grid-cols-3">
                 <FormActionsPerformanceObjectives form={form2} />
                 <FormExpectedResultsPerformanceObjectives form={form2} />
                 <FormKpisPerformanceObjectives form={form2} />
               </div>
 
-              <div className="grid md:grid-cols-2 *:flex-1 gap-4">
+              <div className="grid gap-4 *:flex-1 md:grid-cols-2">
                 <FormField
                   control={form2.control}
                   name="score"
@@ -201,7 +205,7 @@ export default function FormPerformanceObjectives({
                 onClick={() => form2.handleSubmit(addValue)()}
                 className="w-full"
               >
-                <PlusIcon className="h-4 w-4 mr-2" />
+                <PlusIcon className="mr-2 h-4 w-4" />
                 Add Performance Objective
               </Button>
               <Card className="bg-sidebar">
@@ -210,30 +214,69 @@ export default function FormPerformanceObjectives({
                     {watchedValues.length} objective(s) available
                   </CardDescription>
                 </CardHeader>
-                <CardFooter className="flex flex-wrap space-x-2 space-y-2">
+                <CardFooter className="flex flex-wrap gap-2">
                   {watchedValues.map((wv, index) => (
-                    <div
-                      key={index}
-                      className={cn(
-                        badgeVariants({
-                          variant: "secondary",
-                          className: "space-x-2",
-                        })
-                      )}
-                    >
-                      {wv.perspective}{" "}
-                      <Button
-                        type="button"
-                        variant={"destructive"}
-                        size={"icon"}
-                        className="size-4 p-0"
-                        title="Delete this objective"
-                        onClick={() => remove(index)}
+                    <HoverCard key={index}>
+                      <HoverCardTrigger
+                        className={cn(
+                          "text-sm",
+                          buttonVariants({ size: "sm", variant: "secondary" }),
+                        )}
                       >
-                        <XIcon />
-                        <span className="sr-only">Delete this objective</span>
-                      </Button>
-                    </div>
+                        {index + 1}. {wv.perspective}
+                      </HoverCardTrigger>
+                      <HoverCardContent>
+                        {/* header */}
+                        <div className="flex w-full justify-end">
+                          <Button
+                            type="button"
+                            variant={"destructive"}
+                            size={"icon"}
+                            className="size-4 p-0"
+                            title="Delete this objective"
+                            onClick={() => remove(index)}
+                          >
+                            <XIcon />
+                            <span className="sr-only">
+                              Delete this objective
+                            </span>
+                          </Button>
+                        </div>
+                        {[
+                          {
+                            title: "Performance Objective",
+                            content: wv.objective,
+                          },
+                          {
+                            title: "Actions/ Activities",
+                            content: wv.actions
+                              .map((a) => `- ${a.value}`)
+                              .join(",\n"),
+                          },
+                          {
+                            title: "Expected results",
+                            content: wv.expectedResults
+                              .map((a) => `- ${a.value}`)
+                              .join(",\n"),
+                          },
+                          {
+                            title: "Key Performance Indicators",
+                            content: wv.kpis
+                              .map((a) => `- ${a.value}`)
+                              .join(",\n"),
+                          },
+                        ].map((obj,index) => (
+                          <div key={index}>
+                            <span className="text-sm font-semibold">
+                              {obj.title}
+                            </span>
+                            <p className="whitespace-pre-line text-xs text-muted-foreground">
+                              {obj.content}
+                            </p>
+                          </div>
+                        ))}
+                      </HoverCardContent>
+                    </HoverCard>
                   ))}
                 </CardFooter>
               </Card>

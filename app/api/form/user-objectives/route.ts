@@ -15,8 +15,12 @@ import z from "zod";
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { financialYear, organizationId, position, ndpProgrammes:targetProgrammes } =
-      organizationContextPropsSchema.parse(body);
+    const {
+      financialYear,
+      organizationId,
+      position,
+      ndpProgrammes: targetProgrammes,
+    } = organizationContextPropsSchema.parse(body);
     if (!targetProgrammes) {
       const errorMessage = "Please provide the NDP programmes first.";
       return Response.json(errorMessage, {
@@ -47,7 +51,7 @@ export async function POST(req: Request) {
         statusText: errorMessage,
       });
     }
-    const { osps: ndpOsps, } = ndp;
+    const { osps: ndpOsps } = ndp;
     if (!ndpOsps.length) {
       const errorMessage =
         "Your organization is missing OSPS, please set it to continue";
@@ -68,14 +72,14 @@ targetProgrammes:
     const prompt = ChatPromptTemplate.fromTemplate(template);
     const model = new ChatOpenAI({ model: "gpt-4o", temperature: 0 });
     const parser = StructuredOutputParser.fromZodSchema(
-      z.array(stringArraySchema)
+      z.array(stringArraySchema),
     );
     const retrievalChain = RunnableSequence.from([prompt, model, parser]);
     const response = await retrievalChain.invoke({
-      question: `From array of ${ndpOsps}, extract array's strategicObjective where array's programmes contains any of ${targetProgrammes.map(np=>np.value)}.`,
+      question: `From array of ${ndpOsps}, extract array's strategicObjective where array's programmes contains any of ${targetProgrammes.map((np) => np.value)}.`,
       format_instructions: parser.getFormatInstructions(),
       ndpOsps,
-      targetProgrammes
+      targetProgrammes,
     });
     return Response.json(response, { statusText: "Success", status: 200 });
   } catch (e) {

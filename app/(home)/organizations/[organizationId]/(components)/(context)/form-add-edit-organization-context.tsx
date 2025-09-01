@@ -70,9 +70,9 @@ export default function FormAddEditOrganizationContext({
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(onSubmit)}
-          className="gap-4 *:flex-1 border-t flex flex-col md:flex-row md:divide-x"
+          className="flex flex-col gap-4 border-t *:flex-1 md:flex-row md:divide-x"
         >
-          <div className="flex flex-col gap-4  ">
+          <div className="flex flex-col gap-4">
             <FormField
               control={form.control}
               name="financialYear"
@@ -113,7 +113,7 @@ export default function FormAddEditOrganizationContext({
               )}
             />
           </div>
-          <div className=" flex flex-col md:ps-4 gap-4 ">
+          <div className="flex flex-col gap-4 md:ps-4">
             <FormField
               control={form.control}
               name="mission"

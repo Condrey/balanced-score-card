@@ -24,7 +24,7 @@ export default function CoreValuesContainer({
 }: CoreValuesContainerProps) {
   return (
     <Card>
-      <CardHeader className="flex gap-2 justify-between flex-row items-center">
+      <CardHeader className="flex flex-row items-center justify-between gap-2">
         <div>
           <CardTitle>Core values</CardTitle>
           <CardDescription>{`List of the organization's core values and developed acronym`}</CardDescription>
@@ -47,7 +47,7 @@ export default function CoreValuesContainer({
         </div>
       </CardHeader>
       <CardContent>
-        <p className="*:inline max-w-3xl">
+        <p className="max-w-3xl *:inline">
           Our value system for FY{organizationContext.financialYear} that will
           shape our culture is{" "}
           <q className="uppercase">
@@ -72,7 +72,7 @@ export default function CoreValuesContainer({
             message={
               "It is high time you updated the Behavioral attributes since you have the core values."
             }
-            className="border border-destructive min-h-fit p-2"
+            className="min-h-fit border border-destructive p-2"
           >
             <ButtonAddEditCoreValue
               variant={"secondary"}

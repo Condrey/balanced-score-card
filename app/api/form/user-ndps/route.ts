@@ -47,7 +47,7 @@ export async function POST(req: Request) {
     const prompt = ChatPromptTemplate.fromTemplate(template);
     const model = new ChatOpenAI({ model: "gpt-4o", temperature: 0 });
     const parser = StructuredOutputParser.fromZodSchema(
-      z.array(stringArraySchema)
+      z.array(stringArraySchema),
     );
     const retrievalChain = RunnableSequence.from([prompt, model, parser]);
     const response = await retrievalChain.invoke({

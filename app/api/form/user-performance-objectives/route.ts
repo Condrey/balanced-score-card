@@ -46,7 +46,14 @@ export async function POST(req: Request) {
     }
 
     //Ai part
-    const template = `You are a Balanced Score Card Maker. Given Job description duties (duties), Create the performance objectives for the position "position".
+    const template = `You are a Balanced Score Card Maker for a Local government in Uganda, you make score cards for the whole country basing on the local context. Given Job description duties (duties), Create the performance objectives for the position "position".
+All the perspectives should be included appearing at least once.
+Summation of the percentage for all objectives for a particular perspective should not exceed the percentage alloted that perspective.
+These are the perspective percentages;
+      1. STAKEHOLDERS_CLIENTS: 25%
+      2. FINANCIAL_STEWARDSHIP: 15%
+      3. INTERNAL_PROCESSES: 20%
+      4. MDA_LG_CAPACITY:  20% 
 {format_instructions}\n{question}
 
 duties:
@@ -57,7 +64,7 @@ position:
     const prompt = ChatPromptTemplate.fromTemplate(template);
     const model = new ChatOpenAI({ model: "gpt-4o", temperature: 0 });
     const parser = StructuredOutputParser.fromZodSchema(
-      performanceObjectiveArraySchema
+      performanceObjectiveArraySchema,
     );
     const retrievalChain = RunnableSequence.from([prompt, model, parser]);
     const response = await retrievalChain.invoke({

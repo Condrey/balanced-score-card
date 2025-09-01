@@ -42,7 +42,7 @@ export default function BSCFormInitialData({
             "Fetching initial data from database, Please be patient while loading."
           }
         >
-          <Loader2Icon className="animate-spin size-8" />
+          <Loader2Icon className="size-8 animate-spin" />
         </EmptyContainer>
       ) : status === "error" ? (
         <ErrorContainer

@@ -13,11 +13,11 @@ export default function EmptyContainer({
   return (
     <div
       className={cn(
-        "flex flex-col gap-4 min-h-[20rem] items-center justify-center",
+        "flex min-h-[20rem] flex-col items-center justify-center gap-4",
         className,
       )}
     >
-      <p className="max-w-sm text-muted-foreground text-center">{message}</p>
+      <p className="max-w-sm text-center text-muted-foreground">{message}</p>
       {children}
     </div>
   );

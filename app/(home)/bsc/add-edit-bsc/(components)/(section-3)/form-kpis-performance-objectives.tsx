@@ -56,7 +56,7 @@ export default function FormKpisPerformanceObjectives({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <div className="flex items-center  gap-0.5">
+                    <div className="flex items-center gap-0.5">
                       <Input
                         placeholder="Enter KPI"
                         onKeyPress={(e) =>
@@ -84,7 +84,7 @@ export default function FormKpisPerformanceObjectives({
         )}
       />
 
-      <div className="flex flex-col p-1 gap-2">
+      <div className="flex flex-col gap-2 p-1">
         {fields.map((_, index) => (
           <FormField
             key={index}
@@ -93,7 +93,7 @@ export default function FormKpisPerformanceObjectives({
             render={({ field }) => (
               <FormItem>
                 <FormControl>
-                  <div className="gap-1.5 flex w-fit max-w-sm items-center ">
+                  <div className="flex w-fit max-w-sm items-center gap-1.5">
                     <Input
                       placeholder={`KPI for number ${index + 1}`}
                       value={field.value.value}
@@ -107,7 +107,7 @@ export default function FormKpisPerformanceObjectives({
                       type="button"
                       variant="ghost"
                       size="sm"
-                      className="h-4 w-4 flex-inline p-0 hover:bg-destructive hover:text-destructive-foreground"
+                      className="flex-inline h-4 w-4 p-0 hover:bg-destructive hover:text-destructive-foreground"
                       onClick={() => remove(index)}
                     >
                       <XIcon className="h-3 w-3" />

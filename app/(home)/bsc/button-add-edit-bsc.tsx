@@ -25,7 +25,7 @@ export default function ButtonAddEditBSC({
       {...props}
       asChild
     >
-      <Link href={newUrl} className={cn("flex gap-2 items-center")}>
+      <Link href={newUrl} className={cn("flex items-center gap-2")}>
         {children}
       </Link>
     </LoadingButton>

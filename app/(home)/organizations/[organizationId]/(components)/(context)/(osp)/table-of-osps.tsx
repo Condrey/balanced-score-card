@@ -18,7 +18,7 @@ interface TableOfOSPsProps {
 
 export default function TableOfOSPs({ osps }: TableOfOSPsProps) {
   return (
-    <Table className="border ">
+    <Table className="border">
       <TableCaption className="caption-top">
         List of Strategic Objectives, strategies, and programmes.
       </TableCaption>
@@ -33,25 +33,25 @@ export default function TableOfOSPs({ osps }: TableOfOSPsProps) {
       </TableHeader>
       <TableBody>
         {osps.map((value, index) => (
-          <TableRow key={value.id} className="*:place-content-start ">
+          <TableRow key={value.id} className="*:place-content-start">
             <TableCell>{index + 1}</TableCell>
             <TableCell>{value.strategicObjective}</TableCell>
             <TableCell>
-              <ol className="list-disc list-inside">
+              <ol className="list-inside list-disc">
                 {value.strategies.map((str, _count) => (
                   <li key={_count}>{str}</li>
                 ))}
               </ol>
             </TableCell>
             <TableCell>
-              <ol className="list-disc list-inside">
+              <ol className="list-inside list-disc">
                 {value.programmes.map((programme, _count) => (
                   <li key={_count}>{programme}</li>
                 ))}
               </ol>
             </TableCell>
             <TableCell>
-              <div className="flex gap-1 items-center">
+              <div className="flex items-center gap-1">
                 <ButtonAddEditOsp
                   osp={value}
                   ndp={value.ndp!}

@@ -63,5 +63,4 @@ export type OrganizationData = Prisma.OrganizationGetPayload<{
   include: typeof organizationDataInclude;
 }>;
 
-
-// Miscellaneous 
+// Miscellaneous

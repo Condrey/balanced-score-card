@@ -53,7 +53,7 @@ export const usePositionColumns: ColumnDef<PositionData>[] = [
     },
     cell({ row }) {
       return (
-        <p className="text-sm line-clamp-2 text-ellipsis ">
+        <p className="line-clamp-2 text-ellipsis text-sm">
           {row.original.departmentalMandate}
         </p>
       );
@@ -97,7 +97,7 @@ export const usePositionColumns: ColumnDef<PositionData>[] = [
           {!responsibleFor.length ? (
             <Badge variant={"destructive"}>No supervised staff</Badge>
           ) : (
-            <div className="flex flex-wrap gap-2 items-center">
+            <div className="flex flex-wrap items-center gap-2">
               {responsibleFor.slice(0, MAX_LENGTH).map((staff, index) => (
                 <Badge
                   key={index}
