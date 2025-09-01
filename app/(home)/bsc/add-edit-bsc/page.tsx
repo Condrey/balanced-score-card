@@ -32,7 +32,7 @@ export default async function Page({ searchParams }: PageProps) {
       positionId,
       year,
     });
-    console.log({ bSc, organizationContext, position })
+  console.log({ bSc, organizationContext, position });
   return (
     <main className="min-h-screen bg-background">
       <BSCForm

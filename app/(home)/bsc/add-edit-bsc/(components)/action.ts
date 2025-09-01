@@ -39,13 +39,13 @@ export async function upsertBSC(input: BSCFormData) {
       year,
       supervisor: {
         connectOrCreate: {
-          where: { employeeNumber: supervisor.employeeNumber },
+          where: { id: supervisor.id },
           create: supervisor,
         },
       },
       supervisee: {
         connectOrCreate: {
-          where: { employeeNumber: supervisee.employeeNumber },
+          where: { id: supervisee.id },
           create: supervisee,
         },
       },

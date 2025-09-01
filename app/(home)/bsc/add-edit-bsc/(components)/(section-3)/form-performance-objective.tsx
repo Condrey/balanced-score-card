@@ -265,7 +265,7 @@ export default function FormPerformanceObjectives({
                               .map((a) => `- ${a.value}`)
                               .join(",\n"),
                           },
-                        ].map((obj,index) => (
+                        ].map((obj, index) => (
                           <div key={index}>
                             <span className="text-sm font-semibold">
                               {obj.title}

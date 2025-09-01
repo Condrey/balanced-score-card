@@ -80,7 +80,7 @@ export function DataTable<TData, TValue>({
   return (
     <div
       className={cn(
-        "w-fit max-w-full rounded-md bg-card p-4 shadow-md dark:border border",
+        "w-fit max-w-full rounded-md border bg-card p-4 shadow-md dark:border",
         className,
       )}
     >

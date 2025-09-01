@@ -9,14 +9,16 @@ import {
 import LoadingButton from "@/components/ui/loading-button";
 import { useCustomSearchParams } from "@/hooks/use-custom-search-param";
 import { BSCData } from "@/lib/types";
+import ky from "ky";
 import {
-  ArrowUpRightIcon,
   Edit3Icon,
   MoreHorizontalIcon,
+  PrinterIcon,
   Trash2Icon,
 } from "lucide-react";
 import Link from "next/link";
 import { useState, useTransition } from "react";
+import { toast } from "sonner";
 import { DialogDeleteBSC } from "./button-delete-bsc";
 
 interface DropdownMenuBSCProps {
@@ -32,6 +34,14 @@ export default function DropdownMenuBSC({ bSC }: DropdownMenuBSCProps) {
   const newEditUrl = getNavigationLinkWithPathnameWithoutUpdate(
     `/bsc/${bSC.id}`,
   );
+  async function printBsc() {
+    startTransition(async () => {
+      const response = await ky.post(`/api/template`, {
+        body: JSON.stringify(bSC),
+      });
+      toast.success(response.statusText);
+    });
+  }
   return (
     <>
       <DropdownMenu modal={false}>
@@ -44,9 +54,9 @@ export default function DropdownMenuBSC({ bSC }: DropdownMenuBSCProps) {
           <DropdownMenuGroup>
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => startTransition(() => {})}>
-              <Link href={newUrl} className="flex w-full">
-                <ArrowUpRightIcon className="mr-2" /> View BSC
-              </Link>
+              <button className="flex w-full" onClick={printBsc}>
+                <PrinterIcon className="mr-2" /> Print BSC
+              </button>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => startTransition(() => {})}>
               <Link href={newEditUrl} className="flex w-full">

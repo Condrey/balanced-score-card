@@ -1,11 +1,19 @@
+import { perspectives } from "@/lib/contants";
 import { BSCData } from "@/lib/types";
+import { StructuredOutputParser } from "@langchain/core/output_parsers";
+import { ChatPromptTemplate } from "@langchain/core/prompts";
+import { RunnableSequence } from "@langchain/core/runnables";
+import { ChatOpenAI } from "@langchain/openai";
+import { PerspectiveType } from "@prisma/client";
 import * as carbone from "carbone";
 import * as fs from "fs";
 import * as os from "os";
 import * as path from "path";
+import z from "zod";
 
 export async function POST(req: Request, res: Response) {
   try {
+    console.info("Generating BSC document...");
     const body = await req.json();
     const bsc = body as BSCData;
 
@@ -13,8 +21,12 @@ export async function POST(req: Request, res: Response) {
       process.cwd(),
       "public/templates/bsc_template.docx",
     );
-
+    console.log({ bsc: bsc.supervisee });
+    const clients = !!bsc.clients.length
+      ? bsc.clients
+      : await getClients(bsc.supervisee.jobTitle);
     const perspectiveGroups = groupByPerspective(bsc);
+
     // Carbone expects data as an object
     const data = {
       ...bsc,
@@ -23,6 +35,11 @@ export async function POST(req: Request, res: Response) {
       strategicObjectives: bsc.strategicObjectives.map((s) => ({
         objective: s,
       })),
+      clients: clients.map((c) => ({ client: c })),
+      behavioralAttributes: bsc.behavioralAttributes.map((bA, index) => ({
+        ...bA,
+        index: index + 1,
+      })),
     };
 
     // Render DOCX using Carbone
@@ -30,7 +47,7 @@ export async function POST(req: Request, res: Response) {
       if (err) {
         return Response.json(
           { message: "BSC generation failed", error: err },
-          { status: 500, statusText: "Internal Server Error" },
+          { status: 200, statusText: `Internal Server Error, ${err}` },
         );
       }
 
@@ -43,11 +60,20 @@ export async function POST(req: Request, res: Response) {
         `bsc ${bsc.supervisee.name} ${bsc.year}.docx`,
       );
       const outputPath = path.join(downloadsPath, fileName);
-      fs.writeFileSync(outputPath, result);
+      try {
+        fs.writeFileSync(outputPath, result);
+      } catch (error) {
+        console.error("Error saving BSC document:", error);
+        return Response.json(
+          { message: "BSC generation failed", error },
+          { status: 200, statusText: `${error}` },
+        );
+      }
     });
     const msg = `BSC generated successfully for ${bsc.supervisee.name}`;
-    return Response.json('success', { status: 200, statusText: msg });
+    return Response.json("success", { status: 200, statusText: msg });
   } catch (error) {
+    console.error("Error generating BSC:", error);
     return Response.json(
       { message: "BSC generation failed", error },
       { status: 500, statusText: "Internal Server Error" },
@@ -80,11 +106,15 @@ function groupByPerspective(bsc: BSCData) {
     if (!groups[obj.perspective]) {
       groups[obj.perspective] = {
         perspective: obj.perspective,
-        percentage: obj.percentage, // or compute total percentage if needed
+        percentage: 0, // start at 0 and sum later
         objectives: [],
       };
     }
 
+    // add to total percentage for this perspective
+    groups[obj.perspective].percentage += obj.percentage;
+
+    // push this objective
     groups[obj.perspective].objectives.push({
       objective: obj.objective,
       percentage: obj.percentage,
@@ -92,9 +122,47 @@ function groupByPerspective(bsc: BSCData) {
       expectedResults: obj.expectedResults.map((r) => ({ result: r })),
       kpis: obj.kpis.map((k) => ({ kpi: k })),
       score: obj.score,
-      comments: obj.comments!,
+      comments: obj.comments ?? "",
     });
   }
 
-  return Object.values(groups);
+  return Object.values(groups).map((group) => ({
+    ...group,
+    perspective: perspectives[group.perspective as PerspectiveType],
+  }));
+}
+
+async function getClients(jobTitle: string): Promise<string[]> {
+  const allClients = [
+    "Political leaders",
+    "Central Government",
+    "Public",
+    "Employees",
+    "NGOs",
+    "CSOs",
+  ];
+
+  const template = `You are an expert in identifying key clients for public sector job roles. Given a job title, provide a concise list of the most relevant clients (stakeholders) that the role typically serves or interacts with. Focus on high-level clients that are crucial for the role's success.
+  {format_instructions}\n{question}
+  allClients:
+  {allClients}
+
+  jobTitle:
+  {jobTitle}
+  `;
+  try {
+    const prompt = ChatPromptTemplate.fromTemplate(template);
+    const model = new ChatOpenAI({ model: "gpt-4o", temperature: 0 });
+    const parser = StructuredOutputParser.fromZodSchema(z.array(z.string()));
+    const retrievalChain = RunnableSequence.from([prompt, model, parser]);
+    const response = await retrievalChain.invoke({
+      allClients,
+      jobTitle,
+      format_instructions: parser.getFormatInstructions(),
+      question: `From array of ${allClients}, extract the most relevant stakeholders for ${jobTitle}`,
+    });
+    return response;
+  } catch (error) {
+    return Response.json("error", { status: 500, statusText: "Error" }) as any;
+  }
 }

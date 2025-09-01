@@ -125,6 +125,7 @@ model BSC {
 
   // Performance Plan and Appraisal
   performanceObjectives PerformanceObjective[]
+  clients               String[]
 
   // Behavioral Assessment
   coreValues           CoreValue             @relation(fields: [coreValueId], references: [id])
@@ -192,6 +193,7 @@ model BehavioralAttribute {
   createdAt             DateTime             @default(now())
 
   @@unique([attribute, organizationContextId])
+  @@unique([attribute, bscId])
   @@map("behavioral_attributes")
 }
 

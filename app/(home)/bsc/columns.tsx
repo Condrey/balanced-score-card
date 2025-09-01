@@ -6,8 +6,6 @@ import { organizationStructures } from "@/lib/enums";
 import { BSCData } from "@/lib/types";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { Copy } from "lucide-react";
-import { toast } from "sonner";
 import DropdownMenuBSC from "./dropdown-menu-bsc";
 
 export const useBSCColumns: ColumnDef<BSCData>[] = [
@@ -126,7 +124,7 @@ export const useBSCColumns: ColumnDef<BSCData>[] = [
     cell({ row }) {
       return (
         <>
-          <button
+          {/* <button
             onClick={() => {
               toast("copied!");
               navigator.clipboard.writeText(
@@ -135,7 +133,7 @@ export const useBSCColumns: ColumnDef<BSCData>[] = [
             }}
           >
             <Copy />
-          </button>
+          </button> */}
           <DropdownMenuBSC bSC={row.original} />
         </>
       );
