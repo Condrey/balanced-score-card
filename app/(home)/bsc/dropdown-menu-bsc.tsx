@@ -17,6 +17,7 @@ import {
   Trash2Icon,
 } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { DialogDeleteBSC } from "./button-delete-bsc";
@@ -30,6 +31,7 @@ export default function DropdownMenuBSC({ bSC }: DropdownMenuBSCProps) {
   const [isPending, startTransition] = useTransition();
   const { getNavigationLinkWithPathnameWithoutUpdate } =
     useCustomSearchParams();
+  const router = useRouter();
   const newUrl = getNavigationLinkWithPathnameWithoutUpdate(`/bsc/${bSC.id}`);
   const newEditUrl = getNavigationLinkWithPathnameWithoutUpdate(
     `/bsc/${bSC.id}`,
@@ -39,7 +41,19 @@ export default function DropdownMenuBSC({ bSC }: DropdownMenuBSCProps) {
       const response = await ky.post(`/api/template`, {
         body: JSON.stringify(bSC),
       });
-      toast.success(response.statusText);
+      if (response.ok) {
+        const { message, url, isError } = await response.json<{
+          message: string;
+          url?: string;
+          isError: boolean;
+        }>();
+        if (!isError && !!url) {
+          toast.success(message);
+          window.open(url);
+        }
+        toast.error(message);
+      }
+      toast.error(response.statusText);
     });
   }
   return (

@@ -5,103 +5,69 @@ import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { ChatOpenAI } from "@langchain/openai";
 import { PerspectiveType } from "@prisma/client";
+import { put } from "@vercel/blob";
 import * as carbone from "carbone";
-import * as fs from "fs";
-import * as os from "os";
 import * as path from "path";
 import z from "zod";
 
 export async function POST(req: Request, res: Response) {
+  console.info("Generating BSC document...");
+  const body = await req.json();
+  const bsc = body as BSCData;
+
+  const templatePath = path.resolve(
+    process.cwd(),
+    "public/templates/bsc_template.docx",
+  );
+  const clients = !!bsc.clients.length
+    ? bsc.clients
+    : await getClients(bsc.supervisee.jobTitle);
+  const perspectiveGroups = groupByPerspective(bsc);
+
+  // Carbone expects data as an object
+  const data = {
+    ...bsc,
+    perspectiveGroups,
+    ndpProgrammes: bsc.ndpProgrammes.map((n) => ({ programme: n })),
+    strategicObjectives: bsc.strategicObjectives.map((s) => ({
+      objective: s,
+    })),
+    clients: clients.map((c) => ({ client: c })),
+    behavioralAttributes: bsc.behavioralAttributes.map((bA, index) => ({
+      ...bA,
+      index: index + 1,
+    })),
+  };
+
   try {
-    console.info("Generating BSC document...");
-    const body = await req.json();
-    const bsc = body as BSCData;
-
-    const templatePath = path.resolve(
-      process.cwd(),
-      "public/templates/bsc_template.docx",
-    );
-    console.log({ bsc: bsc.supervisee });
-    const clients = !!bsc.clients.length
-      ? bsc.clients
-      : await getClients(bsc.supervisee.jobTitle);
-    const perspectiveGroups = groupByPerspective(bsc);
-
-    // Carbone expects data as an object
-    const data = {
-      ...bsc,
-      perspectiveGroups,
-      ndpProgrammes: bsc.ndpProgrammes.map((n) => ({ programme: n })),
-      strategicObjectives: bsc.strategicObjectives.map((s) => ({
-        objective: s,
-      })),
-      clients: clients.map((c) => ({ client: c })),
-      behavioralAttributes: bsc.behavioralAttributes.map((bA, index) => ({
-        ...bA,
-        index: index + 1,
-      })),
-    };
-    return new Promise((resolve) => {
-      carbone.render("templatePath.docx", bsc, {}, (err, result) => {
-        if (err) {
-          return resolve(
-            new Response(
-              JSON.stringify({ message: "BSC generation failed", error: err }),
-              { status: 500 },
-            ),
-          );
-        }
-
-        const fileName = sanitizeFilename(
-          `bsc ${bsc.supervisee.name} ${bsc.year}.docx`,
-        );
-
-        if (process.env.VERCEL) {
-          // ✅ On Vercel: stream file as download
-          return resolve(
-            new Response(Buffer.from(result), {
-              status: 200,
-              headers: {
-                "Content-Type":
-                  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                "Content-Disposition": `attachment; filename="${fileName}"`,
-              },
-            }),
-          );
-        } else {
-          // ✅ Locally: write to Downloads
-          const downloadsPath = path.join(os.homedir(), "Downloads");
-          if (!fs.existsSync(downloadsPath)) {
-            fs.mkdirSync(downloadsPath, { recursive: true });
-          }
-          const outputPath = path.join(downloadsPath, fileName);
-
-          try {
-            fs.writeFileSync(outputPath, Buffer.from(result));
-            console.log(`✅ BSC saved locally: ${outputPath}`);
-          } catch (error) {
-            console.error("❌ Error saving BSC:", error);
-            return resolve(
-              new Response(
-                JSON.stringify({ message: "BSC generation failed", error }),
-                { status: 500 },
-              ),
-            );
-          }
-
-          return resolve(
-            new Response(
-              JSON.stringify({ message: "BSC generated", file: outputPath }),
-              { status: 200 },
-            ),
-          );
-        }
+    const result: Buffer = await new Promise((resolve, reject) => {
+      carbone.render(templatePath, data, {}, (err, result) => {
+        if (err) return reject(err);
+        resolve(Buffer.from(result));
       });
     });
+
+    // Give a unique fileName
+    const fileName = sanitizeFilename(
+      `bsc ${bsc.supervisee.name} ${bsc.year}.docx`,
+    );
+
+    // Upload to Blob storage
+    const blob = await put(fileName, result, {
+      access: "public",
+      allowOverwrite: true,
+    });
+
+    // return msg
+    const msg = `BSC generated successfully for ${bsc.supervisee.name}`;
+    return Response.json(
+      { message: msg, url: blob.downloadUrl, isError: false },
+      { status: 200, statusText: msg },
+    );
   } catch (error) {
     console.error("Error generating BSC:", error);
     return Response.json(
-      { message: "BSC generation failed", error },
+      { message: `BSC generation failed: ${error}`, isError: true },
       { status: 500, statusText: "Internal Server Error" },
     );
   }
@@ -189,6 +155,9 @@ async function getClients(jobTitle: string): Promise<string[]> {
     });
     return response;
   } catch (error) {
-    return Response.json("error", { status: 500, statusText: "Error" }) as any;
+    return Response.json(
+      { message: "Internal Server Error", isError: true },
+      { status: 500, statusText: "Internal Server Error" },
+    ) as any;
   }
 }
