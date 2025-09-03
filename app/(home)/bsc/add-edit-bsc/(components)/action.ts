@@ -61,7 +61,7 @@ export async function upsertBSC(input: BSCFormData) {
         },
       },
       behavioralAttributes: {
-        createMany: { data: behavioralAttributes, skipDuplicates: true },
+        createMany: { data: behavioralAttributes.map(bA=>({ ...bA, id: undefined })), skipDuplicates: true },
       },
       performanceObjectives: {
         createMany: {

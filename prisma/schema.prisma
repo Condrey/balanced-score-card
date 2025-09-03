@@ -158,6 +158,7 @@ model PerformanceObjective {
   score           Float           @default(0)
   comments        String?
 
+  @@unique([id, bscId])
   @@map("performance_objectives")
 }
 
@@ -193,7 +194,7 @@ model BehavioralAttribute {
   createdAt             DateTime             @default(now())
 
   @@unique([attribute, organizationContextId])
-  @@unique([attribute, bscId])
+  // @@unique([attribute, bscId])
   @@map("behavioral_attributes")
 }
 
