@@ -1,10 +1,9 @@
-import { perspectives } from "@/lib/contants";
 import { BSCData } from "@/lib/types";
+import { groupByPerspective } from "@/lib/utils";
 import { StructuredOutputParser } from "@langchain/core/output_parsers";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
 import { RunnableSequence } from "@langchain/core/runnables";
 import { ChatOpenAI } from "@langchain/openai";
-import { PerspectiveType } from "@prisma/client";
 import { put } from "@vercel/blob";
 import * as carbone from "carbone";
 import * as path from "path";
@@ -22,7 +21,7 @@ export async function POST(req: Request, res: Response) {
   const clients = !!bsc.clients.length
     ? bsc.clients
     : await getClients(bsc.supervisee.jobTitle);
-  const perspectiveGroups = groupByPerspective(bsc);
+  const perspectiveGroups = groupByPerspective(bsc.performanceObjectives);
 
   // Carbone expects data as an object
   const data = {
@@ -76,53 +75,6 @@ export async function POST(req: Request, res: Response) {
 
 function sanitizeFilename(name: string): string {
   return name.replace(/[\/\\:*?"<>|]/g, "-");
-}
-
-type PerspectiveGroup = {
-  perspective: string;
-  percentage: number; // can keep first or sum
-  objectives: {
-    objective: string;
-    percentage: number;
-    actions: { action: string }[];
-    expectedResults: { result: string }[];
-    kpis: { kpi: string }[];
-    score: number;
-    comments: string;
-  }[];
-};
-
-function groupByPerspective(bsc: BSCData) {
-  const groups: Record<string, PerspectiveGroup> = {};
-
-  for (const obj of bsc.performanceObjectives) {
-    if (!groups[obj.perspective]) {
-      groups[obj.perspective] = {
-        perspective: obj.perspective,
-        percentage: 0, // start at 0 and sum later
-        objectives: [],
-      };
-    }
-
-    // add to total percentage for this perspective
-    groups[obj.perspective].percentage += obj.percentage;
-
-    // push this objective
-    groups[obj.perspective].objectives.push({
-      objective: obj.objective,
-      percentage: obj.percentage,
-      actions: obj.actions.map((a) => ({ action: a })),
-      expectedResults: obj.expectedResults.map((r) => ({ result: r })),
-      kpis: obj.kpis.map((k) => ({ kpi: k })),
-      score: obj.score,
-      comments: obj.comments ?? "",
-    });
-  }
-
-  return Object.values(groups).map((group) => ({
-    ...group,
-    perspective: perspectives[group.perspective as PerspectiveType],
-  }));
 }
 
 async function getClients(jobTitle: string): Promise<string[]> {

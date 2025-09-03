@@ -11,9 +11,11 @@ import { useCustomSearchParams } from "@/hooks/use-custom-search-param";
 import { BSCData } from "@/lib/types";
 import ky from "ky";
 import {
+  CopyIcon,
+  DownloadIcon,
   Edit3Icon,
   MoreHorizontalIcon,
-  PrinterIcon,
+  MoveUpRightIcon,
   Trash2Icon,
 } from "lucide-react";
 import Link from "next/link";
@@ -49,7 +51,7 @@ export default function DropdownMenuBSC({ bSC }: DropdownMenuBSCProps) {
         }>();
         if (!isError && !!url) {
           toast.success(message);
-          window.open(url);
+          window.open(url, "_blank");
         } else {
           toast.error(message);
         }
@@ -70,8 +72,16 @@ export default function DropdownMenuBSC({ bSC }: DropdownMenuBSCProps) {
           <DropdownMenuGroup>
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => startTransition(() => {})}>
+              <Link href={newUrl} className="flex w-full">
+                <MoveUpRightIcon className="mr-2" /> View BSC
+              </Link>
+            </DropdownMenuItem>
+          </DropdownMenuGroup>
+          <DropdownMenuGroup>
+            <DropdownMenuLabel>Secondary Actions</DropdownMenuLabel>
+            <DropdownMenuItem>
               <button className="flex w-full" onClick={printBsc}>
-                <PrinterIcon className="mr-2" /> Print BSC
+                <DownloadIcon className="mr-2" /> Download BSC
               </button>
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => startTransition(() => {})}>
@@ -82,6 +92,18 @@ export default function DropdownMenuBSC({ bSC }: DropdownMenuBSCProps) {
             <DropdownMenuItem onClick={() => setOpenDelete(true)}>
               <Trash2Icon /> Delete BSC
             </DropdownMenuItem>
+            {process.env.NODE_ENV === "development" && (
+              <DropdownMenuItem asChild>
+                <button
+                  onClick={() => {
+                    toast("copied!");
+                    navigator.clipboard.writeText(JSON.stringify(bSC, null, 2));
+                  }}
+                >
+                  <CopyIcon />
+                </button>
+              </DropdownMenuItem>
+            )}
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>

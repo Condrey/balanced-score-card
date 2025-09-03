@@ -126,16 +126,7 @@ export const useBSCColumns: ColumnDef<BSCData>[] = [
     cell({ row }) {
       return (
         <>
-          <button
-            onClick={() => {
-              toast("copied!");
-              navigator.clipboard.writeText(
-                JSON.stringify(row.original, null, 2),
-              );
-            }}
-          >
-            <Copy />
-          </button>
+         
           <DropdownMenuBSC bSC={row.original} />
         </>
       );

@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
-import { GeistSans } from "geist/font/sans";
-import { GeistMono } from "geist/font/mono";
-import "./globals.css";
-import ReactQueryProvider from "../components/react-query-provider";
 import { ThemeProvider } from "@/components/theme-provider";
+import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
+import type { Metadata } from "next";
 import { Toaster } from "sonner";
+import ReactQueryProvider from "../components/react-query-provider";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Balanced Score Card",
@@ -36,7 +36,7 @@ html {
         >
           <ReactQueryProvider>
             {children}
-            <Toaster />
+            <Toaster richColors={true} />
           </ReactQueryProvider>
         </ThemeProvider>
       </body>

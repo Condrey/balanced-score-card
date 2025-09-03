@@ -64,3 +64,16 @@ export type OrganizationData = Prisma.OrganizationGetPayload<{
 }>;
 
 // Miscellaneous
+export type PerspectiveGroup = {
+  perspective: string;
+  percentage: number; // can keep first or sum
+  objectives: {
+    objective: string;
+    percentage: number;
+    actions: { action: string }[];
+    expectedResults: { result: string }[];
+    kpis: { kpi: string }[];
+    score: number;
+    comments: string;
+  }[];
+};
