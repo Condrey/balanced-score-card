@@ -49,13 +49,14 @@ export async function POST(req: Request, res: Response) {
 
     // Give a unique fileName
     const fileName = sanitizeFilename(
-      `${bsc.supervisee.name} bsc ${bsc.year}.docx`,
+      `${bsc.supervisee.name} bsc-${bsc.year}.docx`,
     );
 
     // Upload to Blob storage
     const blob = await put(fileName, result, {
       access: "public",
       allowOverwrite: true,
+      cacheControlMaxAge: 1,
     });
 
     // return msg
