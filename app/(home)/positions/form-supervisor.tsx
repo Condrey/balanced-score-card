@@ -95,6 +95,13 @@ export default function FormSupervisor({ form }: FormSupervisorProps) {
                 <CommandList>
                   <CommandEmpty>No supervisor found.</CommandEmpty>
                   <CommandGroup>
+                    <CommandItem
+                      value=""
+                      onSelect={() => form.setValue("reportsToId", "")}
+                      className="text-muted-foreground"
+                    >
+                      Not Applicable
+                    </CommandItem>
                     {data.map((d) => (
                       <CommandItem
                         value={d.jobTitle}
