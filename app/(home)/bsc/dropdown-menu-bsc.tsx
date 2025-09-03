@@ -50,12 +50,12 @@ export default function DropdownMenuBSC({ bSC }: DropdownMenuBSCProps) {
         if (!isError && !!url) {
           toast.success(message);
           window.open(url);
-        }else{
-toast.error(message);
+        } else {
+          toast.error(message);
         }
-        
+      } else {
+        toast.error(response.statusText);
       }
-      toast.error(response.statusText);
     });
   }
   return (
