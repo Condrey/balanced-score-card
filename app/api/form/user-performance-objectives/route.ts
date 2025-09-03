@@ -69,6 +69,7 @@ Your role is to generate Balanced Scorecards tailored to the Ugandan local gover
    - FINANCIAL_STEWARDSHIP
    - INTERNAL_PROCESSES
    - MDA_LG_CAPACITY
+   There is a tendency for the AI to forget FINANCIAL_STEWARDSHIP, take note.
 3. These are the blueprint perspectives with their maximum allowable percentages:  
    {perspectivesWithPercentages}
 4. Ensure the total percentage of objectives under each perspective does **not exceed** its allotted percentage.  
