@@ -49,7 +49,7 @@ export async function POST(req: Request, res: Response) {
 
     // Give a unique fileName
     const fileName = sanitizeFilename(
-      `${bsc.supervisee.name} bsc-${bsc.year}.docx`,
+      `${bsc.supervisee.name}_bsc ${bsc.year}.docx`,
     );
 
     // Upload to Blob storage
