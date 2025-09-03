@@ -1,14 +1,14 @@
 "use client";
 
+import { DataTable } from "@/components/data-table/data-table";
+import EmptyContainer from "@/components/query-containers/empty-container";
+import ErrorContainer from "@/components/query-containers/error-container";
 import { PositionData } from "@/lib/types";
 import { useQuery } from "@tanstack/react-query";
+import { PlusIcon } from "lucide-react";
 import { getAllPositions } from "./action";
-import ErrorContainer from "@/components/query-containers/error-container";
-import EmptyContainer from "@/components/query-containers/empty-container";
-import { DataTable } from "@/components/data-table/data-table";
 import ButtonAddEditPosition from "./button-add-edit-position";
 import { usePositionColumns } from "./columns";
-import { PlusIcon } from "lucide-react";
 
 interface ListOfPositionsProps {
   positions: PositionData[];
@@ -19,6 +19,7 @@ export default function ListOfPositions({ positions }: ListOfPositionsProps) {
     queryKey: ["positions"],
     queryFn: getAllPositions,
     initialData: positions,
+    refetchOnWindowFocus: false,
   });
   const { data, status } = query;
   return (
