@@ -59,7 +59,7 @@ export default function FormDuties({ form }: FormDutiesProps) {
                   <FormControl>
                     <div className="flex items-center gap-2">
                       <Input
-                        placeholder="Enter a programme from the NDP"
+                        placeholder="Enter Key duty and responsibility for the JD"
                         onKeyPress={(e) =>
                           e.key === "Enter" &&
                           (e.preventDefault(), form2.handleSubmit(addValue)())
