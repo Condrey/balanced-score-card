@@ -31,6 +31,7 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
   const financialYear = form.watch("year");
   const position = form.watch("supervisee.id")!;
   const superviseeId = form.watch("supervisee.id");
+  const behavioralAttributes = form.watch("behavioralAttributes");
 
   const query = useQuery({
     queryKey: ["performanceObjectives", superviseeId],
@@ -42,7 +43,7 @@ export function PerformancePlanSection({ form }: PerformancePlanSectionProps) {
           json: {
             financialYear,
             organizationId,
-            position,
+            position,behavioralAttributes
           } satisfies OrganizationContextPropsSchema,
         })
         .json<PerformanceObjectiveArraySchema>(),

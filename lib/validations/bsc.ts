@@ -100,14 +100,14 @@ export const performanceObjectiveSchema = z
       .describe(
         `This refers to defined outcomes arising from the achievement of performance objectives and shall be stated in past tense.
         e.g., Customer satisfaction, Increased purchasing power in the community.
-        You can even include a percentage measure.
+        You can seldomly include a percentage measure.
         `,
       ),
     kpis: z.array(stringArraySchema).min(1, "At least one KPI is required")
       .describe(`
       -shall consist of qualitative and quantitative measures, and shall have a target embedded.
       -Generation shall be guided by the Metadata structure
-            e.g., Customer satisfaction index, % of poverty level, Budget absorption rate.
+            e.g.,  % of poverty level,Customer satisfaction index, Budget absorption rate.
             NB: Do not give the value of the percentage.
       `),
     score: z

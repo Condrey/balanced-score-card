@@ -45,7 +45,6 @@ export function BSCForm({
 }: BSCFormProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
-  const router = useRouter();
   const { isPending, mutate } = upsertBSCMutation();
   const form = useForm<BSCFormData>({
     resolver: zodResolver(bscSchema),
@@ -82,7 +81,7 @@ export function BSCForm({
       performanceObjectives: bSC
         ? bSC.performanceObjectives.map((p) => ({
             ...p,
-            score: p.score || 0,
+            score: p.score ,
             actions: p.actions.map((a) => ({ value: a })),
             expectedResults: p.expectedResults.map((a) => ({ value: a })),
             kpis: p.kpis.map((a) => ({ value: a })),
@@ -110,7 +109,7 @@ export function BSCForm({
         ? bSC.behavioralAttributes.map((b) => ({
             ...b,
             commentsJustification: b.commentsJustification!,
-            score: b.score || 0,
+            score: b.score ,
             description: b.description || "",
           }))
         : organizationContext
@@ -187,7 +186,7 @@ export function BSCForm({
                   <form onSubmit={form.handleSubmit(onSubmit)}>
                     {currentStep === 0 && <ParticularsSection form={form} />}
                     {currentStep === 1 && (
-                      <StrategicElementsSection form={form} />
+                      <StrategicElementsSection form={form} positionId={position?.id!} />
                     )}
                     {currentStep === 2 && (
                       <PerformancePlanSection form={form} />

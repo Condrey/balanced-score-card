@@ -19,38 +19,55 @@ import LoadingButton from "@/components/ui/loading-button";
 import { Textarea } from "@/components/ui/textarea";
 import kyInstance from "@/lib/ky";
 import type { BSCFormData } from "@/lib/validations/bsc";
+import { OrganizationContextPropsSchema } from "@/lib/validations/others";
 import { useQuery } from "@tanstack/react-query";
 import { StarsIcon } from "lucide-react";
+import { useEffect } from "react";
 import { type UseFormReturn } from "react-hook-form";
 import FormNdps from "./form-ndps";
 import FormStrategicObjectives from "./form-strategic-objectives";
 
 interface StrategicElementsSectionProps {
   form: UseFormReturn<BSCFormData>;
+  positionId:string
 }
 
 export function StrategicElementsSection({
-  form,
+  form,positionId
 }: StrategicElementsSectionProps) {
+  const organizationId = form.watch("organizationId")!;
+  const financialYear = form.watch("year");
+  const position = form.watch("supervisee.jobTitle");
+  const superviseeId = form.watch("supervisee.id");
+
   const query = useQuery({
-    queryKey: ["departmentalMandate", form.getValues("supervisee.id")],
+    queryKey: ["departmentalMandate", superviseeId],
     refetchOnWindowFocus: false,
+    staleTime: Infinity,
     queryFn: async () =>
       kyInstance
-        .get("/api/form/departmental-mandate", {
-          json: form.watch(),
+        .post("/api/form/departmental-mandate", {
+          json: {
+            financialYear,
+            organizationId,
+            position,
+          } satisfies OrganizationContextPropsSchema,
         })
         .json<string>(),
   });
-  async function getAiDepartmentalMandate() {
-    await query.refetch();
-  }
-  const { data, isError, isPending, isSuccess, error } = query;
-  if (isSuccess) {
-    form.setValue("strategicElements.departmentalMandate", data);
-  }
+
+  const { data, isError, isPending, isFetching, isSuccess, error } = query;
+  useEffect(() => {
+    if (isSuccess && !!data) {
+      form.setValue("strategicElements.departmentalMandate", data);
+    }
+  }, [isSuccess, data, form]);
+
   if (isError) {
     console.error(error);
+  }
+  async function getAiDepartmentalMandate() {
+    await query.refetch();
   }
   return (
     <div className="space-y-6">
@@ -140,7 +157,7 @@ export function StrategicElementsSection({
                 <FormLabel className="flex items-center justify-between gap-2">
                   <span>Your Departmental Mandate</span>
                   <LoadingButton
-                    loading={isPending}
+                    loading={isFetching}
                     type="button"
                     title="Use Ai to search your departmental mandate"
                     onClick={getAiDepartmentalMandate}
@@ -160,7 +177,7 @@ export function StrategicElementsSection({
                     {...field}
                   />
                 </FormControl>
-                {isPending && (
+                {isFetching && (
                   <FormDescription>
                     Ai is fetching the perfect departmental mandate for you...
                   </FormDescription>
@@ -186,7 +203,7 @@ export function StrategicElementsSection({
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <FormNdps form={form} />
+          <FormNdps form={form} positionId={positionId} />
         </CardContent>
       </Card>
 

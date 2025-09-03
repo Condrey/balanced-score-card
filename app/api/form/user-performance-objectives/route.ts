@@ -13,7 +13,7 @@ export async function POST(req: Request) {
   console.log("Requesting plan");
   try {
     const body = await req.json();
-    const { position: superviseeId } =
+    const { position: superviseeId, behavioralAttributes } =
       organizationContextPropsSchema.parse(body);
     if (!superviseeId) {
       const errorMessage = "Please provide the position for the post.";
@@ -26,6 +26,18 @@ export async function POST(req: Request) {
       where: { id: superviseeId },
       include: positionDataInclude,
     });
+
+    const perspectivesWithPercentages = !behavioralAttributes?.length
+      ? [
+          { perspective: "STAKEHOLDERS_CLIENTS", percentage: 25 },
+          { perspective: "FINANCIAL_STEWARDSHIP", percentage: 15 },
+          { perspective: "INTERNAL_PROCESSES", percentage: 20 },
+          { perspective: "MDA_LG_CAPACITY", percentage: 20 },
+        ]
+      : behavioralAttributes.map((b) => ({
+          perspective: b.attribute,
+          percentage: b.percentage,
+        }));
 
     if (!position) {
       const errorMessage =
@@ -46,21 +58,35 @@ export async function POST(req: Request) {
     }
 
     //Ai part
-    const template = `You are a Balanced Score Card Maker for a Local government in Uganda, you make score cards for the whole country basing on the local context. Given Job description duties (duties), Create the performance objectives for the position "position".
-All the perspectives should be included appearing at least once.
-Summation of the percentage for all objectives for a particular perspective should not exceed the percentage alloted that perspective.
-These are the perspective percentages;
-      1. STAKEHOLDERS_CLIENTS: 25%
-      2. FINANCIAL_STEWARDSHIP: 15%
-      3. INTERNAL_PROCESSES: 20%
-      4. MDA_LG_CAPACITY:  20% 
-{format_instructions}\n{question}
+    const template = `
+You are a Balanced Scorecard Maker for Local Governments in Uganda who makes annual BSCs. 
+Your role is to generate Balanced Scorecards tailored to the Ugandan local government context.
 
-duties:
+**Instructions:**
+1. Use the provided Job Description Duties (duties) to create Performance Objectives for the specified Position (position).
+2. The Balanced Scorecard must include *all* four blueprint perspectives, and each perspective must appear at least **two times** and at most **four times** for senior job positions in the output:
+   - STAKEHOLDERS_CLIENTS
+   - FINANCIAL_STEWARDSHIP
+   - INTERNAL_PROCESSES
+   - MDA_LG_CAPACITY
+3. These are the blueprint perspectives with their maximum allowable percentages:  
+   {perspectivesWithPercentages}
+4. Ensure the total percentage of objectives under each perspective does **not exceed** its allotted percentage.  
+5. If the draft misses 1 or more objectives for a given perspective, smartly add them to ensure every perspective is represented at least twice.  
+6. Distribute percentages realistically and fairly across objectives.  
+7. Output must strictly follow the required format.  
+
+{format_instructions}
+
+{question}
+
+Duties:  
 {duties}
 
-position:
-{position}`;
+Position:  
+{position}
+`;
+
     const prompt = ChatPromptTemplate.fromTemplate(template);
     const model = new ChatOpenAI({ model: "gpt-4o", temperature: 0 });
     const parser = StructuredOutputParser.fromZodSchema(
@@ -68,10 +94,11 @@ position:
     );
     const retrievalChain = RunnableSequence.from([prompt, model, parser]);
     const response = await retrievalChain.invoke({
-      question: `From array of ${duties}, generate the performance objectives.`,
+      question: `From array of ${duties}, generate the performance objectives with the instructed number of generated perspectives.`,
       format_instructions: parser.getFormatInstructions(),
       duties,
       position,
+      perspectivesWithPercentages,
     });
     return Response.json(response, { statusText: "Success", status: 200 });
   } catch (e) {

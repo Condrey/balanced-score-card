@@ -16,7 +16,6 @@ import { cn } from "@/lib/utils";
 import { BSCFormData } from "@/lib/validations/bsc";
 import {
   OrganizationContextPropsSchema,
-  organizationContextPropsSchema,
   stringArraySchema,
   StringArraySchema,
 } from "@/lib/validations/others";
@@ -29,12 +28,12 @@ import z from "zod";
 
 interface FormNdpsProps {
   form: UseFormReturn<BSCFormData>;
+  positionId:string
 }
 
-export default function FormNdps({ form }: FormNdpsProps) {
+export default function FormNdps({ form, positionId }: FormNdpsProps) {
   const organizationId = form.watch("organizationId")!;
   const financialYear = form.watch("year");
-  const position = form.watch("supervisee.jobTitle");
   const outputSchema = z.array(stringArraySchema);
   type OutputSchema = z.infer<typeof outputSchema>;
   const superviseeId = form.watch("supervisee.id");
@@ -49,7 +48,7 @@ export default function FormNdps({ form }: FormNdpsProps) {
           json: {
             organizationId,
             financialYear,
-            position,
+            position:positionId,
           } satisfies OrganizationContextPropsSchema,
         })
         .json<OutputSchema>(),

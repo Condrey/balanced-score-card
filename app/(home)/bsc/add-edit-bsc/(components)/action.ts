@@ -67,7 +67,6 @@ export async function upsertBSC(input: BSCFormData) {
         createMany: {
           data: performanceObjectives.map((p) => ({
             ...p,
-            id: p.id || "",
             actions: p.actions.map((a) => a.value),
             kpis: p.kpis.map((a) => a.value),
             expectedResults: p.expectedResults.map((a) => a.value),
