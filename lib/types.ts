@@ -63,6 +63,13 @@ export type OrganizationData = Prisma.OrganizationGetPayload<{
   include: typeof organizationDataInclude;
 }>;
 
+export const peerReviewDataInclude = {
+  user: true,
+} satisfies Prisma.PeerReviewInclude;
+export type PeerReviewData = Prisma.PeerReviewGetPayload<{
+  include: typeof peerReviewDataInclude;
+}>;
+
 // Miscellaneous
 export type PerspectiveGroup = {
   perspective: string;
