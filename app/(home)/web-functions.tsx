@@ -1,9 +1,13 @@
 import { Card } from "@/components/ui/card";
+import { Clock10Icon, DownloadIcon } from "lucide-react";
 import Image from "next/image";
 
 export default function WebFunctions() {
   return (
-    <Card className="flex items-center gap-4">
+   <div className="space-y-4">
+             <h1 className="text-xl text-center uppercase tracking-tight">
+What is offered</h1>
+     <Card className="flex items-center max-w-4xl  gap-4">
       <Image
       height={300}
       width={400}
@@ -12,16 +16,17 @@ export default function WebFunctions() {
         src="/bsc.png"
       />
       <div className="font-medium">
-        <p className="font-mono text-xs uppercase text-blue-500 dark:text-blue-400">
-          Speed
+        <p className="font-mono text-xl  tracking-tighter uppercase text-primary">
+          QUICK FILL AND DOWNLOAD AT LEISURE
         </p>
-        <p className="mt-2 text-base text-gray-700 dark:text-gray-300">
-          Built for power users
+        <p className="mt-2  text-base text-muted-foreground">
+         <Clock10Icon className="inline size-4"/>   <DownloadIcon className="inline size-4 mr-4"/> Two-minute-delay only
         </p>
-        <p className="mt-1 text-balance text-sm leading-relaxed text-gray-500">
-          Work faster than ever with customizable keyboard shortcuts
+        <p className="mt-1 max-w-md text-sm leading-relaxed ">
+          In 2 minutes get your BSC wholesomely generated. Download at will and edit at your pase.
         </p>
       </div>
     </Card>
+   </div>
   );
 }
