@@ -101,7 +101,7 @@ export default function FormAddEditPosition({
               name="departmentalMandate"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Job purpose/ Departmental Mandate</FormLabel>
+                  <FormLabel>Job purpose</FormLabel>
                   <FormControl>
                     <Textarea
                       placeholder="job purpose from Job description "

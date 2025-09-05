@@ -27,24 +27,24 @@ import { Suspense, useTransition } from "react";
 const items = [
   {
     title: "Positions",
-    url: "/positions",
+    url: "/admin/positions",
     icon: VoteIcon,
   },
   {
     title: "Organizations",
-    url: "/organizations",
+    url: "/admin/organizations",
     icon: StoreIcon,
   },
   {
     title: "Balance Score Cards",
-    url: "/bsc",
+    url: "/admin/bsc",
     icon: LetterTextIcon,
   },
 ];
 
 export function AppSidebar() {
   const pathname = usePathname();
-  const isHomeActive = pathname === "/";
+  const isHomeActive = pathname === "/admin";
   return (
     <Suspense
       fallback={
@@ -60,13 +60,13 @@ export function AppSidebar() {
             <SidebarGroupContent>
               <SidebarMenu>
                 <ListItem
-                  item={{ title: "Home", url: "/", icon: HomeIcon }}
+                  item={{ title: "Home", url: "/admin", icon: HomeIcon }}
                   isActive={isHomeActive}
                 />
                 {/* Map through items to create list items */}
                 {items.map((item) => {
                   const isActive =
-                    pathname.startsWith(item.url) && pathname !== "/";
+                    pathname.startsWith(item.url) && pathname !== "/admin";
                   return (
                     <ListItem
                       key={item.title}

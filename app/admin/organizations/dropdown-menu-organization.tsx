@@ -33,7 +33,7 @@ export default function DropdownMenuOrganization({
   const { getNavigationLinkWithPathnameWithoutUpdate } =
     useCustomSearchParams();
   const newUrl = getNavigationLinkWithPathnameWithoutUpdate(
-    `/organizations/${organization.id}`,
+    `/admin/organizations/${organization.id}`,
   );
 
   return (

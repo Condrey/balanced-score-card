@@ -19,7 +19,6 @@ import {
   Trash2Icon,
 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { DialogDeleteBSC } from "./button-delete-bsc";
@@ -33,10 +32,11 @@ export default function DropdownMenuBSC({ bSC }: DropdownMenuBSCProps) {
   const [isPending, startTransition] = useTransition();
   const { getNavigationLinkWithPathnameWithoutUpdate } =
     useCustomSearchParams();
-  const router = useRouter();
-  const newUrl = getNavigationLinkWithPathnameWithoutUpdate(`/bsc/${bSC.id}`);
+  const newUrl = getNavigationLinkWithPathnameWithoutUpdate(
+    `/admin/bsc/${bSC.id}`,
+  );
   const newEditUrl = getNavigationLinkWithPathnameWithoutUpdate(
-    `/bsc/${bSC.id}`,
+    `/admin/bsc/${bSC.id}`,
   );
   async function printBsc() {
     startTransition(async () => {
