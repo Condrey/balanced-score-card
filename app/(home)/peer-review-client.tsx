@@ -23,7 +23,7 @@ export default function PeerReviewsClient({ peerReviews }: { peerReviews: PeerRe
 						const {
 							id,
 							rating,
-							review,
+							review, createdAt,updatedAt,
 							user: { email, image, name }
 						} = peerReview;
 						return (
