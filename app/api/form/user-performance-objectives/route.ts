@@ -10,55 +10,53 @@ import { ChatOpenAI } from "@langchain/openai";
 // We shall be getting the following
 // NDP programmes for a supervisee
 export async function POST(req: Request) {
-  console.log("Requesting plan");
-  try {
-    const body = await req.json();
-    const { position: superviseeId, behavioralAttributes } =
-      organizationContextPropsSchema.parse(body);
-    if (!superviseeId) {
-      const errorMessage = "Please provide the position for the post.";
-      return Response.json(errorMessage, {
-        status: 200,
-        statusText: errorMessage,
-      });
-    }
-    const position = await prisma.position.findFirst({
-      where: { id: superviseeId },
-      include: positionDataInclude,
-    });
+	console.log("Requesting plan");
+	try {
+		const body = await req.json();
+		const { position: superviseeId, behavioralAttributes } = organizationContextPropsSchema.parse(body);
+		if (!superviseeId) {
+			const errorMessage = "Please provide the position for the post.";
+			return Response.json(errorMessage, {
+				status: 200,
+				statusText: errorMessage
+			});
+		}
+		const position = await prisma.position.findFirst({
+			where: { id: superviseeId },
+			include: positionDataInclude
+		});
 
-    const perspectivesWithPercentages = !behavioralAttributes?.length
-      ? [
-          { perspective: "STAKEHOLDERS_CLIENTS", percentage: 25 },
-          { perspective: "FINANCIAL_STEWARDSHIP", percentage: 15 },
-          { perspective: "INTERNAL_PROCESSES", percentage: 20 },
-          { perspective: "MDA_LG_CAPACITY", percentage: 20 },
-        ]
-      : behavioralAttributes.map((b) => ({
-          perspective: b.attribute,
-          percentage: b.percentage,
-        }));
+		const perspectivesWithPercentages = !behavioralAttributes?.length
+			? [
+					{ perspective: "STAKEHOLDERS_CLIENTS", percentage: 25 },
+					{ perspective: "FINANCIAL_STEWARDSHIP", percentage: 15 },
+					{ perspective: "INTERNAL_PROCESSES", percentage: 20 },
+					{ perspective: "MDA_LG_CAPACITY", percentage: 20 }
+				]
+			: behavioralAttributes.map((b) => ({
+					perspective: b.attribute,
+					percentage: b.percentage
+				}));
 
-    if (!position) {
-      const errorMessage =
-        "Sorry, this position was not found, please cross-check and try again.";
-      return Response.json(errorMessage, {
-        status: 200,
-        statusText: errorMessage,
-      });
-    }
+		if (!position) {
+			const errorMessage = "Sorry, this position was not found, please cross-check and try again.";
+			return Response.json(errorMessage, {
+				status: 200,
+				statusText: errorMessage
+			});
+		}
 
-    const { duties } = position;
-    if (!duties) {
-      const errorMessage = "This position is missing duties.";
-      return Response.json(errorMessage, {
-        status: 200,
-        statusText: errorMessage,
-      });
-    }
+		const { duties } = position;
+		if (!duties) {
+			const errorMessage = "This position is missing duties.";
+			return Response.json(errorMessage, {
+				status: 200,
+				statusText: errorMessage
+			});
+		}
 
-    //Ai part
-    const template = `
+		//Ai part
+		const template = `
 You are a Balanced Scorecard Maker for Local Governments in Uganda who makes annual BSCs. 
 Your role is to generate Balanced Scorecards tailored to the Ugandan local government context.
 
@@ -88,26 +86,24 @@ Position:
 {position}
 `;
 
-    const prompt = ChatPromptTemplate.fromTemplate(template);
-    const model = new ChatOpenAI({ model: "gpt-4o", temperature: 0 });
-    const parser = StructuredOutputParser.fromZodSchema(
-      performanceObjectiveArraySchema,
-    );
-    const retrievalChain = RunnableSequence.from([prompt, model, parser]);
-    const response = await retrievalChain.invoke({
-      question: `From array of ${duties}, generate the performance objectives with the instructed number of generated perspectives.`,
-      format_instructions: parser.getFormatInstructions(),
-      duties,
-      position,
-      perspectivesWithPercentages,
-    });
-    return Response.json(response, { statusText: "Success", status: 200 });
-  } catch (e) {
-    console.error(e || "We failed to decode the error");
-    const errorMessage = "There was a server error, please try again.";
-    return Response.json(errorMessage, {
-      status: 500,
-      statusText: errorMessage,
-    });
-  }
+		const prompt = ChatPromptTemplate.fromTemplate(template);
+		const model = new ChatOpenAI({ model: "gpt-4o", temperature: 0 });
+		const parser = StructuredOutputParser.fromZodSchema(performanceObjectiveArraySchema);
+		const retrievalChain = RunnableSequence.from([prompt, model, parser]);
+		const response = await retrievalChain.invoke({
+			question: `From array of ${duties}, generate the performance objectives with the instructed number of generated perspectives.`,
+			format_instructions: parser.getFormatInstructions(),
+			duties,
+			position,
+			perspectivesWithPercentages
+		});
+		return Response.json(response, { statusText: "Success", status: 200 });
+	} catch (e) {
+		console.error(e || "We failed to decode the error");
+		const errorMessage = "There was a server error, please try again.";
+		return Response.json(errorMessage, {
+			status: 500,
+			statusText: errorMessage
+		});
+	}
 }

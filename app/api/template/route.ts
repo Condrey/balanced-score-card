@@ -10,84 +10,67 @@ import * as path from "path";
 import z from "zod";
 
 export async function POST(req: Request, res: Response) {
-  console.info("Generating BSC document...");
-  const body = await req.json();
-  const bsc = body as BSCData;
+	console.info("Generating BSC document...");
+	const body = await req.json();
+	const bsc = body as BSCData;
 
-  const templatePath = path.resolve(
-    process.cwd(),
-    "public/templates/bsc_template.docx",
-  );
-  const clients = !!bsc.clients.length
-    ? bsc.clients
-    : await getClients(bsc.supervisee.jobTitle);
-  const perspectiveGroups = groupByPerspective(bsc.performanceObjectives);
+	const templatePath = path.resolve(process.cwd(), "public/templates/bsc_template.docx");
+	const clients = !!bsc.clients.length ? bsc.clients : await getClients(bsc.supervisee.jobTitle);
+	const perspectiveGroups = groupByPerspective(bsc.performanceObjectives);
 
-  // Carbone expects data as an object
-  const data = {
-    ...bsc,
-    perspectiveGroups,
-    ndpProgrammes: bsc.ndpProgrammes.map((n) => ({ programme: n })),
-    strategicObjectives: bsc.strategicObjectives.map((s) => ({
-      objective: s,
-    })),
-    clients: clients.map((c) => ({ client: c })),
-    behavioralAttributes: bsc.behavioralAttributes.map((bA, index) => ({
-      ...bA,
-      index: index + 1,
-    })),
-  };
+	// Carbone expects data as an object
+	const data = {
+		...bsc,
+		perspectiveGroups,
+		ndpProgrammes: bsc.ndpProgrammes.map((n) => ({ programme: n })),
+		strategicObjectives: bsc.strategicObjectives.map((s) => ({
+			objective: s
+		})),
+		clients: clients.map((c) => ({ client: c })),
+		behavioralAttributes: bsc.behavioralAttributes.map((bA, index) => ({
+			...bA,
+			index: index + 1
+		}))
+	};
 
-  try {
-    const result: Buffer = await new Promise((resolve, reject) => {
-      carbone.render(templatePath, data, {}, (err, result) => {
-        if (err) return reject(err);
-        resolve(Buffer.from(result));
-      });
-    });
+	try {
+		const result: Buffer = await new Promise((resolve, reject) => {
+			carbone.render(templatePath, data, {}, (err, result) => {
+				if (err) return reject(err);
+				resolve(Buffer.from(result));
+			});
+		});
 
-    // Give a unique fileName
-    const fileName = sanitizeFilename(
-      `${bsc.supervisee.name}_bsc ${bsc.year}.docx`,
-    );
+		// Give a unique fileName
+		const fileName = sanitizeFilename(`${bsc.supervisee.name}_bsc ${bsc.year}.docx`);
 
-    // Upload to Blob storage
-    const blob = await put(fileName, result, {
-      access: "public",
-      allowOverwrite: true,
-      cacheControlMaxAge: 1,
-    });
+		// Upload to Blob storage
+		const blob = await put(fileName, result, {
+			access: "public",
+			allowOverwrite: true,
+			cacheControlMaxAge: 1
+		});
 
-    // return msg
-    const msg = `BSC generated successfully for ${bsc.supervisee.name}`;
-    return Response.json(
-      { message: msg, url: blob.downloadUrl, isError: false },
-      { status: 200, statusText: msg },
-    );
-  } catch (error) {
-    console.error("Error generating BSC:", error);
-    return Response.json(
-      { message: `BSC generation failed: ${error}`, isError: true },
-      { status: 500, statusText: "Internal Server Error" },
-    );
-  }
+		// return msg
+		const msg = `BSC generated successfully for ${bsc.supervisee.name}`;
+		return Response.json({ message: msg, url: blob.downloadUrl, isError: false }, { status: 200, statusText: msg });
+	} catch (error) {
+		console.error("Error generating BSC:", error);
+		return Response.json(
+			{ message: `BSC generation failed: ${error}`, isError: true },
+			{ status: 500, statusText: "Internal Server Error" }
+		);
+	}
 }
 
 function sanitizeFilename(name: string): string {
-  return name.replace(/[\/\\:*?"<>|]/g, "-");
+	return name.replace(/[\/\\:*?"<>|]/g, "-");
 }
 
 async function getClients(jobTitle: string): Promise<string[]> {
-  const allClients = [
-    "Political leaders",
-    "Central Government",
-    "Public",
-    "Employees",
-    "NGOs",
-    "CSOs",
-  ];
+	const allClients = ["Political leaders", "Central Government", "Public", "Employees", "NGOs", "CSOs"];
 
-  const template = `You are an expert in identifying key clients for public sector job roles. Given a job title, provide a concise list of the most relevant clients (stakeholders) that the role typically serves or interacts with. Focus on high-level clients that are crucial for the role's success.
+	const template = `You are an expert in identifying key clients for public sector job roles. Given a job title, provide a concise list of the most relevant clients (stakeholders) that the role typically serves or interacts with. Focus on high-level clients that are crucial for the role's success.
   {format_instructions}\n{question}
   allClients:
   {allClients}
@@ -95,22 +78,22 @@ async function getClients(jobTitle: string): Promise<string[]> {
   jobTitle:
   {jobTitle}
   `;
-  try {
-    const prompt = ChatPromptTemplate.fromTemplate(template);
-    const model = new ChatOpenAI({ model: "gpt-4o", temperature: 0 });
-    const parser = StructuredOutputParser.fromZodSchema(z.array(z.string()));
-    const retrievalChain = RunnableSequence.from([prompt, model, parser]);
-    const response = await retrievalChain.invoke({
-      allClients,
-      jobTitle,
-      format_instructions: parser.getFormatInstructions(),
-      question: `From array of ${allClients}, extract the most relevant stakeholders for ${jobTitle}`,
-    });
-    return response;
-  } catch (error) {
-    return Response.json(
-      { message: "Internal Server Error", isError: true },
-      { status: 500, statusText: "Internal Server Error" },
-    ) as any;
-  }
+	try {
+		const prompt = ChatPromptTemplate.fromTemplate(template);
+		const model = new ChatOpenAI({ model: "gpt-4o", temperature: 0 });
+		const parser = StructuredOutputParser.fromZodSchema(z.array(z.string()));
+		const retrievalChain = RunnableSequence.from([prompt, model, parser]);
+		const response = await retrievalChain.invoke({
+			allClients,
+			jobTitle,
+			format_instructions: parser.getFormatInstructions(),
+			question: `From array of ${allClients}, extract the most relevant stakeholders for ${jobTitle}`
+		});
+		return response;
+	} catch (error) {
+		return Response.json(
+			{ message: "Internal Server Error", isError: true },
+			{ status: 500, statusText: "Internal Server Error" }
+		) as any;
+	}
 }

@@ -11,46 +11,30 @@ import { DataTable } from "@/components/data-table/data-table";
 import { PlusIcon } from "lucide-react";
 
 interface ListOfOrganizationsProps {
-  organizations: OrganizationData[];
+	organizations: OrganizationData[];
 }
-export default function ListOfOrganizations({
-  organizations,
-}: ListOfOrganizationsProps) {
-  const query = useQuery({
-    queryKey: ["organizations"],
-    queryFn: getAllOrganizations,
-    initialData: organizations,
-  });
-  const { data, status } = query;
-  return (
-    <div>
-      {status === "error" ? (
-        <ErrorContainer
-          errorMessage="Failed to fetch organizations"
-          query={query}
-        />
-      ) : status === "success" && !data.length ? (
-        <EmptyContainer
-          message={
-            "There are no organizations added in the database yet. Please add"
-          }
-        >
-          <ButtonAddEditOrganization variant={"secondary"}>
-            Create a new organization
-          </ButtonAddEditOrganization>
-        </EmptyContainer>
-      ) : (
-        <DataTable
-          query={query}
-          data={data}
-          columns={useOrganizationColumns}
-          filterColumn={{ id: "name" }}
-        >
-          <ButtonAddEditOrganization variant={"secondary"}>
-            <PlusIcon />
-          </ButtonAddEditOrganization>
-        </DataTable>
-      )}
-    </div>
-  );
+export default function ListOfOrganizations({ organizations }: ListOfOrganizationsProps) {
+	const query = useQuery({
+		queryKey: ["organizations"],
+		queryFn: getAllOrganizations,
+		initialData: organizations
+	});
+	const { data, status } = query;
+	return (
+		<div>
+			{status === "error" ? (
+				<ErrorContainer errorMessage="Failed to fetch organizations" query={query} />
+			) : status === "success" && !data.length ? (
+				<EmptyContainer message={"There are no organizations added in the database yet. Please add"}>
+					<ButtonAddEditOrganization variant={"secondary"}>Create a new organization</ButtonAddEditOrganization>
+				</EmptyContainer>
+			) : (
+				<DataTable query={query} data={data} columns={useOrganizationColumns} filterColumn={{ id: "name" }}>
+					<ButtonAddEditOrganization variant={"secondary"}>
+						<PlusIcon />
+					</ButtonAddEditOrganization>
+				</DataTable>
+			)}
+		</div>
+	);
 }

@@ -9,25 +9,15 @@ import { useTransition } from "react";
 
 interface ButtonAddEditBSCProps extends ButtonProps {}
 
-export default function ButtonAddEditBSC({
-  children,
-  ...props
-}: ButtonAddEditBSCProps) {
-  const [isPending, startTransition] = useTransition();
-  const { getNavigationLinkWithPathnameWithoutUpdate } =
-    useCustomSearchParams();
-  const newUrl =
-    getNavigationLinkWithPathnameWithoutUpdate("/bsc/add-edit-bsc");
-  return (
-    <LoadingButton
-      onClick={() => startTransition(() => {})}
-      loading={isPending}
-      {...props}
-      asChild
-    >
-      <Link href={newUrl} className={cn("flex items-center gap-2")}>
-        {children}
-      </Link>
-    </LoadingButton>
-  );
+export default function ButtonAddEditBSC({ children, ...props }: ButtonAddEditBSCProps) {
+	const [isPending, startTransition] = useTransition();
+	const { getNavigationLinkWithPathnameWithoutUpdate } = useCustomSearchParams();
+	const newUrl = getNavigationLinkWithPathnameWithoutUpdate("/bsc/add-edit-bsc");
+	return (
+		<LoadingButton onClick={() => startTransition(() => {})} loading={isPending} {...props} asChild>
+			<Link href={newUrl} className={cn("flex items-center gap-2")}>
+				{children}
+			</Link>
+		</LoadingButton>
+	);
 }

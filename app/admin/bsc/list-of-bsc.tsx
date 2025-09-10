@@ -11,38 +11,36 @@ import ButtonAddEditBSC from "./button-add-edit-bsc";
 import { useBSCColumns } from "./columns";
 
 interface ListOfBSCsProps {
-  bSCs: BSCData[];
+	bSCs: BSCData[];
 }
 
 export default function ListOfBSCs({ bSCs }: ListOfBSCsProps) {
-  const query = useQuery({
-    queryKey: ["bSCs"],
-    queryFn: getAllBSCs,
-    initialData: bSCs,
-  });
-  const { data, status } = query;
-  return (
-    <div className="space-y-4">
-      {status === "error" ? (
-        <ErrorContainer errorMessage="Failed to load bSCs" query={query} />
-      ) : status === "success" && !data.length ? (
-        <EmptyContainer message={"There are no bSCs added yet."}>
-          <ButtonAddEditBSC variant={"secondary"}>
-            Create a new one
-          </ButtonAddEditBSC>
-        </EmptyContainer>
-      ) : (
-        <DataTable
-          query={query}
-          data={data}
-          columns={useBSCColumns}
-          filterColumn={{ id: "supervisee_name", label: "supervisee" }}
-        >
-          <ButtonAddEditBSC size={"icon"}>
-            <PlusIcon />
-          </ButtonAddEditBSC>
-        </DataTable>
-      )}
-    </div>
-  );
+	const query = useQuery({
+		queryKey: ["bSCs"],
+		queryFn: getAllBSCs,
+		initialData: bSCs
+	});
+	const { data, status } = query;
+	return (
+		<div className="space-y-4">
+			{status === "error" ? (
+				<ErrorContainer errorMessage="Failed to load bSCs" query={query} />
+			) : status === "success" && !data.length ? (
+				<EmptyContainer message={"There are no bSCs added yet."}>
+					<ButtonAddEditBSC variant={"secondary"}>Create a new one</ButtonAddEditBSC>
+				</EmptyContainer>
+			) : (
+				<DataTable
+					query={query}
+					data={data}
+					columns={useBSCColumns}
+					filterColumn={{ id: "supervisee_name", label: "supervisee" }}
+				>
+					<ButtonAddEditBSC size={"icon"}>
+						<PlusIcon />
+					</ButtonAddEditBSC>
+				</DataTable>
+			)}
+		</div>
+	);
 }

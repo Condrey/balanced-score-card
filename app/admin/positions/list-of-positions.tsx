@@ -11,39 +11,37 @@ import ButtonAddEditPosition from "./button-add-edit-position";
 import { usePositionColumns } from "./columns";
 
 interface ListOfPositionsProps {
-  positions: PositionData[];
+	positions: PositionData[];
 }
 
 export default function ListOfPositions({ positions }: ListOfPositionsProps) {
-  const query = useQuery({
-    queryKey: ["positions"],
-    queryFn: getAllPositions,
-    initialData: positions,
-    refetchOnWindowFocus: false,
-  });
-  const { data, status } = query;
-  return (
-    <div className="space-y-4">
-      {status === "error" ? (
-        <ErrorContainer errorMessage="Failed to load positions" query={query} />
-      ) : status === "success" && !data.length ? (
-        <EmptyContainer message={"There are no positions added yet."}>
-          <ButtonAddEditPosition variant={"secondary"}>
-            Create a new one
-          </ButtonAddEditPosition>
-        </EmptyContainer>
-      ) : (
-        <DataTable
-          query={query}
-          data={data}
-          columns={usePositionColumns}
-          filterColumn={{ id: "jobTitle", label: "Job title" }}
-        >
-          <ButtonAddEditPosition size={"icon"}>
-            <PlusIcon />
-          </ButtonAddEditPosition>
-        </DataTable>
-      )}
-    </div>
-  );
+	const query = useQuery({
+		queryKey: ["positions"],
+		queryFn: getAllPositions,
+		initialData: positions,
+		refetchOnWindowFocus: false
+	});
+	const { data, status } = query;
+	return (
+		<div className="space-y-4">
+			{status === "error" ? (
+				<ErrorContainer errorMessage="Failed to load positions" query={query} />
+			) : status === "success" && !data.length ? (
+				<EmptyContainer message={"There are no positions added yet."}>
+					<ButtonAddEditPosition variant={"secondary"}>Create a new one</ButtonAddEditPosition>
+				</EmptyContainer>
+			) : (
+				<DataTable
+					query={query}
+					data={data}
+					columns={usePositionColumns}
+					filterColumn={{ id: "jobTitle", label: "Job title" }}
+				>
+					<ButtonAddEditPosition size={"icon"}>
+						<PlusIcon />
+					</ButtonAddEditPosition>
+				</DataTable>
+			)}
+		</div>
+	);
 }

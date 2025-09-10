@@ -2,12 +2,7 @@
 
 import EmptyContainer from "@/components/query-containers/empty-container";
 import ErrorContainer from "@/components/query-containers/error-container";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { organizationStructures } from "@/lib/enums";
 import { OrganizationData } from "@/lib/types";
 import { OrganizationStructure } from "@prisma/client";
@@ -19,74 +14,51 @@ import ButtonAddEditOrganizationContext from "./(context)/button-add-edit-organi
 import OrganizationContexts from "./(context)/organization-contexts";
 
 interface OrganizationContainerProps {
-  initialData: OrganizationData;
+	initialData: OrganizationData;
 }
 
-export default function OrganizationContainer({
-  initialData,
-}: OrganizationContainerProps) {
-  const query = useQuery({
-    queryKey: ["organization", initialData.id],
-    queryFn: async () => getOrganizationById(initialData.id),
-    initialData,
-  });
+export default function OrganizationContainer({ initialData }: OrganizationContainerProps) {
+	const query = useQuery({
+		queryKey: ["organization", initialData.id],
+		queryFn: async () => getOrganizationById(initialData.id),
+		initialData
+	});
 
-  const { data: organization, status } = query;
-  if (status === "error")
-    <ErrorContainer
-      errorMessage="Failed to retrieve this organization"
-      query={query}
-    />;
-  if (status === "success" && !organization)
-    <EmptyContainer message="Organization not found" />;
-  const { icon, label } =
-    organizationStructures[
-      organization?.structure || OrganizationStructure.DISTRICT
-    ];
-  const Icon = icon;
-  const organizationContexts = organization?.organizationContexts;
-  return (
-    <div>
-      <Card className="max-w-lg">
-        <CardHeader className="flex flex-row justify-between gap-2">
-          <div>
-            <CardTitle className="flex items-center">
-              <Icon className="mr-2 inline-block" />
-              {organization?.voteName} - {organization?.name}
-            </CardTitle>
-            <CardDescription className="text-xs text-muted-foreground">
-              {label}
-            </CardDescription>
-          </div>
-          <ButtonAddEditOrganization
-            organization={organization || initialData}
-            size="icon"
-            variant="secondary"
-          >
-            <Edit3Icon />
-          </ButtonAddEditOrganization>
-        </CardHeader>
-      </Card>
+	const { data: organization, status } = query;
+	if (status === "error") <ErrorContainer errorMessage="Failed to retrieve this organization" query={query} />;
+	if (status === "success" && !organization) <EmptyContainer message="Organization not found" />;
+	const { icon, label } = organizationStructures[organization?.structure || OrganizationStructure.DISTRICT];
+	const Icon = icon;
+	const organizationContexts = organization?.organizationContexts;
+	return (
+		<div>
+			<Card className="max-w-lg">
+				<CardHeader className="flex flex-row justify-between gap-2">
+					<div>
+						<CardTitle className="flex items-center">
+							<Icon className="mr-2 inline-block" />
+							{organization?.voteName} - {organization?.name}
+						</CardTitle>
+						<CardDescription className="text-xs text-muted-foreground">{label}</CardDescription>
+					</div>
+					<ButtonAddEditOrganization organization={organization || initialData} size="icon" variant="secondary">
+						<Edit3Icon />
+					</ButtonAddEditOrganization>
+				</CardHeader>
+			</Card>
 
-      {/* organization contexts */}
-      <div>
-        {!organizationContexts?.length ? (
-          <EmptyContainer
-            message={
-              "There are no organization contexts for this vote in the system. Please add"
-            }
-          >
-            <ButtonAddEditOrganizationContext
-              organizationId={organization?.id || initialData.id}
-              variant={"secondary"}
-            >
-              Add a new context
-            </ButtonAddEditOrganizationContext>
-          </EmptyContainer>
-        ) : (
-          <OrganizationContexts contexts={organizationContexts} />
-        )}
-      </div>
-    </div>
-  );
+			{/* organization contexts */}
+			<div>
+				{!organizationContexts?.length ? (
+					<EmptyContainer message={"There are no organization contexts for this vote in the system. Please add"}>
+						<ButtonAddEditOrganizationContext organizationId={organization?.id || initialData.id} variant={"secondary"}>
+							Add a new context
+						</ButtonAddEditOrganizationContext>
+					</EmptyContainer>
+				) : (
+					<OrganizationContexts contexts={organizationContexts} />
+				)}
+			</div>
+		</div>
+	);
 }

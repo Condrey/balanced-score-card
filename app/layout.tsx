@@ -7,39 +7,34 @@ import ReactQueryProvider from "../components/react-query-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Balanced Score Card",
-  description: "Generating a BSC for the staffs of the whole country.",
+	title: "Balanced Score Card",
+	description: "Generating a BSC for the staffs of the whole country."
 };
 
 export default function RootLayout({
-  children,
+	children
 }: Readonly<{
-  children: React.ReactNode;
+	children: React.ReactNode;
 }>) {
-  return (
-    <html lang="en">
-      <head>
-        <style>{`
+	return (
+		<html lang="en">
+			<head>
+				<style>{`
 html {
   font-family: ${GeistSans.style.fontFamily};
   --font-sans: ${GeistSans.variable};
   --font-mono: ${GeistMono.variable};
 }
         `}</style>
-      </head>
-      <body suppressHydrationWarning>
-        <ThemeProvider
-          enableSystem
-          defaultTheme="system"
-          attribute="class"
-          enableColorScheme
-        >
-          <ReactQueryProvider>
-            {children}
-            <Toaster richColors={true} />
-          </ReactQueryProvider>
-        </ThemeProvider>
-      </body>
-    </html>
-  );
+			</head>
+			<body suppressHydrationWarning>
+				<ThemeProvider enableSystem defaultTheme="system" attribute="class" enableColorScheme>
+					<ReactQueryProvider>
+						{children}
+						<Toaster richColors={true} />
+					</ReactQueryProvider>
+				</ThemeProvider>
+			</body>
+		</html>
+	);
 }

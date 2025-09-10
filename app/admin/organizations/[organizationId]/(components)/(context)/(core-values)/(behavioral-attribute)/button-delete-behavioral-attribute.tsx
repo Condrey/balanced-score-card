@@ -9,67 +9,54 @@ import { useState } from "react";
 import { deleteBehavioralAttributeMutation } from "./mutation";
 
 interface ButtonDeleteBehavioralAttributeProps extends ButtonProps {
-  behavioralAttribute: BehavioralAttributeData;
+	behavioralAttribute: BehavioralAttributeData;
 }
 
 export default function ButtonDeleteBehavioralAttribute({
-  behavioralAttribute,
-  ...props
+	behavioralAttribute,
+	...props
 }: ButtonDeleteBehavioralAttributeProps) {
-  const [open, setOpen] = useState(false);
-  return (
-    <>
-      <Button
-        title={
-          behavioralAttribute
-            ? "Edit BehavioralAttribute"
-            : "Add BehavioralAttribute"
-        }
-        onClick={() => setOpen(true)}
-        {...props}
-      />
-      <DialogDeleteBehavioralAttribute
-        open={open}
-        setOpen={setOpen}
-        behavioralAttribute={behavioralAttribute}
-      />
-    </>
-  );
+	const [open, setOpen] = useState(false);
+	return (
+		<>
+			<Button
+				title={behavioralAttribute ? "Edit BehavioralAttribute" : "Add BehavioralAttribute"}
+				onClick={() => setOpen(true)}
+				{...props}
+			/>
+			<DialogDeleteBehavioralAttribute open={open} setOpen={setOpen} behavioralAttribute={behavioralAttribute} />
+		</>
+	);
 }
 
 interface DialogDeleteBehavioralAttributeProps {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  behavioralAttribute: BehavioralAttributeData;
+	open: boolean;
+	setOpen: (open: boolean) => void;
+	behavioralAttribute: BehavioralAttributeData;
 }
 export function DialogDeleteBehavioralAttribute({
-  open,
-  setOpen,
-  behavioralAttribute,
+	open,
+	setOpen,
+	behavioralAttribute
 }: DialogDeleteBehavioralAttributeProps) {
-  const { isPending, mutate } = deleteBehavioralAttributeMutation();
-  const deleteItem = () =>
-    mutate(behavioralAttribute.id, { onSuccess: () => setOpen(false) });
+	const { isPending, mutate } = deleteBehavioralAttributeMutation();
+	const deleteItem = () => mutate(behavioralAttribute.id, { onSuccess: () => setOpen(false) });
 
-  return (
-    <ResponsiveDrawer
-      open={open}
-      setOpen={setOpen}
-      title={`Delete Behavioral Attribute of "${behavioralAttribute.attribute}"`}
-      description="Please know that this action can not be undone, proceed with caution."
-    >
-      <DialogFooter>
-        <Button variant={"outline"} onClick={() => setOpen(false)}>
-          Cancel
-        </Button>
-        <LoadingButton
-          loading={isPending}
-          variant={"destructive"}
-          onClick={deleteItem}
-        >
-          Delete
-        </LoadingButton>
-      </DialogFooter>
-    </ResponsiveDrawer>
-  );
+	return (
+		<ResponsiveDrawer
+			open={open}
+			setOpen={setOpen}
+			title={`Delete Behavioral Attribute of "${behavioralAttribute.attribute}"`}
+			description="Please know that this action can not be undone, proceed with caution."
+		>
+			<DialogFooter>
+				<Button variant={"outline"} onClick={() => setOpen(false)}>
+					Cancel
+				</Button>
+				<LoadingButton loading={isPending} variant={"destructive"} onClick={deleteItem}>
+					Delete
+				</LoadingButton>
+			</DialogFooter>
+		</ResponsiveDrawer>
+	);
 }
