@@ -31,7 +31,7 @@ const items = [
 		icon: CoinsIcon
 	},
 	{
-		title: "Balance Score Cards",
+		title: "Balanced Score Cards",
 		url: "/balanced-score-cards",
 		icon: FileSpreadsheetIcon
 	}
