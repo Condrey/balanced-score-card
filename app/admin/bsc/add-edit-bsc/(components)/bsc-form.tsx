@@ -32,6 +32,7 @@ interface BSCFormProps {
 }
 
 export function BSCForm({ bSC, organizationContext, position, year }: BSCFormProps) {
+	const router = useRouter();
 	const [currentStep, setCurrentStep] = useState(0);
 	const [completedSteps, setCompletedSteps] = useState<number[]>([]);
 	const { isPending, mutate } = upsertBSCMutation();
@@ -110,11 +111,8 @@ export function BSCForm({ bSC, organizationContext, position, year }: BSCFormPro
 	});
 
 	const onSubmit = async (data: BSCFormData) => {
-		toast("submitted", {
-			description: <pre className="max-h-40 overflow-y-auto">{JSON.stringify(data, null, 2)}</pre>
-		});
 		mutate(data, {
-			// onSuccess: () => router.push("/bsc"),
+			onSuccess: () => router.push("/bsc")
 		});
 	};
 
@@ -193,25 +191,25 @@ export function BSCForm({ bSC, organizationContext, position, year }: BSCFormPro
 
 const steps = [
 	{
-		id: "particulars",
+		id: 0,
 		title: "Particulars",
 		icon: Users,
 		description: "Supervisee and Supervisor details"
 	},
 	{
-		id: "strategic",
+		id: 1,
 		title: "Strategic Elements",
 		icon: Target,
 		description: "Mandate, Vision, Mission & Objectives"
 	},
 	{
-		id: "performance",
+		id: 2,
 		title: "Performance Plan",
 		icon: BarChart3,
 		description: "Objectives, KPIs & Scoring"
 	},
 	{
-		id: "behavioral",
+		id: 3,
 		title: "Behavioral Assessment",
 		icon: FileText,
 		description: "Core Values & Attributes"

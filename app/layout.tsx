@@ -2,8 +2,10 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
+import { SessionProvider } from "next-auth/react";
 import { Toaster } from "sonner";
 import ReactQueryProvider from "../components/react-query-provider";
+
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -30,7 +32,7 @@ html {
 			<body suppressHydrationWarning>
 				<ThemeProvider enableSystem defaultTheme="system" attribute="class" enableColorScheme>
 					<ReactQueryProvider>
-						{children}
+						<SessionProvider>{children}</SessionProvider>
 						<Toaster richColors={true} />
 					</ReactQueryProvider>
 				</ThemeProvider>

@@ -23,6 +23,7 @@ export async function POST(req: Request) {
 
 		if (!officer) {
 			const errorMessage = "Failed to get officer for the given position";
+			console.error(errorMessage);
 			return Response.json(errorMessage, {
 				status: 200,
 				statusText: errorMessage
@@ -31,6 +32,7 @@ export async function POST(req: Request) {
 
 		if (!organizationContext) {
 			const errorMessage = "Failed to get Organization contexts for this year and organization";
+			console.error(errorMessage);
 			return Response.json(errorMessage, {
 				status: 200,
 				statusText: errorMessage
@@ -40,6 +42,7 @@ export async function POST(req: Request) {
 		const { ndp } = organizationContext;
 		if (!ndp) {
 			const errorMessage = "Your organization is missing NDP for the given financial year";
+			console.error(errorMessage);
 			return Response.json(errorMessage, {
 				status: 200,
 				statusText: errorMessage

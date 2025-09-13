@@ -3,7 +3,7 @@ import { CheckCircle, LucideIcon } from "lucide-react";
 
 interface BscStepsProps {
 	steps: {
-		id: string;
+		id: number;
 		title: string;
 		icon: LucideIcon;
 		description: string;

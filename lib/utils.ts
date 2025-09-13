@@ -1,6 +1,6 @@
 import { PerformanceObjective, PerspectiveType } from "@prisma/client";
 import { clsx, type ClassValue } from "clsx";
-import { differenceInDays, differenceInHours, differenceInMinutes, format, isToday, isYesterday } from "date-fns";
+import { differenceInDays, differenceInHours, differenceInMinutes, format, getMonth, getYear, isToday, isYesterday } from "date-fns";
 import { twMerge } from "tailwind-merge";
 import { perspectives } from "./constants";
 import { PerspectiveGroup } from "./types";
@@ -68,4 +68,11 @@ export function groupByPerspective(performanceObjectives: PerformanceObjective[]
 		...group,
 		perspective: perspectives[group.perspective as PerspectiveType]
 	}));
+}
+ 
+export function getCurrentFinancialYear() {
+	const today = new Date();
+	const year = getYear(today);
+	const month = getMonth(today);
+	return month >= 6 ? `${year}/${year + 1}` : `${year - 1}/${year}`;
 }

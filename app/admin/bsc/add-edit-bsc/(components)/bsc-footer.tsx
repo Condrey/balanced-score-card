@@ -11,7 +11,7 @@ interface BscFooterProps {
 	setCurrentStep: (currentStep: number) => void;
 	setCompletedSteps: React.Dispatch<React.SetStateAction<number[]>>;
 	steps: {
-		id: string;
+		id: number;
 		title: string;
 		icon: LucideIcon;
 		description: string;

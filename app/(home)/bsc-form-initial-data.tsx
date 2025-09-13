@@ -9,26 +9,22 @@ import { Loader2Icon } from "lucide-react";
 import { useState } from "react";
 import { getPositionsAndOrganizations } from "./action";
 import BSCInitialDataForm from "./form-position-and-organization";
-import { getMonth, getYear } from "date-fns";
-import { getCurrentFinancialYear } from "@/lib/utils";
 
 interface BSCFormInitialDataProps {
 	positionId?: string;
 	organizationId?: string;
-	year?: string;
 }
 
-export default function BSCFormInitialData({ positionId, organizationId, year }: BSCFormInitialDataProps) {
-	const [_, setOpen] = useState(true);
+export default function BSCFormInitialData({ positionId, organizationId }: BSCFormInitialDataProps) {
+	const [open, setOpen] = useState(true);
 	const query = useQuery({
 		queryKey: ["position", positionId, "organization", organizationId],
 		queryFn: () => getPositionsAndOrganizations({ positionId, organizationId })
 	});
 	const { status, data } = query;
-	const currentYear = getCurrentFinancialYear();
 	return (
 		<ResponsiveDrawer
-			open={true}
+			open={open}
 			setOpen={setOpen}
 			title="Preliminary Values"
 			description="Please set up these preliminary values before proceeding further."
@@ -40,9 +36,8 @@ export default function BSCFormInitialData({ positionId, organizationId, year }:
 			) : status === "error" ? (
 				<ErrorContainer errorMessage="Failed to fetch initial data, please try again!" query={query} />
 			) : (
-				<BSCInitialDataForm data={data} year={year || currentYear} />
+				<BSCInitialDataForm data={data} setOpen={setOpen} />
 			)}
 		</ResponsiveDrawer>
 	);
 }
-

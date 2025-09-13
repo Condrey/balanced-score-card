@@ -31,7 +31,7 @@ export default function FormNdps({ form, positionId }: FormNdpsProps) {
 		refetchOnWindowFocus: false,
 		staleTime: Infinity,
 		queryFn: async () =>
-			kyInstance
+			await kyInstance
 				.post("/api/form/user-ndps", {
 					json: {
 						organizationId,

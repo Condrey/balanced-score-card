@@ -18,7 +18,7 @@ interface PageContainerProps {
 }
 export default function PageContainer({ heading, className, children }: PageContainerProps) {
 	return (
-		<main className="absolute z-50">
+		<main className="">
 			<header className="flex h-16 shrink-0 items-center gap-2 ">
 				<div className="flex items-center gap-2 px-4">
 					<SidebarTrigger className="-ml-1" />
@@ -48,7 +48,7 @@ export default function PageContainer({ heading, className, children }: PageCont
 					</Breadcrumb>
 				</div>
 			</header>
-			<div className={cn("px-4", className)}>{children}</div>
+			<div className={cn("px-4 w-full ", className)}>{children}</div>
 		</main>
 	);
 }

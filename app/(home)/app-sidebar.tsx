@@ -49,11 +49,13 @@ export function AppSidebar({ session, ...props }: { session: Session } & React.C
 				</div>
 			}
 		>
-			<Sidebar {...props} variant="inset">
-				<SidebarHeader className="border-b bg-gradient-to-br dark:from-primary/20 from-primary/50 rounded-md">
-					<CardTitle className="text-center text-primary-foreground">Balanced Score Card Generator</CardTitle>
+			<Sidebar {...props} variant="inset" collapsible="offcanvas">
+				<SidebarHeader className="border-b bg-gradient-to-br flex flex-col dark:from-primary/20 from-primary/50 rounded-md">
+					<CardTitle className="text-center text-wrap shrink  text-primary-foreground">
+						Balanced Score Card Generator
+					</CardTitle>
 					<div className="size-full mx-auto overflow-clip rounded-full w-full max-w-[120px] max-h-[120px] ">
-						<Image src={user.image} height={200} width={200} alt="profile-image" className="" />
+						<Image src={user.image!} height={200} width={200} alt="profile-image" className="" />
 					</div>
 					<div className="flex flex-col items-center">
 						<span className="text-sm line-clamp-1 text-ellipsis">{user.name}</span>

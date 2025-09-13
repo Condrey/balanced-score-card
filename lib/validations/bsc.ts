@@ -151,7 +151,17 @@ export const bscSchema = z.object({
 		.describe("List of behavioral attributes for assessment")
 });
 
+
+export const individualBSCSchema= z.object({
+	year: z.string().min(1).describe("Financial Year of planning and review for this BSC"),
+	// Supervisee and Supervisor
+	supervisee: employeeSchema.describe("Details of the employee being appraised"),
+	supervisor: employeeSchema.describe("Details of the supervising officer conducting the appraisal"),
+
+})
+
 // Type exports for use in components
+export type IndividualBSCSchema = z.infer<typeof individualBSCSchema>;
 export type BSCFormData = z.infer<typeof bscSchema>;
 export type EmployeeData = z.infer<typeof employeeSchema>;
 export type PerformanceObjectiveSchema = z.infer<typeof performanceObjectiveSchema>;
