@@ -1,11 +1,9 @@
-'use client'
+"use client";
 
 import EmptyContainer from "@/components/query-containers/empty-container";
 import { OrganizationContextData } from "@/lib/types";
 import { BSC } from "@prisma/client";
 import ButtonAddBSC from "./button-add-bsc";
-import { useSession } from "next-auth/react";
-import { getCurrentFinancialYear } from "@/lib/utils";
 
 interface BscSamplesProps {
 	balancedScoreCards: BSC[];
@@ -13,7 +11,7 @@ interface BscSamplesProps {
 }
 
 export default function BscSamples({ balancedScoreCards, organizationContext }: BscSamplesProps) {
-    // 	const { data: session } = useSession();
+	// 	const { data: session } = useSession();
 	// const year = getCurrentFinancialYear();
 	// const organizationId = session?.user.organizationId!;
 	// const [open, setOpen] = useState(false);
@@ -36,13 +34,23 @@ export default function BscSamples({ balancedScoreCards, organizationContext }: 
 			<h1 className="text-xl sm:text-2xl font-bold tracking-tighter capitalize">Recent Balance Score cards</h1>
 			<div>
 				{!balancedScoreCards.length ? (
-					<EmptyContainer message={"You have not created any Balanced Score card yet. Please add to view here."}
-                    className="min-h-fit">
+					<EmptyContainer
+						message={"You have not created any Balanced Score card yet. Please add to view here."}
+						className="min-h-fit"
+					>
 						<ButtonAddBSC organizationContext={organizationContext}>Create one</ButtonAddBSC>
 					</EmptyContainer>
 				) : (
 					<div>
-						<pre>{JSON.stringify(balancedScoreCards, null, 2)}</pre>
+						<ButtonAddBSC organizationContext={organizationContext}>Add</ButtonAddBSC>
+
+						<pre>
+							{JSON.stringify(
+								balancedScoreCards.map((bsc) => `${bsc.year} - ${bsc.id}`),
+								null,
+								2
+							)}
+						</pre>
 					</div>
 				)}
 			</div>

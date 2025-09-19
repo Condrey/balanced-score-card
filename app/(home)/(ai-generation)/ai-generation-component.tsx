@@ -1,6 +1,7 @@
 import BscSteps from "@/app/admin/bsc/add-edit-bsc/(components)/bsc-steps";
 import EmptyContainer from "@/components/query-containers/empty-container";
 import { Button } from "@/components/ui/button";
+import LoadingButton from "@/components/ui/loading-button";
 import kyInstance from "@/lib/ky";
 import { OrganizationContextData, PositionData } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -166,7 +167,7 @@ export default function AiGenerationComponent({
 					break;
 				case 3:
 					setMsg({ message: "Behavioral assessment done, BSC generation complete", isError: false });
-					setCompletedStepsMessages((msgs) => [...msgs, "Behavioral assessment done, \nBSC generation complete"]);
+					setCompletedStepsMessages((msgs) => [...msgs, "Behavioral assessment done"]);
 					setMsg(undefined);
 					mutate(form.watch(), { onSuccess: () => setOpen(false) });
 					break;
@@ -220,6 +221,11 @@ export default function AiGenerationComponent({
 				>
 					Go Back
 				</Button>
+				{isPending && (
+					<LoadingButton loading={isPending} onClick={() => handleSubmit()} className="max-w-fit mx-auto">
+						Submit BSC{" "}
+					</LoadingButton>
+				)}
 			</div>
 		</div>
 	);
@@ -251,17 +257,3 @@ const steps = [
 		description: "Core Values & Attributes"
 	}
 ];
-function getStepFields(step: number): (keyof BSCFormData)[] {
-	switch (step) {
-		case 0:
-			return ["supervisee", "supervisor", "year"];
-		case 1:
-			return ["strategicElements"];
-		case 2:
-			return ["performanceObjectives"];
-		case 3:
-			return ["coreValues", "behavioralAttributes"];
-		default:
-			return [];
-	}
-}
