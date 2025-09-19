@@ -114,7 +114,7 @@ export default function AiGenerationComponent({
 							form.setValue("strategicElements.vision", vision);
 							form.setValue("strategicElements.mandate", mandate);
 							form.setValue("strategicElements.goal", goal);
-							form.setValue("strategicElements.departmentalMandate", " ");
+							form.setValue("strategicElements.departmentalMandate", "This is to be got from PBS");
 							form.setValue(
 								"behavioralAttributes",
 								behavioralAttributes.map((bA) => ({
@@ -168,7 +168,7 @@ export default function AiGenerationComponent({
 					setMsg({ message: "Behavioral assessment done, BSC generation complete", isError: false });
 					setCompletedStepsMessages((msgs) => [...msgs, "Behavioral assessment done, \nBSC generation complete"]);
 					setMsg(undefined);
-					form.handleSubmit(handleSubmit)();
+					mutate(form.watch(), { onSuccess: () => setOpen(false) });
 					break;
 				default:
 					break;
@@ -176,9 +176,7 @@ export default function AiGenerationComponent({
 		};
 		run();
 	}, [currentStep]);
-	function handleSubmit() {
-		mutate(form.watch(), { onSuccess: () => setOpen(false) });
-	}
+	function handleSubmit() {}
 	return (
 		<div className="space-y-4">
 			<BscSteps
@@ -189,6 +187,7 @@ export default function AiGenerationComponent({
 			/>
 
 			{/* <pre className="overflow-y-clip">{JSON.stringify(form.watch(), null, 2)}</pre> */}
+			<pre className="overflow-y-clip">{JSON.stringify(form.formState.errors, null, 2)}</pre>
 
 			<ul className="list-inside list-disc space-y-1 max-w-3xl mx-auto bg-secondary p-3 rounded-md">
 				{completedStepsMessages.map((message, index) => (
