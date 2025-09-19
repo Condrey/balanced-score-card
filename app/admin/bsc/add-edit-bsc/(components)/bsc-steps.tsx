@@ -1,4 +1,5 @@
 import { Card, CardContent } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 import { CheckCircle, LucideIcon } from "lucide-react";
 
 interface BscStepsProps {
@@ -18,15 +19,18 @@ export default function BscSteps({ steps, completedSteps, currentStep, setCurren
 		<div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-4">
 			{steps.map((step, index) => {
 				const Icon = step.icon;
-				const isCompleted = completedSteps.includes(index);
+				// const isCompleted = completedSteps.includes(index);
+				const isCompleted = currentStep > index;
 				const isCurrent = currentStep === index;
 
 				return (
 					<Card
 						key={step.id}
-						className={`cursor-pointer transition-all ${
-							isCurrent ? "bg-muted ring-2 ring-primary" : "text-muted-foreground opacity-80"
-						} ${isCompleted ? "border-green-200 bg-green-50 text-green-950" : ""}`}
+						className={cn(
+							"cursor-pointer transition-all",
+							isCurrent ? "bg-muted ring-2 ring-primary" : "text-muted-foreground opacity-80",
+							isCompleted ? "border-green-200 bg-green-50 text-green-950" : ""
+						)}
 						onClick={() => setCurrentStep(index)}
 					>
 						<CardContent className="p-4">

@@ -8,7 +8,6 @@ import { Suspense } from "react";
 import { getOrganizationContext } from "./action";
 import BscSamples from "./bsc-samples";
 import PageContainer from "./page-container";
-import BSCFormInitialData from "./bsc-form-initial-data";
 
 export const metadata: Metadata = {
 	title: "Welcome to BSC Generator"
@@ -18,7 +17,7 @@ export default function Page() {
 		<PageContainer heading={[{ label: "Home", url: "/" }]}>
 			<Suspense
 				fallback={
-					<EmptyContainer message={"...Fetching values"}>
+					<EmptyContainer message={"Fetching dashboard values"}>
 						<Loader2Icon className="animate-spin" />
 					</EmptyContainer>
 				}

@@ -1,13 +1,10 @@
 "use client";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import type { BSCFormData } from "@/lib/validations/bsc";
-import { X } from "lucide-react";
 import { type UseFormReturn, useFieldArray } from "react-hook-form";
 import Assessments from "./assessments";
 import FormCoreValues from "./form-core-values";

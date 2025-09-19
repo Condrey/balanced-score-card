@@ -8,21 +8,21 @@ import { getCurrentFinancialYear } from "@/lib/utils";
 import { individualBSCSchema, IndividualBSCSchema } from "@/lib/validations/bsc";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "next-auth";
-import { useState, useTransition } from "react";
+import { Dispatch, SetStateAction, useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import AiGenerationComponent from "./(ai-generation)/ai-generation-component";
 import FormSupervisorSupervisee from "./form-supervisor-supervisee";
 
 interface FormAddBalancedScoreCardProps {
 	open: boolean;
-	setOpen: (open: boolean) => void;
+	setOpen: Dispatch<SetStateAction<boolean>>;
 	user: User | undefined;
 }
 
 export default function FormAddBalancedScoreCard({ open, setOpen, user }: FormAddBalancedScoreCardProps) {
 	const [isPending, _] = useTransition();
 	const [isGenerating, setIsGenerating] = useState(false);
-	const [currentStep, setCurrentStep] = useState(0);
+	const [currentStep, setCurrentStep] = useState(1);
 
 	const year = getCurrentFinancialYear();
 	const form = useForm<IndividualBSCSchema>({
@@ -46,7 +46,7 @@ export default function FormAddBalancedScoreCard({ open, setOpen, user }: FormAd
 		}
 	});
 	function submitForm() {
-		setCurrentStep(1);
+		setCurrentStep(0);
 		setIsGenerating(true);
 	}
 	return (
@@ -65,6 +65,7 @@ export default function FormAddBalancedScoreCard({ open, setOpen, user }: FormAd
 					currentStep={currentStep}
 					setCurrentStep={setCurrentStep}
 					position={user?.position!}
+					setOpen={setOpen}
 				/>
 			) : (
 				<Form {...form}>

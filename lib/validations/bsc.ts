@@ -142,6 +142,7 @@ export const bscSchema = z.object({
 		.array(performanceObjectiveSchema)
 		.min(1, "At least one performance objective is required")
 		.describe("List of performance objectives across different perspectives"),
+	clients: z.array(stringArraySchema).optional().describe("List of key clients and stakeholders"),
 
 	// Behavioral Assessment
 	coreValues: coreValuesSchema.describe("Organizational core values and their acronym"),
@@ -151,14 +152,12 @@ export const bscSchema = z.object({
 		.describe("List of behavioral attributes for assessment")
 });
 
-
-export const individualBSCSchema= z.object({
+export const individualBSCSchema = z.object({
 	year: z.string().min(1).describe("Financial Year of planning and review for this BSC"),
 	// Supervisee and Supervisor
 	supervisee: employeeSchema.describe("Details of the employee being appraised"),
-	supervisor: employeeSchema.describe("Details of the supervising officer conducting the appraisal"),
-
-})
+	supervisor: employeeSchema.describe("Details of the supervising officer conducting the appraisal")
+});
 
 // Type exports for use in components
 export type IndividualBSCSchema = z.infer<typeof individualBSCSchema>;
