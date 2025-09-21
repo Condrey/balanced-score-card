@@ -6,8 +6,11 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { BSCData, OrganizationContextData } from "@/lib/types";
 import { cn, formatDate } from "@/lib/utils";
+import ky from "ky";
 import { DownloadCloudIcon, FileIcon, MoveRightIcon } from "lucide-react";
 import Link from "next/link";
+import { useTransition } from "react";
+import { toast } from "sonner";
 import ButtonAddBSC from "./button-add-bsc";
 
 interface BscSamplesProps {
@@ -73,30 +76,56 @@ export default function BscSamples({ balancedScoreCards, organizationContext }: 
 	);
 }
 
-function BSCFile({ bsc: { id, year, createdAt, updatedAt, user } }: { bsc: BSCData }) {
+function BSCFile({ bsc }: { bsc: BSCData }) {
+	const { id, createdAt, updatedAt, user, year } = bsc;
 	const dateTime = updatedAt > createdAt ? `(Update) ${formatDate(updatedAt)}` : formatDate(createdAt);
-
+	const [isPending, startTransition] = useTransition();
+	function onDownloadClicked() {
+		startTransition(async () => {
+			const response = await ky.post(`/api/template`, {
+				body: JSON.stringify(bsc)
+			});
+			if (response.ok) {
+				const { message, url, isError } = await response.json<{
+					message: string;
+					url?: string;
+					isError: boolean;
+				}>();
+				if (!isError && !!url) {
+					toast.success(message);
+					window.open(url, "_blank");
+				} else {
+					toast.error(message);
+				}
+			} else {
+				toast.error(response.statusText);
+			}
+		});
+	}
 	return (
 		<div
 			key={id}
+			onClick={onDownloadClicked}
 			className="relative aspect-auto group/bsc hover:bg-primary/20 flex flex-col items-center border rounded-md px-2 py-1"
 		>
 			<div className="relative ">
 				<FileIcon className="size-24 fill-blue-500 group-hover/bsc:fill-primary text-background" strokeWidth={0.4} />
 				<span className="text-background text-sm absolute bottom-2 right-4.5">.docx</span>
 				<p className="text-background text-xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">BSC</p>
-				<Button
-					size={"sm"}
-					className="text-background hidden group-hover/bsc:flex  absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-				>
-					<DownloadCloudIcon />
-					Download
-				</Button>
 			</div>
 			<Avatar className="absolute top-0.5 left-0.5">
 				<AvatarImage src={user?.image!} alt="user image" />
 				<AvatarFallback className="uppercase">{user?.name?.substring(0, 1)}</AvatarFallback>
 			</Avatar>
+			<Button
+				size={"sm"}
+				variant={"outline"}
+				onClick={onDownloadClicked}
+				className="text-xs hidden group-hover/bsc:flex  absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+			>
+				<DownloadCloudIcon />
+				Download
+			</Button>
 			<p className=" text-sm text-center">FY{year}</p>
 			<span className="text-muted-foreground text-center text-xs">{dateTime}</span>
 		</div>
