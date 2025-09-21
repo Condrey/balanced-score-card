@@ -2,8 +2,9 @@
 
 import EmptyContainer from "@/components/query-containers/empty-container";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import LoadingButton from "@/components/ui/loading-button";
 import { BSCData, OrganizationContextData } from "@/lib/types";
 import { cn, formatDate } from "@/lib/utils";
 import ky from "ky";
@@ -117,15 +118,19 @@ function BSCFile({ bsc }: { bsc: BSCData }) {
 				<AvatarImage src={user?.image!} alt="user image" />
 				<AvatarFallback className="uppercase">{user?.name?.substring(0, 1)}</AvatarFallback>
 			</Avatar>
-			<Button
+			<LoadingButton
 				size={"sm"}
 				variant={"outline"}
+				loading={isPending}
 				onClick={onDownloadClicked}
-				className="text-xs hidden group-hover/bsc:flex  absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+				className={cn(
+					"text-xs  group-hover/bsc:flex hidden  absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
+					isPending ? "flex" : "hidden"
+				)}
 			>
 				<DownloadCloudIcon />
 				Download
-			</Button>
+			</LoadingButton>
 			<p className=" text-sm text-center">FY{year}</p>
 			<span className="text-muted-foreground text-center text-xs">{dateTime}</span>
 		</div>
