@@ -21,7 +21,8 @@ export const bSCDataInclude = {
 	behavioralAttributes: { orderBy: { createdAt: "asc" } },
 	coreValues: { include: { values: true } },
 	performanceObjectives: true,
-	organization: true
+	organization: true,
+	user: true
 } satisfies Prisma.BSCInclude;
 export type BSCData = Prisma.BSCGetPayload<{
 	include: typeof bSCDataInclude;

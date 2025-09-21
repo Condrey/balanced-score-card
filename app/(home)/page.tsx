@@ -1,5 +1,6 @@
 import EmptyContainer from "@/components/query-containers/empty-container";
 import prisma from "@/lib/prisma";
+import { bSCDataInclude } from "@/lib/types";
 import { getCurrentFinancialYear } from "@/lib/utils";
 import { verifySession } from "@/lib/verify-session";
 import { Loader2Icon } from "lucide-react";
@@ -34,7 +35,7 @@ async function PageContent() {
 	const year = getCurrentFinancialYear();
 
 	const [balancedScoreCards, paymentHistories, organizationContext] = await Promise.all([
-		await prisma.bSC.findMany({ where: { userId: user.id }, take: 5 }),
+		await prisma.bSC.findMany({ where: { userId: user.id }, take: 5, include: bSCDataInclude }),
 		await prisma.payment.findMany({ where: { userId: user.id }, take: 5 }),
 		await getOrganizationContext({ organizationId: user.organizationId!, year })
 	]);
