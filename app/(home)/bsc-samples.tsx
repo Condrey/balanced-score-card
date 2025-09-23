@@ -12,7 +12,7 @@ import { DownloadCloudIcon, FileIcon, MoveRightIcon } from "lucide-react";
 import Link from "next/link";
 import { useTransition } from "react";
 import { toast } from "sonner";
-import ButtonAddBSC from "./button-add-bsc";
+import ButtonAddBSC from "./add-bsc/button-add-bsc";
 
 interface BscSamplesProps {
 	balancedScoreCards: BSCData[];
@@ -62,7 +62,7 @@ export default function BscSamples({ balancedScoreCards, organizationContext }: 
 								))}
 							</div>
 						</div>
-						{/* <pre>{JSON.stringify(balancedScoreCards[0], null, 2)}</pre> */}
+						<pre>{JSON.stringify(balancedScoreCards[0], null, 2)}</pre>
 						{balancedScoreCards.length > 2 && (
 							<div className="ms-auto w-full max-w-fit">
 								<Link href={"/balanced-score-cards"} className={cn(buttonVariants({ variant: "secondary" }))}>
@@ -85,8 +85,8 @@ function BSCFile({ bsc }: { bsc: BSCData }) {
 	const dateTime = updatedAt > createdAt ? `(Update) ${formatDate(updatedAt)}` : formatDate(createdAt);
 	const [isPending, startTransition] = useTransition();
 	function onDownloadClicked() {
-		!isPaid
-			? toast.error("You need to pay for the BSC generation before downloading.")
+		isPaid
+			? toast.error("PAYMENT NOT FOUND", { description: "You need to pay for the BSC generation before downloading." })
 			: startTransition(async () => {
 					const response = await ky.post(`/api/template`, {
 						body: JSON.stringify(bsc)

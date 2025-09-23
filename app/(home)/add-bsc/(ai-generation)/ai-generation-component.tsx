@@ -14,6 +14,7 @@ import { useForm, UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 import { upsertBSCMutation } from "./mutattion";
+import { useRouter } from "next/navigation";
 
 interface AiGenerationComponentProps {
 	previousForm: UseFormReturn<IndividualBSCSchema>;
@@ -22,7 +23,6 @@ interface AiGenerationComponentProps {
 	setIsGenerating: (isGenerating: boolean) => void;
 	currentStep: number;
 	setCurrentStep: Dispatch<SetStateAction<number>>;
-	setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export default function AiGenerationComponent({
@@ -32,7 +32,6 @@ export default function AiGenerationComponent({
 	setIsGenerating,
 	currentStep,
 	setCurrentStep,
-	setOpen
 }: AiGenerationComponentProps) {
 	const outputSchema = z.array(stringArraySchema);
 	type OutputSchema = z.infer<typeof outputSchema>;
@@ -44,6 +43,7 @@ export default function AiGenerationComponent({
 		"Created supervisee and supervisor details"
 	]);
 	const [msg, setMsg] = useState<{ message: string; isError: boolean } | undefined>(undefined);
+	const router = useRouter()
 	const { isPending, mutate } = upsertBSCMutation();
 	const form = useForm<BSCFormData>({
 		resolver: zodResolver(bscSchema),
@@ -170,7 +170,7 @@ export default function AiGenerationComponent({
 					setMsg({ message: "Behavioral assessment done, BSC generation complete", isError: false });
 					setCompletedStepsMessages((msgs) => [...msgs, "Behavioral assessment done"]);
 					setMsg(undefined);
-					mutate(form.watch(), { onSuccess: () => setOpen(false) });
+					mutate(form.watch(), { onSuccess: () => router.push('/')});
 					break;
 				default:
 					break;
@@ -189,7 +189,7 @@ export default function AiGenerationComponent({
 			/>
 
 			{/* <pre className="overflow-y-clip">{JSON.stringify(form.watch(), null, 2)}</pre> */}
-			<pre className="overflow-y-clip">{JSON.stringify(form.formState.errors, null, 2)}</pre>
+			{/* <pre className="overflow-y-clip">{JSON.stringify(form.formState.errors, null, 2)}</pre> */}
 
 			<ul className="list-inside list-disc space-y-1 max-w-3xl mx-auto bg-secondary p-3 rounded-md">
 				{completedStepsMessages.map((message, index) => (
@@ -209,10 +209,7 @@ export default function AiGenerationComponent({
 					</p>
 				)}
 			</ul>
-			<EmptyContainer
-				message={`Generating balanced score card for ${supervisee.name}- ${supervisee.jobTitle}. Please be patient while loading.!`}
-				className="text-xs bg-secondary p-3 rounded-md  min-h-fit  max-w-3xl mx-auto "
-			></EmptyContainer>
+		
 			<div className="flex justify-center">
 				<Button
 					type="button"

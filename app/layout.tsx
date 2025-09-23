@@ -33,7 +33,7 @@ html {
 				<ThemeProvider enableSystem defaultTheme="system" attribute="class" enableColorScheme>
 					<ReactQueryProvider>
 						<SessionProvider>{children}</SessionProvider>
-						<Toaster richColors={true} />
+						<Toaster richColors={true} expand />
 					</ReactQueryProvider>
 				</ThemeProvider>
 			</body>

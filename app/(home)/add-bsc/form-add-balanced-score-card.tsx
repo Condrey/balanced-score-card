@@ -1,25 +1,24 @@
 "use client";
 
-import ResponsiveDrawer from "@/components/responsive-drawer";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
+import { PositionData } from "@/lib/types";
 import { getCurrentFinancialYear } from "@/lib/utils";
 import { individualBSCSchema, IndividualBSCSchema } from "@/lib/validations/bsc";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { User } from "next-auth";
-import { Dispatch, SetStateAction, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import AiGenerationComponent from "./(ai-generation)/ai-generation-component";
 import FormSupervisorSupervisee from "./form-supervisor-supervisee";
 
 interface FormAddBalancedScoreCardProps {
-	open: boolean;
-	setOpen: Dispatch<SetStateAction<boolean>>;
 	user: User | undefined;
+	positions: PositionData[];
 }
 
-export default function FormAddBalancedScoreCard({ open, setOpen, user }: FormAddBalancedScoreCardProps) {
+export default function FormAddBalancedScoreCard({ user, positions }: FormAddBalancedScoreCardProps) {
 	const [isPending, _] = useTransition();
 	const [isGenerating, setIsGenerating] = useState(false);
 	const [currentStep, setCurrentStep] = useState(1);
@@ -50,13 +49,7 @@ export default function FormAddBalancedScoreCard({ open, setOpen, user }: FormAd
 		setIsGenerating(true);
 	}
 	return (
-		<ResponsiveDrawer
-			open={open}
-			setOpen={setOpen}
-			title="Add A Balanced Score Card"
-			description={`For the FY${form.watch("year")}`}
-			className="max-w-4xl"
-		>
+		<>
 			{isGenerating ? (
 				<AiGenerationComponent
 					previousForm={form}
@@ -65,7 +58,6 @@ export default function FormAddBalancedScoreCard({ open, setOpen, user }: FormAd
 					currentStep={currentStep}
 					setCurrentStep={setCurrentStep}
 					position={user?.position!}
-					setOpen={setOpen}
 				/>
 			) : (
 				<Form {...form}>
@@ -90,7 +82,7 @@ export default function FormAddBalancedScoreCard({ open, setOpen, user }: FormAd
 								</LoadingButton>
 							</div>
 
-							<FormSupervisorSupervisee form={form} />
+							<FormSupervisorSupervisee form={form} positions={positions} />
 							<LoadingButton loading={isPending} className="md:hidden  w-full">
 								Create BSC
 							</LoadingButton>
@@ -98,6 +90,6 @@ export default function FormAddBalancedScoreCard({ open, setOpen, user }: FormAd
 					</form>
 				</Form>
 			)}
-		</ResponsiveDrawer>
+		</>
 	);
 }

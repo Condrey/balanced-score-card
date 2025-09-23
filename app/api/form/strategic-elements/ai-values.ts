@@ -102,7 +102,7 @@ export async function generateAiMandate(jobTitle: string): Promise<string> {
 	});
 
 	//Ai part
-	const template = `You are an array content extractor.Construct the departmental mandate for a given jobTitle from the list of positions.
+	const template = `You are an array content extractor. Construct the  mandate for a given jobTitle from the list of positions.
 	(jobTitle): 
 	{jobTitle}
 	
@@ -115,10 +115,10 @@ export async function generateAiMandate(jobTitle: string): Promise<string> {
 	const parser = StructuredOutputParser.fromZodSchema(z.string());
 	const retrievalChain = RunnableSequence.from([prompt, model, parser]);
 	const response = await retrievalChain.invoke({
-		question: `What departmentalMandate applies  to the jobTitle of ${jobTitle} in ${positions}?`,
+		question: `What Mandate applies  to the jobTitle of ${jobTitle} in ${positions.map((p) => ({ id: p.id, jobTitle: p.jobTitle, departmentalMandate: p.departmentalMandate }))}?`,
 		format_instructions: parser.getFormatInstructions(),
 		jobTitle,
-		positions
+		positions: positions.map((p) => ({ id: p.id, jobTitle: p.jobTitle, departmentalMandate: p.departmentalMandate }))
 	});
 	return response;
 }

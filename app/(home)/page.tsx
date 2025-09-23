@@ -35,7 +35,12 @@ async function PageContent() {
 	const year = getCurrentFinancialYear();
 
 	const [balancedScoreCards, paymentHistories, organizationContext] = await Promise.all([
-		await prisma.bSC.findMany({ where: { userId: user.id }, take: 5, include: bSCDataInclude }),
+		await prisma.bSC.findMany({
+			where: { userId: user.id },
+			take: 5,
+			orderBy: { updatedAt: "desc" },
+			include: bSCDataInclude
+		}),
 		await prisma.payment.findMany({ where: { userId: user.id }, take: 5 }),
 		await getOrganizationContext({ organizationId: user.organizationId!, year })
 	]);

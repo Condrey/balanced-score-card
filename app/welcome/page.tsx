@@ -17,7 +17,7 @@ export default function Page() {
 			<section className="mx-auto w-full *:w-full *:mx-auto max-w-5xl flex-1 space-y-12 p-4">
 				{/* sign in button  */}
 				<div className="flex justify-end">
-					<SignIn className="text-xl">Generate My BSC</SignIn>
+					<SignIn className="text-xl capitalize">Log in now</SignIn>
 				</div>
 				<DescriptionOfBsc />
 				<ReasonForBsc />
