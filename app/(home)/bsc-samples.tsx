@@ -107,10 +107,19 @@ function BSCFile({ bsc }: { bsc: BSCData }) {
 		<div
 			key={id}
 			onClick={onDownloadClicked}
-			className="relative aspect-auto group/bsc hover:bg-primary/20 flex flex-col items-center border rounded-md px-2 py-1"
+			className={cn(
+				"relative aspect-auto group/bsc hover:bg-primary/20 flex flex-col items-center border rounded-md px-2 py-1",
+				isPending && "bg-primary/20 border-primary"
+			)}
 		>
 			<div className="relative ">
-				<FileIcon className="size-24 fill-blue-500 group-hover/bsc:fill-primary text-background" strokeWidth={0.4} />
+				<FileIcon
+					className={cn(
+						"size-24 fill-blue-500 group-hover/bsc:fill-primary text-background",
+						isPending && "fill-primary"
+					)}
+					strokeWidth={0.4}
+				/>
 				<span className="text-background text-sm absolute bottom-2 right-4.5">.docx</span>
 				<p className="text-background text-xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">BSC</p>
 			</div>
