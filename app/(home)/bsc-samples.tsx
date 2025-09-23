@@ -39,7 +39,7 @@ export default function BscSamples({ balancedScoreCards, organizationContext }: 
 	// 	);
 
 	return (
-		<div className="space-y-4 cursor-pointer   max-w-5xl w-full mx-auto">
+		<div className="space-y-4    max-w-5xl w-full mx-auto">
 			<CardHeader className="bg-card flex-row justify-between items-center">
 				<CardTitle className=" capitalize">Recent Balance Score cards</CardTitle>
 				<ButtonAddBSC organizationContext={organizationContext}>New BSC</ButtonAddBSC>
@@ -79,37 +79,41 @@ export default function BscSamples({ balancedScoreCards, organizationContext }: 
 }
 
 function BSCFile({ bsc }: { bsc: BSCData }) {
-	const { id, createdAt, updatedAt, user, year } = bsc;
+	const { id, createdAt, updatedAt, user, year, payments } = bsc;
+	const paidAmount = payments?.reduce((total, payment) => total + payment.amount, 0) || 0;
+	const isPaid = paidAmount >= 20000;
 	const dateTime = updatedAt > createdAt ? `(Update) ${formatDate(updatedAt)}` : formatDate(createdAt);
 	const [isPending, startTransition] = useTransition();
 	function onDownloadClicked() {
-		startTransition(async () => {
-			const response = await ky.post(`/api/template`, {
-				body: JSON.stringify(bsc)
-			});
-			if (response.ok) {
-				const { message, url, isError } = await response.json<{
-					message: string;
-					url?: string;
-					isError: boolean;
-				}>();
-				if (!isError && !!url) {
-					toast.success(message);
-					window.open(url, "_blank");
-				} else {
-					toast.error(message);
-				}
-			} else {
-				toast.error(response.statusText);
-			}
-		});
+		!isPaid
+			? toast.error("You need to pay for the BSC generation before downloading.")
+			: startTransition(async () => {
+					const response = await ky.post(`/api/template`, {
+						body: JSON.stringify(bsc)
+					});
+					if (response.ok) {
+						const { message, url, isError } = await response.json<{
+							message: string;
+							url?: string;
+							isError: boolean;
+						}>();
+						if (!isError && !!url) {
+							toast.success(message);
+							window.open(url, "_blank");
+						} else {
+							toast.error(message);
+						}
+					} else {
+						toast.error(response.statusText);
+					}
+				});
 	}
 	return (
 		<div
 			key={id}
 			onClick={onDownloadClicked}
 			className={cn(
-				"relative aspect-auto group/bsc hover:bg-primary/20 flex flex-col items-center border rounded-md px-2 py-1",
+				"relative aspect-auto group/bsc cursor-pointer hover:bg-primary/20 flex flex-col items-center border rounded-md px-2 py-1",
 				isPending && "bg-primary/20 border-primary"
 			)}
 		>
