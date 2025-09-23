@@ -97,6 +97,7 @@ export default function AiGenerationComponent({
 									organizationContext: OrganizationContextData;
 									userObjectives: OutputSchema;
 									clients: string[];
+									mandate: string;
 							  }
 							| string
 						>();
@@ -104,7 +105,7 @@ export default function AiGenerationComponent({
 						if (typeof data === "string") {
 							setMsg({ message: data, isError: true });
 						} else {
-							const { mandate, mission, vision, goal, behavioralAttributes, coreValue } = data.organizationContext;
+							const { mission, vision, goal, behavioralAttributes, coreValue } = data.organizationContext;
 							form.setValue("strategicElements.ndpProgrammes", data.ndps);
 							form.setValue("strategicElements.strategicObjectives", data.userObjectives);
 							form.setValue(
@@ -113,7 +114,7 @@ export default function AiGenerationComponent({
 							);
 							form.setValue("strategicElements.mission", mission);
 							form.setValue("strategicElements.vision", vision);
-							form.setValue("strategicElements.mandate", mandate);
+							form.setValue("strategicElements.mandate", data.mandate);
 							form.setValue("strategicElements.goal", goal);
 							form.setValue("strategicElements.departmentalMandate", "This is to be got from PBS");
 							form.setValue(

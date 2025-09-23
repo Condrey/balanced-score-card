@@ -1,7 +1,7 @@
 import prisma from "@/lib/prisma";
 import { organizationContextDataInclude } from "@/lib/types";
 import { organizationContextPropsSchema } from "@/lib/validations/others";
-import { generateAiNdps, generateAiUserClients, generateAiUserObjects } from "./ai-values";
+import { generateAiMandate, generateAiNdps, generateAiUserClients, generateAiUserObjects } from "./ai-values";
 
 // We shall be getting the following
 // NDP programmes for a supervisee
@@ -46,11 +46,16 @@ export async function POST(req: Request) {
 		}
 		const { osps: ndpOsps, programmes: ndpProgrammes } = ndp;
 		//Ai part
-		const ndps = await generateAiNdps(officer, ndpProgrammes);
+
+		const [ndps, myClients, mandate] = await Promise.all([
+			await generateAiNdps(officer, ndpProgrammes),
+			await generateAiUserClients(officer.jobTitle),
+			await generateAiMandate(officer.jobTitle)
+		]);
 		const userObjectives = await generateAiUserObjects({ ndp, targetProgrammes: ndps });
-		const myClients = await generateAiUserClients(officer.jobTitle);
+
 		return Response.json(
-			{ ndps, userObjectives, organizationContext, clients: myClients },
+			{ ndps, userObjectives, organizationContext, mandate, clients: myClients },
 			{ statusText: "Success", status: 200 }
 		);
 	} catch (e) {

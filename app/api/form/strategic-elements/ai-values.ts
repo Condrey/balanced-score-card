@@ -1,4 +1,5 @@
-import { NdpData } from "@/lib/types";
+import prisma from "@/lib/prisma";
+import { NdpData, positionDataInclude } from "@/lib/types";
 import { stringArraySchema } from "@/lib/validations/others";
 import { StructuredOutputParser } from "@langchain/core/output_parsers";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
@@ -93,4 +94,31 @@ export async function generateAiUserClients(jobTitle: string): Promise<string[]>
 			{ status: 500, statusText: "Internal Server Error" }
 		) as any;
 	}
+}
+
+export async function generateAiMandate(jobTitle: string): Promise<string> {
+	const positions = await prisma.position.findMany({
+		include: positionDataInclude
+	});
+
+	//Ai part
+	const template = `You are an array content extractor.Construct the departmental mandate for a given jobTitle from the list of positions.
+	(jobTitle): 
+	{jobTitle}
+	
+	(positions): 
+	{positions}
+	{format_instructions}\n{question}`;
+
+	const prompt = ChatPromptTemplate.fromTemplate(template);
+	const model = new ChatOpenAI({ model: "gpt-4o", temperature: 0 });
+	const parser = StructuredOutputParser.fromZodSchema(z.string());
+	const retrievalChain = RunnableSequence.from([prompt, model, parser]);
+	const response = await retrievalChain.invoke({
+		question: `What departmentalMandate applies  to the jobTitle of ${jobTitle} in ${positions}?`,
+		format_instructions: parser.getFormatInstructions(),
+		jobTitle,
+		positions
+	});
+	return response;
 }

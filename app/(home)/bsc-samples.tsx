@@ -3,7 +3,7 @@
 import EmptyContainer from "@/components/query-containers/empty-container";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { buttonVariants } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import LoadingButton from "@/components/ui/loading-button";
 import { BSCData, OrganizationContextData } from "@/lib/types";
 import { cn, formatDate } from "@/lib/utils";
@@ -39,7 +39,7 @@ export default function BscSamples({ balancedScoreCards, organizationContext }: 
 	// 	);
 
 	return (
-		<Card className="space-y-4 cursor-pointer   max-w-5xl w-full mx-auto">
+		<div className="space-y-4 cursor-pointer   max-w-5xl w-full mx-auto">
 			<CardHeader className="bg-card flex-row justify-between items-center">
 				<CardTitle className=" capitalize">Recent Balance Score cards</CardTitle>
 				<ButtonAddBSC organizationContext={organizationContext}>New BSC</ButtonAddBSC>
@@ -62,6 +62,7 @@ export default function BscSamples({ balancedScoreCards, organizationContext }: 
 								))}
 							</div>
 						</div>
+						{/* <pre>{JSON.stringify(balancedScoreCards[0], null, 2)}</pre> */}
 						{balancedScoreCards.length > 2 && (
 							<div className="ms-auto w-full max-w-fit">
 								<Link href={"/balanced-score-cards"} className={cn(buttonVariants({ variant: "secondary" }))}>
@@ -73,7 +74,7 @@ export default function BscSamples({ balancedScoreCards, organizationContext }: 
 					</div>
 				)}
 			</CardContent>
-		</Card>
+		</div>
 	);
 }
 
