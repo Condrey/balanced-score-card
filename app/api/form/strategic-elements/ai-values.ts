@@ -122,3 +122,5 @@ export async function generateAiMandate(jobTitle: string): Promise<string> {
 	});
 	return response;
 }
+
+

@@ -1,20 +1,24 @@
 import BscSteps from "@/app/admin/bsc/add-edit-bsc/(components)/bsc-steps";
-import EmptyContainer from "@/components/query-containers/empty-container";
 import { Button } from "@/components/ui/button";
 import LoadingButton from "@/components/ui/loading-button";
 import kyInstance from "@/lib/ky";
 import { OrganizationContextData, PositionData } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { BSCFormData, bscSchema, IndividualBSCSchema, PerformanceObjectiveArraySchema } from "@/lib/validations/bsc";
-import { OrganizationContextPropsSchema, stringArraySchema } from "@/lib/validations/others";
+import {
+	OrganizationContextPropsSchema,
+	ScheduleOfDutySchema,
+	SdRequestSchema,
+	stringArraySchema
+} from "@/lib/validations/others";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BarChart3, FileText, StarsIcon, Target, Users } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 import { upsertBSCMutation } from "./mutattion";
-import { useRouter } from "next/navigation";
 
 interface AiGenerationComponentProps {
 	previousForm: UseFormReturn<IndividualBSCSchema>;
@@ -31,7 +35,7 @@ export default function AiGenerationComponent({
 	position,
 	setIsGenerating,
 	currentStep,
-	setCurrentStep,
+	setCurrentStep
 }: AiGenerationComponentProps) {
 	const outputSchema = z.array(stringArraySchema);
 	type OutputSchema = z.infer<typeof outputSchema>;
@@ -43,7 +47,7 @@ export default function AiGenerationComponent({
 		"Created supervisee and supervisor details"
 	]);
 	const [msg, setMsg] = useState<{ message: string; isError: boolean } | undefined>(undefined);
-	const router = useRouter()
+	const router = useRouter();
 	const { isPending, mutate } = upsertBSCMutation();
 	const form = useForm<BSCFormData>({
 		resolver: zodResolver(bscSchema),
@@ -56,7 +60,9 @@ export default function AiGenerationComponent({
 			strategicElements: undefined,
 			performanceObjectives: [],
 			coreValues: undefined,
-			behavioralAttributes: []
+			behavioralAttributes: [],
+			scheduleOfDuty: undefined,
+			clients: []
 		}
 	});
 
@@ -169,8 +175,29 @@ export default function AiGenerationComponent({
 				case 3:
 					setMsg({ message: "Behavioral assessment done, BSC generation complete", isError: false });
 					setCompletedStepsMessages((msgs) => [...msgs, "Behavioral assessment done"]);
+					try {
+						setMsg({ message: "Making for you the schedule of duties", isError: false });
+						const res = await kyInstance.post("/api/form/schedule-of-duty", {
+							json: {
+								positionId: position.id,
+								location: form.watch("supervisee.location") || ""
+							} satisfies SdRequestSchema
+						});
+						const data = await res.json<ScheduleOfDutySchema | string>();
+						if (typeof data === "string") {
+							setMsg({ message: data, isError: true });
+						} else {
+							form.setValue("scheduleOfDuty", data);
+
+							setMsg({ message: "SD has been created.", isError: false });
+							setCompletedStepsMessages((msgs) => [...msgs, "Your schedule of duly was successfully created"]);
+						}
+					} catch (error) {
+						console.error("API error:", error);
+						setMsg({ message: "Failed to Create your schedule of duty " + JSON.stringify(error), isError: true });
+					}
 					setMsg(undefined);
-					mutate(form.watch(), { onSuccess: () => router.push('/')});
+					mutate(form.watch(), { onSuccess: () => router.push("/") });
 					break;
 				default:
 					break;
@@ -178,6 +205,7 @@ export default function AiGenerationComponent({
 		};
 		run();
 	}, [currentStep]);
+
 	function handleSubmit() {}
 	return (
 		<div className="space-y-4">
@@ -209,7 +237,7 @@ export default function AiGenerationComponent({
 					</p>
 				)}
 			</ul>
-		
+
 			<div className="flex justify-center">
 				<Button
 					type="button"

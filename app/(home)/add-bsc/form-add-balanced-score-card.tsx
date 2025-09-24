@@ -77,6 +77,19 @@ export default function FormAddBalancedScoreCard({ user, positions }: FormAddBal
 										</FormItem>
 									)}
 								/>
+								<FormField
+									control={form.control}
+									name="supervisee.location"
+									render={({ field }) => (
+										<FormItem className="flex-1">
+											<FormLabel>Location/ Facility</FormLabel>
+											<FormControl>
+												<Input placeholder="e.g OPD, Surgery Room for Health assistants, Central Registry, e.t.c." {...field} />
+											</FormControl>
+											<FormMessage />
+										</FormItem>
+									)}
+								/>
 								<LoadingButton loading={isPending} size={"lg"} className="hidden md:flex">
 									Create BSC
 								</LoadingButton>

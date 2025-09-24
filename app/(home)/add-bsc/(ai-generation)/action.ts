@@ -26,8 +26,23 @@ export async function upsertBSC(input: BSCFormData) {
 		supervisee,
 		supervisor,
 		year,
-		clients
+		clients,
+		scheduleOfDuty
 	} = bscSchema.parse(input);
+	const sanitizedSupervisor = {
+		id: supervisor.id,
+		employeeNumber: supervisor.employeeNumber,
+		name: supervisor.name,
+		jobTitle: supervisor.jobTitle,
+		salaryScale: supervisor.salaryScale
+	};
+	const sanitizedSupervisee = {
+		id: supervisee.id,
+		employeeNumber: supervisee.employeeNumber,
+		name: supervisee.name,
+		jobTitle: supervisee.jobTitle,
+		salaryScale: supervisee.salaryScale
+	};
 
 	return await prisma.bSC.create({
 		data: {
@@ -54,13 +69,13 @@ export async function upsertBSC(input: BSCFormData) {
 			supervisor: {
 				connectOrCreate: {
 					where: { id: supervisor.id },
-					create: supervisor
+					create: sanitizedSupervisor
 				}
 			},
 			supervisee: {
 				connectOrCreate: {
 					where: { id: supervisee.id },
-					create: supervisee
+					create: sanitizedSupervisee
 				}
 			},
 			coreValues: {
@@ -86,6 +101,30 @@ export async function upsertBSC(input: BSCFormData) {
 						expectedResults: p.expectedResults.map((a) => a.value)
 					})),
 					skipDuplicates: true
+				}
+			},
+			scheduleOfDuty: {
+				connectOrCreate: {
+					where: { id: scheduleOfDuty?.id },
+					create: {
+						...scheduleOfDuty,
+						positionId: scheduleOfDuty?.positionId!,
+						jobTitle: scheduleOfDuty?.jobTitle!,
+						location: scheduleOfDuty?.location!,
+						jobSummary: scheduleOfDuty?.jobSummary!,
+						resultAreas: scheduleOfDuty?.resultAreas.map((r) => r.value)!,
+						clients: scheduleOfDuty?.clients.map((c) => c.value)!,
+						reportingArrangements: scheduleOfDuty?.reportingArrangements.map((r) => r.value)!,
+						guidingDocuments: scheduleOfDuty?.guidingDocuments.map((g) => g.value)!,
+						outPutActivities: {
+							createMany: {
+								data: scheduleOfDuty?.outputActivities?.map((oA) => ({
+									output: oA.output,
+									activities: oA.activities.map((a) => a.value)
+								}))!
+							}
+						}
+					}
 				}
 			}
 		},

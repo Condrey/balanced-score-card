@@ -240,7 +240,39 @@ model BSC {
   userId   String?
   payments Payment[]
 
+  // schedule of duty 
+  scheduleOfDuty   ScheduleOfDuty? @relation(fields: [scheduleOfDutyId], references: [id], onDelete: Cascade)
+  scheduleOfDutyId String?
+
   @@map("bscs")
+}
+
+model ScheduleOfDuty {
+  id                    String           @id @default(uuid())
+  positionId            String
+  jobTitle              String
+  location              String
+  jobSummary            String
+  resultAreas           String[]
+  outPutActivities      OutputActivity[]
+  clients               String[]
+  reportingArrangements String[]
+  guidingDocuments      String[]
+  createdAt             DateTime         @default(now())
+  updatedAt             DateTime         @default(now()) @updatedAt
+  bscs                  BSC[]
+
+  @@map("schedule_of_duties")
+}
+
+model OutputActivity {
+  id               String          @id @default(uuid())
+  output           String
+  activities       String[]
+  scheduleOfDuty   ScheduleOfDuty? @relation(fields: [scheduleOfDutyId], references: [id], onDelete: Cascade)
+  scheduleOfDutyId String?
+
+  @@map("output_activities")
 }
 
 model Payment {

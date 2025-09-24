@@ -62,7 +62,7 @@ export default function BscSamples({ balancedScoreCards, organizationContext }: 
 								))}
 							</div>
 						</div>
-						<pre>{JSON.stringify(balancedScoreCards[0], null, 2)}</pre>
+						{/* <pre>{JSON.stringify(balancedScoreCards[0], null, 2)}</pre> */}
 						{balancedScoreCards.length > 2 && (
 							<div className="ms-auto w-full max-w-fit">
 								<Link href={"/balanced-score-cards"} className={cn(buttonVariants({ variant: "secondary" }))}>

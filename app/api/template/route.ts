@@ -30,7 +30,19 @@ export async function POST(req: Request, res: Response) {
 		behavioralAttributes: bsc.behavioralAttributes.map((bA, index) => ({
 			...bA,
 			index: index + 1
-		}))
+		})),
+		scheduleOfDuty: {
+			...bsc.scheduleOfDuty,
+			clients: bsc.scheduleOfDuty?.clients.map((c) => ({ client: c })),
+			reportingArrangements: bsc.scheduleOfDuty?.reportingArrangements.map((r) => ({ reportingArrangement: r })),
+			guidingDocuments: bsc.scheduleOfDuty?.guidingDocuments.map((g) => ({ guidingDocument: g })),
+			resultAreas: bsc.scheduleOfDuty?.resultAreas.map((r) => ({ resultArea: r })),
+			outputActivities: bsc.scheduleOfDuty?.outPutActivities.map((oA, index) => ({
+				...oA,
+				index: index + 1,
+				activities: oA.activities.map((a, subIndex) => ({ activity: a, subIndex: `${index + 1}.${subIndex + 1}.` }))
+			}))
+		}
 	};
 
 	try {
@@ -42,7 +54,7 @@ export async function POST(req: Request, res: Response) {
 		});
 
 		// Give a unique fileName
-		const fileName = sanitizeFilename(`${bsc.supervisee.name}_bsc ${bsc.year}.docx`);
+		const fileName = sanitizeFilename(`${bsc.supervisee.name}_bsc_${bsc.year}.docx`);
 
 		// Upload to Blob storage
 		const blob = await put(fileName, result, {

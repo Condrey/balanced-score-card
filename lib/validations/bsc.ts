@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { stringArraySchema } from "./others";
+import { scheduleOfDutySchema, stringArraySchema } from "./others";
 
 // Employee validation schema
 export const employeeSchema = z.object({
@@ -7,7 +7,10 @@ export const employeeSchema = z.object({
 	employeeNumber: z.string().min(1, "Employee number is required").describe("Unique identifier for the employee"),
 	name: z.string().min(2, "Name must be at least 2 characters").describe("Full name of the employee"),
 	jobTitle: z.string().min(1, "Job title is required").describe("Current position/job title of the employee"),
-	salaryScale: z.string().min(1, "Salary scale is required").describe("Employee's salary scale or grade level")
+	salaryScale: z.string().min(1, "Salary scale is required").describe("Employee's salary scale or grade level"),
+	location: z.string().optional().describe(`This is the location or facility where the job is being performed, 
+        e.g Enrolled Nurse (OPD) and Enrolled Nurse (MALE WARD), Office Attendant (Central Registry) and Office Attendant (Engineering and Works Department or even Service Commission)`)
+
 });
 
 // Strategic elements validation schema
@@ -149,7 +152,11 @@ export const bscSchema = z.object({
 	behavioralAttributes: z
 		.array(behavioralAttributeSchema)
 		.min(1, "At least one behavioral attribute is required")
-		.describe("List of behavioral attributes for assessment")
+		.describe("List of behavioral attributes for assessment"),
+
+		// Schedule of duty 
+		scheduleOfDuty: scheduleOfDutySchema.optional().describe("Schedule of duty for the supervisee"),
+		
 });
 
 export const individualBSCSchema = z.object({
