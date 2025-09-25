@@ -1,5 +1,4 @@
-import prisma from "@/lib/prisma";
-import { BSCData, bSCDataInclude } from "@/lib/types";
+import { BSCData } from "@/lib/types";
 import { groupByPerspective } from "@/lib/utils";
 import { StructuredOutputParser } from "@langchain/core/output_parsers";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
@@ -13,9 +12,9 @@ import z from "zod";
 export async function POST(req: Request, res: Response) {
 	console.info("Generating BSC document...");
 	const body = await req.json();
-	
+
 	const bsc = body as BSCData;
-	
+
 	const clients = !!bsc.clients.length ? bsc.clients : await getClients(bsc.supervisee.jobTitle);
 	const perspectiveGroups = groupByPerspective(bsc.performanceObjectives);
 	const position = bsc.user?.position || null;
@@ -57,8 +56,10 @@ export async function POST(req: Request, res: Response) {
 				},
 		supervisees: !!position ? position.responsibleFor : []
 	};
+	console.log({ PerspectiveGroups: JSON.stringify(data.perspectiveGroups, null, 2) });
 
 	const templatePath = path.resolve(process.cwd(), "public/templates/bsc_template.docx");
+
 	try {
 		const result: Buffer = await new Promise((resolve, reject) => {
 			// console.log(JSON.stringify({ data }, null, 2));
