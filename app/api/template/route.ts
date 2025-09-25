@@ -37,7 +37,7 @@ export async function POST(req: Request, res: Response) {
 			reportingArrangements: bsc.scheduleOfDuty?.reportingArrangements.map((r) => ({ reportingArrangement: r })),
 			guidingDocuments: bsc.scheduleOfDuty?.guidingDocuments.map((g) => ({ guidingDocument: g })),
 			resultAreas: bsc.scheduleOfDuty?.resultAreas.map((r) => ({ resultArea: r })),
-			outputActivities: bsc.scheduleOfDuty?.outPutActivities.map((oA, index) => ({
+			outputActivities: bsc.scheduleOfDuty?.outputActivities.map((oA, index) => ({
 				...oA,
 				index: index + 1,
 				activities: oA.activities.map((a, subIndex) => ({ activity: a, subIndex: `${index + 1}.${subIndex + 1}.` }))

@@ -254,7 +254,7 @@ model ScheduleOfDuty {
   location              String
   jobSummary            String
   resultAreas           String[]
-  outPutActivities      OutputActivity[]
+  outputActivities      OutputActivity[]
   clients               String[]
   reportingArrangements String[]
   guidingDocuments      String[]

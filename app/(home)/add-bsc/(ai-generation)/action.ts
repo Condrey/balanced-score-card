@@ -116,14 +116,14 @@ export async function upsertBSC(input: BSCFormData) {
 						clients: scheduleOfDuty?.clients.map((c) => c.value)!,
 						reportingArrangements: scheduleOfDuty?.reportingArrangements.map((r) => r.value)!,
 						guidingDocuments: scheduleOfDuty?.guidingDocuments.map((g) => g.value)!,
-						outPutActivities: {
+						outputActivities: {
 							createMany: {
 								data: scheduleOfDuty?.outputActivities?.map((oA) => ({
 									output: oA.output,
 									activities: oA.activities.map((a) => a.value)
 								}))!
 							}
-						}
+						},
 					}
 				}
 			}

@@ -23,7 +23,7 @@ export const bSCDataInclude = {
 	performanceObjectives: true,
 	organization: true,
 	user: true,
-	payments: true,scheduleOfDuty:{include:{outPutActivities:true}}
+	payments: true,scheduleOfDuty:{include:{outputActivities:true}}
 } satisfies Prisma.BSCInclude;
 export type BSCData = Prisma.BSCGetPayload<{
 	include: typeof bSCDataInclude;
