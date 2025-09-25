@@ -16,7 +16,7 @@ export function DownloadBscButton({ bsc, ...props }: DownloadBscButtonProps) {
 	async function handleOnClickEvent() {
 		startTransition(async () => {
 			const response = await ky.post(`/api/template`, {
-						body: JSON.stringify({id:bsc.id})
+				body: JSON.stringify(bsc)
 			});
 			if (response.ok) {
 				const { message, url, isError } = await response.json<{

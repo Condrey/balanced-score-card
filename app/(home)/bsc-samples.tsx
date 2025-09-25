@@ -89,7 +89,7 @@ function BSCFile({ bsc }: { bsc: BSCData }) {
 			? toast.error("PAYMENT NOT FOUND", { description: "You need to pay for the BSC generation before downloading." })
 			: startTransition(async () => {
 					const response = await ky.post(`/api/template`, {
-						body: JSON.stringify({id:bsc.id})
+						body: JSON.stringify(bsc)
 					});
 					if (response.ok) {
 						const { message, url, isError } = await response.json<{

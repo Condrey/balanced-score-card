@@ -37,7 +37,7 @@ async function PageContent() {
 	const [balancedScoreCards, paymentHistories, organizationContext] = await Promise.all([
 		await prisma.bSC.findMany({
 			where: { userId: user.id },
-			take: 5,
+			take: 7,
 			orderBy: { updatedAt: "desc" },
 			include: bSCDataInclude
 		}),

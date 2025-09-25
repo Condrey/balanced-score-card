@@ -13,21 +13,13 @@ import z from "zod";
 export async function POST(req: Request, res: Response) {
 	console.info("Generating BSC document...");
 	const body = await req.json();
-	const schema = z.object({
-		id:z.string()
-	})
-	const {id} = schema.parse(body);
-	const bsc = await prisma.bSC.findFirst({
-		where:{id},
-		include: bSCDataInclude
-	})
-	if(!bsc){
-		return Response.json({message:"BSC not found",isError:true},{status:404,statusText:"BSC Not Found"})
-	}
-
-	const templatePath = path.resolve(process.cwd(), "public/templates/bsc_template.docx");
+	
+	const bsc = body as BSCData;
+	
 	const clients = !!bsc.clients.length ? bsc.clients : await getClients(bsc.supervisee.jobTitle);
 	const perspectiveGroups = groupByPerspective(bsc.performanceObjectives);
+	const position = bsc.user?.position || null;
+	const scheduleOfDuty = bsc.scheduleOfDuty || null;
 
 	// Carbone expects data as an object
 	const data = {
@@ -42,31 +34,46 @@ export async function POST(req: Request, res: Response) {
 			...bA,
 			index: index + 1
 		})),
-		scheduleOfDuty: {
-			...bsc.scheduleOfDuty,
-			clients: bsc.scheduleOfDuty?.clients.map((c) => ({ client: c })),
-			reportingArrangements: bsc.scheduleOfDuty?.reportingArrangements.map((r) => ({ reportingArrangement: r })),
-			guidingDocuments: bsc.scheduleOfDuty?.guidingDocuments.map((g) => ({ guidingDocument: g })),
-			resultAreas: bsc.scheduleOfDuty?.resultAreas.map((r) => ({ resultArea: r })),
-			outputs: bsc.scheduleOfDuty?.outputActivities.map((oA,index)=>({index: `${index+1}. `,output:oA.output})),
-			activities: bsc.scheduleOfDuty?.outputActivities.map((oA, index) =>{
-				const activities = oA.activities.map((activity,subIndex)=>({index: `${index}.${subIndex+1}. `, activity})).flat();
-				return activities
-			}).flat()
-		},
-		supervisees:bsc.user?.position?.responsibleFor
+		scheduleOfDuty: !scheduleOfDuty
+			? undefined
+			: {
+					clients: scheduleOfDuty.clients.map((c) => ({ client: c })),
+					reportingArrangements: scheduleOfDuty.reportingArrangements.map((r) => ({ reportingArrangement: r })),
+					guidingDocuments: scheduleOfDuty.guidingDocuments.map((g) => ({ guidingDocument: g })),
+					resultAreas: scheduleOfDuty.resultAreas.map((r) => ({ resultArea: r })),
+					outputs: scheduleOfDuty.outputActivities.map((oA, index) => ({
+						index: `${index + 1}. `,
+						output: oA.output
+					})),
+					activities: scheduleOfDuty.outputActivities
+						.map((oA, index) => {
+							const activities = oA.activities
+								.map((activity, subIndex) => ({ index: `${index}.${subIndex + 1}. `, activity }))
+								.flat();
+							return activities;
+						})
+						.flat()
+					// ...bsc.scheduleOfDuty
+				},
+		supervisees: !!position ? position.responsibleFor : []
 	};
 
+	const templatePath = path.resolve(process.cwd(), "public/templates/bsc_template.docx");
 	try {
 		const result: Buffer = await new Promise((resolve, reject) => {
+			// console.log(JSON.stringify({ data }, null, 2));
+
 			carbone.render(templatePath, data, {}, (err, result) => {
-				if (err) return reject(err);
+				if (err) {
+					console.error("Carbone render error:", err);
+					return reject(err);
+				}
 				resolve(Buffer.from(result));
 			});
 		});
 
 		// Give a unique fileName
-		const fileName = sanitizeFilename(`${bsc.supervisee.name}_bsc_${bsc.year}.docx`);
+		const fileName = sanitizeFilename(`${bsc.supervisee.name}_bsc-${bsc.year}.docx`);
 
 		// Upload to Blob storage
 		const blob = await put(fileName, result, {
