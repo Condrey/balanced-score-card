@@ -27,7 +27,7 @@ export async function upsertBSC(input: BSCFormData) {
 		supervisor,
 		year,
 		clients,
-		scheduleOfDuty
+		scheduleOfDuty,
 	} = bscSchema.parse(input);
 	const sanitizedSupervisor = {
 		id: supervisor.id,
@@ -54,7 +54,8 @@ export async function upsertBSC(input: BSCFormData) {
 					create: {
 						id: session.user.id,
 						name: session.user.name || "",
-						email: session.user.email || ""
+						email: session.user.email || "",
+
 					}
 				}
 			},

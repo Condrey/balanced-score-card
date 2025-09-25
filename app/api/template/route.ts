@@ -46,17 +46,20 @@ export async function POST(req: Request, res: Response) {
 					})),
 					activities: scheduleOfDuty.outputActivities
 						.map((oA, index) => {
-							const activities = oA.activities
-								.map((activity, subIndex) => ({ index: `${index}.${subIndex + 1}. `, activity }))
-								.flat();
+							const activities = oA.activities.map((activity, subIndex) => ({
+								index: `${subIndex + 1}.${index + 1}. `,
+								activity
+							}));
 							return activities;
 						})
-						.flat()
-					// ...bsc.scheduleOfDuty
+						.flat(),
+					...bsc.scheduleOfDuty
 				},
 		supervisees: !!position ? position.responsibleFor : []
 	};
-	console.log({ PerspectiveGroups: JSON.stringify(data.perspectiveGroups, null, 2) });
+	console.log({
+		PerspectiveGroups: data.perspectiveGroups.map((p) => ({ perspective: p.objectives.map((o) => o.objective).flat() }))
+	});
 
 	const templatePath = path.resolve(process.cwd(), "public/templates/bsc_template.docx");
 
@@ -74,7 +77,7 @@ export async function POST(req: Request, res: Response) {
 		});
 
 		// Give a unique fileName
-		const fileName = sanitizeFilename(`${bsc.supervisee.name}_bsc-${bsc.year}.docx`);
+		const fileName = sanitizeFilename(`${bsc.supervisee.name}-bsc ${bsc.year}.docx`);
 
 		// Upload to Blob storage
 		const blob = await put(fileName, result, {

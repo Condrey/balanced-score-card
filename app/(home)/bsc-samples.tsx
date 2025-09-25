@@ -6,7 +6,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import LoadingButton from "@/components/ui/loading-button";
 import { BSCData, OrganizationContextData } from "@/lib/types";
-import { cn, formatDate } from "@/lib/utils";
+import { cn, formatDate, groupByPerspective } from "@/lib/utils";
 import ky from "ky";
 import { DownloadCloudIcon, FileIcon, MoveRightIcon } from "lucide-react";
 import Link from "next/link";
@@ -37,7 +37,7 @@ export default function BscSamples({ balancedScoreCards, organizationContext }: 
 	// 			<BSCFormInitialData />
 	// 		</EmptyContainer>
 	// 	);
-
+	const bsc = balancedScoreCards[0]!;
 	return (
 		<div className="space-y-4    max-w-5xl w-full mx-auto">
 			<CardHeader className="bg-card flex-row justify-between items-center">
@@ -62,7 +62,7 @@ export default function BscSamples({ balancedScoreCards, organizationContext }: 
 								))}
 							</div>
 						</div>
-						{/* <pre>{JSON.stringify(balancedScoreCards[0], null, 2)}</pre> */}
+						<pre>{JSON.stringify(groupByPerspective(bsc.performanceObjectives), null, 2)}</pre>
 						{balancedScoreCards.length > 2 && (
 							<div className="ms-auto w-full max-w-fit">
 								<Link href={"/balanced-score-cards"} className={cn(buttonVariants({ variant: "secondary" }))}>
@@ -89,7 +89,8 @@ function BSCFile({ bsc }: { bsc: BSCData }) {
 			? toast.error("PAYMENT NOT FOUND", { description: "You need to pay for the BSC generation before downloading." })
 			: startTransition(async () => {
 					const response = await ky.post(`/api/template`, {
-						body: JSON.stringify(bsc)
+						body: JSON.stringify(bsc),
+						timeout: false
 					});
 					if (response.ok) {
 						const { message, url, isError } = await response.json<{
