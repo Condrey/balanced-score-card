@@ -1,4 +1,5 @@
-import { BSCData } from "@/lib/types";
+import prisma from "@/lib/prisma";
+import { BSCData, bSCDataInclude } from "@/lib/types";
 import { groupByPerspective } from "@/lib/utils";
 import { StructuredOutputParser } from "@langchain/core/output_parsers";
 import { ChatPromptTemplate } from "@langchain/core/prompts";
@@ -12,7 +13,17 @@ import z from "zod";
 export async function POST(req: Request, res: Response) {
 	console.info("Generating BSC document...");
 	const body = await req.json();
-	const bsc = body as BSCData;
+	const schema = z.object({
+		id:z.string()
+	})
+	const {id} = schema.parse(body);
+	const bsc = await prisma.bSC.findFirst({
+		where:{id},
+		include: bSCDataInclude
+	})
+	if(!bsc){
+		return Response.json({message:"BSC not found",isError:true},{status:404,statusText:"BSC Not Found"})
+	}
 
 	const templatePath = path.resolve(process.cwd(), "public/templates/bsc_template.docx");
 	const clients = !!bsc.clients.length ? bsc.clients : await getClients(bsc.supervisee.jobTitle);
@@ -37,12 +48,13 @@ export async function POST(req: Request, res: Response) {
 			reportingArrangements: bsc.scheduleOfDuty?.reportingArrangements.map((r) => ({ reportingArrangement: r })),
 			guidingDocuments: bsc.scheduleOfDuty?.guidingDocuments.map((g) => ({ guidingDocument: g })),
 			resultAreas: bsc.scheduleOfDuty?.resultAreas.map((r) => ({ resultArea: r })),
-			outputActivities: bsc.scheduleOfDuty?.outputActivities.map((oA, index) => ({
-				...oA,
-				index: index + 1,
-				activities: oA.activities.map((a, subIndex) => ({ activity: a, subIndex: `${index + 1}.${subIndex + 1}.` }))
-			}))
-		}
+			outputs: bsc.scheduleOfDuty?.outputActivities.map((oA,index)=>({index: `${index+1}. `,output:oA.output})),
+			activities: bsc.scheduleOfDuty?.outputActivities.map((oA, index) =>{
+				const activities = oA.activities.map((activity,subIndex)=>({index: `${index}.${subIndex+1}. `, activity})).flat();
+				return activities
+			}).flat()
+		},
+		supervisees:bsc.user?.position?.responsibleFor
 	};
 
 	try {

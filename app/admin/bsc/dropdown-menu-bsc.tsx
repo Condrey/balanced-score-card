@@ -29,7 +29,7 @@ export default function DropdownMenuBSC({ bSC }: DropdownMenuBSCProps) {
 	async function printBsc() {
 		startTransition(async () => {
 			const response = await ky.post(`/api/template`, {
-				body: JSON.stringify(bSC)
+						body: JSON.stringify({id:bSC.id})
 			});
 			if (response.ok) {
 				const { message, url, isError } = await response.json<{
