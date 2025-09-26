@@ -83,7 +83,7 @@ export type PerspectiveGroup = {
 		actions: { action: string }[];
 		expectedResults: { result: string }[];
 		kpis: { kpi: string }[];
-		score: number;
+		score: number|undefined;
 		comments: string;
 	}[];
 };

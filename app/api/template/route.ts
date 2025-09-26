@@ -31,6 +31,7 @@ export async function POST(req: Request, res: Response) {
 		clients: clients.map((c) => ({ client: c })),
 		behavioralAttributes: bsc.behavioralAttributes.map((bA, index) => ({
 			...bA,
+			score:bA.score===0?undefined:bA.score,
 			index: index + 1
 		})),
 		scheduleOfDuty: !scheduleOfDuty
