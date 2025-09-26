@@ -17,8 +17,6 @@ export async function generateScheduleOfDuty({ officer, location }: { officer: P
 (Local government duties):
 {localGovernmentDuties}
 {format_instructions}
-NB: With object values requiring arrays, make at least two and utmost four entries in each array. Maintain the numbering format as shown in the examples. 
-activity is a sub-numbering of output, e.g., for output i. the activities will be i.i., i.ii, i.iii, i.iv. e.t.c
 NB: Give guiding documents picking from Local Government and Public service websites
 NB: Create outputActivities for all the resultAreas
 `;
