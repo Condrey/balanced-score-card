@@ -134,10 +134,11 @@ export const scheduleOfDutySchema = z
 				vi.iv. Taking patients to theater
 				vi.v. Preparing Post Surgical Bed
 				vi.vi. Taking patient to recovery room
+				NB: Activities are derived from the outputs with which the job holder is expected to deliver
 `)
 				})
 			)
-			.describe("Key activities are derived from the outputs with which the job holder is expected to deliver"),
+			.describe("Key activities are derived from the outputs with which the job holder is expected to deliver. Maintain the roman numeral numbering."),
 		clients: z
 			.array(stringArraySchema)
 			.describe("Clients/ People the Officer relates with in execution of his/her duties"),

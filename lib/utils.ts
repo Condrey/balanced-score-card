@@ -73,12 +73,11 @@ export function groupByPerspective(performanceObjectives: PerformanceObjective[]
 		});
 	}
 
-	return Object.values(groups)
-		.map((group) => ({
-			...group,
-			objectives: group.objectives.slice(0, 2), // limit to 3 objectives per perspective
-			perspective: perspectives[group.perspective as PerspectiveType]
-		}))
+	return Object.values(groups).map((group) => ({
+		...group,
+		// objectives: group.objectives.slice(0, 2), // limit to 3 objectives per perspective
+		perspective: perspectives[group.perspective as PerspectiveType]
+	}));
 }
 
 export function getCurrentFinancialYear() {

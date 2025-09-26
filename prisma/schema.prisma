@@ -236,12 +236,12 @@ model BSC {
   organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   organizationId String?
 
-  user     User?     @relation(fields: [userId], references: [id])
+  user     User?     @relation(fields: [userId], references: [id],onDelete: Cascade)
   userId   String?
   payments Payment[]
 
   // schedule of duty 
-  scheduleOfDuty   ScheduleOfDuty? @relation(fields: [scheduleOfDutyId], references: [id], onDelete: Cascade)
+  scheduleOfDuty   ScheduleOfDuty? @relation(fields: [scheduleOfDutyId], references: [id], onDelete: SetNull)
   scheduleOfDutyId String?
 
   @@map("bscs")
@@ -280,7 +280,7 @@ model Payment {
   amount  Float
   balance Float
   bsc     BSC    @relation(fields: [bSCId], references: [id])
-  user    User   @relation(fields: [userId], references: [id])
+  user    User   @relation(fields: [userId], references: [id],onDelete: Cascade)
   bSCId   String
   userId  String
 }
@@ -324,7 +324,7 @@ model ScoreValueScore {
 model BehavioralAttribute {
   id                    String               @id @default(uuid())
   bscId                 String?
-  bsc                   BSC?                 @relation(fields: [bscId], references: [id], onDelete: Cascade)
+  bsc                   BSC?                 @relation(fields: [bscId], references: [id], onDelete: SetNull)
   attribute             String
   percentage            Float
   description           String?

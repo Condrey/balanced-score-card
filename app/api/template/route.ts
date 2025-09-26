@@ -36,6 +36,8 @@ export async function POST(req: Request, res: Response) {
 		scheduleOfDuty: !scheduleOfDuty
 			? undefined
 			: {
+					...bsc.scheduleOfDuty,
+
 					clients: scheduleOfDuty.clients.map((c) => ({ client: c })),
 					reportingArrangements: scheduleOfDuty.reportingArrangements.map((r) => ({ reportingArrangement: r })),
 					guidingDocuments: scheduleOfDuty.guidingDocuments.map((g) => ({ guidingDocument: g })),
@@ -45,15 +47,14 @@ export async function POST(req: Request, res: Response) {
 						output: oA.output
 					})),
 					activities: scheduleOfDuty.outputActivities
-						.map((oA, index) => {
-							const activities = oA.activities.map((activity, subIndex) => ({
-								index: `${subIndex + 1}.${index + 1}. `,
-								activity
-							}));
-							return activities;
-						})
-						.flat(),
-					...bsc.scheduleOfDuty
+						.map((oA, index) => ({
+							index: `${index + 1}. `,
+							activities: oA.activities.map((a, aIndex) => ({
+								index: `${index + 1}.${aIndex + 1}. `,
+								activity: a
+							}))
+						}))
+						.flatMap((b) => b.activities)
 				},
 		supervisees: !!position ? position.responsibleFor : []
 	};
@@ -62,7 +63,7 @@ export async function POST(req: Request, res: Response) {
 	});
 
 	const templatePath = path.resolve(process.cwd(), "public/templates/bsc_template.docx");
-
+	// data.scheduleOfDuty?.clients[0].client
 	try {
 		const result: Buffer = await new Promise((resolve, reject) => {
 			// console.log(JSON.stringify({ data }, null, 2));
@@ -77,7 +78,7 @@ export async function POST(req: Request, res: Response) {
 		});
 
 		// Give a unique fileName
-		const fileName = sanitizeFilename(`${bsc.supervisee.name}-bsc ${bsc.year}.docx`);
+		const fileName = sanitizeFilename(`${bsc.supervisee.name}-bsc_${bsc.year}.docx`);
 
 		// Upload to Blob storage
 		const blob = await put(fileName, result, {
