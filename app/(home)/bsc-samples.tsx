@@ -6,7 +6,7 @@ import { buttonVariants } from "@/components/ui/button";
 import { CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import LoadingButton from "@/components/ui/loading-button";
 import { BSCData, OrganizationContextData } from "@/lib/types";
-import { cn, formatDate, groupByPerspective } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 import ky from "ky";
 import { DownloadCloudIcon, FileIcon, MoveRightIcon } from "lucide-react";
 import Link from "next/link";
@@ -85,7 +85,7 @@ function BSCFile({ bsc }: { bsc: BSCData }) {
 	const dateTime = updatedAt > createdAt ? `(Update) ${formatDate(updatedAt)}` : formatDate(createdAt);
 	const [isPending, startTransition] = useTransition();
 	function onDownloadClicked() {
-		isPaid
+		!isPaid
 			? toast.error("PAYMENT NOT FOUND", { description: "You need to pay for the BSC generation before downloading." })
 			: startTransition(async () => {
 					const response = await ky.post(`/api/template`, {

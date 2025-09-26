@@ -17,6 +17,7 @@ export async function generateScheduleOfDuty({ officer, location }: { officer: P
 (Local government duties):
 {localGovernmentDuties}
 {format_instructions}
+NB: With object values requiring arrays, make at least four entries in each array. Do not include the numbering in the example given. 
 NB: Give guiding documents picking from Local Government and Public service websites
 NB: Create outputActivities for all the resultAreas
 `;
