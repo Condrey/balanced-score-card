@@ -27,7 +27,7 @@ export async function upsertBSC(input: BSCFormData) {
 		supervisor,
 		year,
 		clients,
-		scheduleOfDuty,
+		scheduleOfDuty
 	} = bscSchema.parse(input);
 	const sanitizedSupervisor = {
 		id: supervisor.id,
@@ -54,8 +54,7 @@ export async function upsertBSC(input: BSCFormData) {
 					create: {
 						id: session.user.id,
 						name: session.user.name || "",
-						email: session.user.email || "",
-
+						email: session.user.email || ""
 					}
 				}
 			},
@@ -105,26 +104,23 @@ export async function upsertBSC(input: BSCFormData) {
 				}
 			},
 			scheduleOfDuty: {
-				connectOrCreate: {
-					where: { id: scheduleOfDuty?.id },
-					create: {
-						...scheduleOfDuty,
-						positionId: scheduleOfDuty?.positionId!,
-						jobTitle: scheduleOfDuty?.jobTitle!,
-						location: scheduleOfDuty?.location!,
-						jobSummary: scheduleOfDuty?.jobSummary!,
-						resultAreas: scheduleOfDuty?.resultAreas.map((r) => r.value)!,
-						clients: scheduleOfDuty?.clients.map((c) => c.value)!,
-						reportingArrangements: scheduleOfDuty?.reportingArrangements.map((r) => r.value)!,
-						guidingDocuments: scheduleOfDuty?.guidingDocuments.map((g) => g.value)!,
-						outputActivities: {
-							createMany: {
-								data: scheduleOfDuty?.outputActivities?.map((oA) => ({
-									output: oA.output,
-									activities: oA.activities.map((a) => a.value)
-								}))!
-							}
-						},
+				create: {
+					...scheduleOfDuty,
+					positionId: scheduleOfDuty?.positionId!,
+					jobTitle: scheduleOfDuty?.jobTitle!,
+					location: scheduleOfDuty?.location!,
+					jobSummary: scheduleOfDuty?.jobSummary!,
+					resultAreas: scheduleOfDuty?.resultAreas.map((r) => r.value)!,
+					clients: scheduleOfDuty?.clients.map((c) => c.value)!,
+					reportingArrangements: scheduleOfDuty?.reportingArrangements.map((r) => r.value)!,
+					guidingDocuments: scheduleOfDuty?.guidingDocuments.map((g) => g.value)!,
+					outputActivities: {
+						createMany: {
+							data: scheduleOfDuty?.outputActivities?.map((oA) => ({
+								output: oA.output,
+								activities: oA.activities.map((a) => a.value)
+							}))!
+						}
 					}
 				}
 			}

@@ -85,7 +85,7 @@ function BSCFile({ bsc }: { bsc: BSCData }) {
 	const dateTime = updatedAt > createdAt ? `(Update) ${formatDate(updatedAt)}` : formatDate(createdAt);
 	const [isPending, startTransition] = useTransition();
 	function onDownloadClicked() {
-		isPaid
+		!isPaid
 			? toast.error("PAYMENT NOT FOUND", { description: "You need to pay for the BSC generation before downloading." })
 			: startTransition(async () => {
 					const response = await ky.post(`/api/template`, {
