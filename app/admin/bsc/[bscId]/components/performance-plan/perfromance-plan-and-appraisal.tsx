@@ -2,26 +2,39 @@ import EmptyContainer from "@/components/query-containers/empty-container";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { perspectives } from "@/lib/constants";
+import { BSCData } from "@/lib/types";
 import { groupByPerspective } from "@/lib/utils";
-import { PerformanceObjective, PerspectiveType } from "@prisma/client";
+import { PerspectiveType } from "@prisma/client";
+import ButtonEditPerformancePlanAndAppraisal from "./button-edit-performance-plan-and-appraisal";
 
 interface PerformancePlanAndAppraisalProps {
-	performanceObjectives: PerformanceObjective[];
-	clients: string[];
+	bsc: BSCData;
 }
 
-export default function PerformancePlanAndAppraisal({
-	performanceObjectives,
-	clients
-}: PerformancePlanAndAppraisalProps) {
+export default function PerformancePlanAndAppraisal({ bsc }: PerformancePlanAndAppraisalProps) {
+	const { performanceObjectives, organizationId, superviseeId, year, clients, behavioralAttributes } = bsc;
+
 	const groupedPerspectives = groupByPerspective(performanceObjectives);
 	const totalScore = performanceObjectives.reduce((acc, obj) => acc + obj.score, 0);
 	return (
 		<Card className="max-w-7xl">
-			<CardHeader>
-				<CardTitle className="uppercase">Section 3: Performance Plan and Performance Appraisal</CardTitle>
-				<CardDescription>CLIENTS: {clients.join(", ")}.</CardDescription>
-				<CardDescription>TOTAL SCORE OUT OF 80%: {totalScore}</CardDescription>
+			<CardHeader className="flex flex-row justify-between gap-3 ">
+				<div>
+					<CardTitle className="uppercase">Section 3: Performance Plan and Performance Appraisal</CardTitle>
+					<CardDescription>CLIENTS: {clients.join(", ")}.</CardDescription>
+					<CardDescription>TOTAL SCORE OUT OF 80%: {totalScore}</CardDescription>
+				</div>
+				<ButtonEditPerformancePlanAndAppraisal
+					className="w-fit"
+					variant={"outline"}
+					bscId={bsc.id}
+					behavioralAttributes={behavioralAttributes}
+					organizationId={organizationId!}
+					position={superviseeId}
+					year={year}
+				>
+					Re-submit
+				</ButtonEditPerformancePlanAndAppraisal>
 			</CardHeader>
 			<CardContent>
 				<Table>
@@ -43,7 +56,7 @@ export default function PerformancePlanAndAppraisal({
 							<>
 								{groupedPerspectives.map((p) =>
 									p.objectives.map((obj, index) => (
-										<TableRow key={obj.objective} className="*:align-top">
+										<TableRow key={obj.objective + index} className="*:align-top">
 											{/* Render perspective cell only on first row */}
 											{index === 0 && (
 												<TableCell rowSpan={p.objectives.length} className="break-all">

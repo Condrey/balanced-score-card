@@ -32,7 +32,7 @@ export default async function Page({ params }: PageProps) {
 					<DownloadIcon />
 				</DownloadBscButton>
 			</div>
-			<PageContent bsc={bsc} />
+			<PageContent initialData={bsc} />
 		</div>
 	);
 }

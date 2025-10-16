@@ -40,13 +40,11 @@ Your role is to generate Balanced Scorecards tailored to the Ugandan local gover
 
 **Instructions:**
 1. Use the provided Job Description Duties (duties) to create Performance Objectives for the specified Position (position).
-2. The Balanced Scorecard must include *all* four blueprint perspectives, and each perspective MUST appear **four times** in the following output perspective:
-   - STAKEHOLDERS_CLIENTS with percentage of 25%
-   - FINANCIAL_STEWARDSHIP with percentage of 15%
-   - INTERNAL_PROCESSES with percentage of 20%
-   - MDA_LG_CAPACITY with percentage of 20%
-   > Note: Each perspective must appear exactly four times, resulting in a total of 16 performance objectives.
-   > Note: Each perspective must have at least 2 objectives directly related to the duties provided.
+2. The Balanced Scorecard must include *all* four blueprint perspectives, and each perspective must appear at least **two times** and at most **four times** for senior job positions in the output:
+   - STAKEHOLDERS_CLIENTS
+   - FINANCIAL_STEWARDSHIP
+   - INTERNAL_PROCESSES
+   - MDA_LG_CAPACITY
    There is a tendency for the AI to forget FINANCIAL_STEWARDSHIP, take note.
 3. These are the blueprint perspectives with their maximum allowable percentages:  
    {perspectivesWithPercentages}

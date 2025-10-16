@@ -236,7 +236,7 @@ model BSC {
   organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   organizationId String?
 
-  user     User?     @relation(fields: [userId], references: [id],onDelete: Cascade)
+  user     User?     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId   String?
   payments Payment[]
 
@@ -280,16 +280,15 @@ model Payment {
   amount  Float
   balance Float
   bsc     BSC    @relation(fields: [bSCId], references: [id])
-  user    User   @relation(fields: [userId], references: [id],onDelete: Cascade)
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
   bSCId   String
   userId  String
 }
 
 model PerformanceObjective {
-  id    String @id @default(uuid())
-  bscId String
-  bsc   BSC    @relation(fields: [bscId], references: [id], onDelete: Cascade)
-
+  id              String          @id @default(uuid())
+  bscId           String
+  bsc             BSC             @relation(fields: [bscId], references: [id], onDelete: Cascade)
   perspective     PerspectiveType
   objective       String
   percentage      Float
