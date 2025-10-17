@@ -26,7 +26,7 @@ export default async function Page({ params }: PageProps) {
 	if (!bsc) return notFound();
 	return (
 		<div className="space-y-6">
-			<div className="top-10 z-50 flex items-center justify-between gap-3 rounded-md p-3 sm:sticky sm:border sm:bg-card">
+			<div className="top-10 z-50 flex items-center justify-between gap-3 rounded-md p-3 sm:sticky sm:border sm:bg-card/20 backdrop-blur-2xl">
 				<h1 className="text-xl font-bold tracking-tight">Balanced Score Card - FY{bsc.year}</h1>
 				<DownloadBscButton bsc={bsc} size={"icon"} className="flex-none">
 					<DownloadIcon />

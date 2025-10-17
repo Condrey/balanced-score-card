@@ -11,7 +11,7 @@ export function StrategicElements({ bsc }: StrategicElementsProps) {
 			<CardHeader>
 				<CardTitle className="uppercase">Section 2: BSC Strategic Elements</CardTitle>
 			</CardHeader>
-			<CardContent className="flex flex-col gap-2.5 *:text-justify *:before:font-bold *:before:uppercase">
+			<CardContent className="flex flex-col gap-2.5 *:md:text-justify *:before:font-bold *:before:uppercase">
 				<p className='before:content-["Mandate:_"]'>{bsc.mandate}</p>
 				<p className='before:content-["Vision:_"]'>{bsc.vision}</p>
 				<p className='before:content-["Mission:_"]'>{bsc.mission}</p>

@@ -18,20 +18,21 @@ export default function PerformancePlanAndAppraisal({ bsc }: PerformancePlanAndA
 	const totalScore = performanceObjectives.reduce((acc, obj) => acc + obj.score, 0);
 	return (
 		<Card className="max-w-7xl">
-			<CardHeader className="flex flex-row justify-between gap-3 ">
+			<CardHeader className="flex flex-wrap flex-row justify-between gap-3 ">
 				<div>
 					<CardTitle className="uppercase">Section 3: Performance Plan and Performance Appraisal</CardTitle>
 					<CardDescription>CLIENTS: {clients.join(", ")}.</CardDescription>
 					<CardDescription>TOTAL SCORE OUT OF 80%: {totalScore}</CardDescription>
 				</div>
 				<ButtonEditPerformancePlanAndAppraisal
-					className="w-fit"
+					className="w-fit ml-auto"
 					variant={"outline"}
 					bscId={bsc.id}
 					behavioralAttributes={behavioralAttributes}
 					organizationId={organizationId!}
 					position={superviseeId}
 					year={year}
+					
 				>
 					Re-submit
 				</ButtonEditPerformancePlanAndAppraisal>

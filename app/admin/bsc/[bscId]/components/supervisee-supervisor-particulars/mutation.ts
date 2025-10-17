@@ -2,14 +2,14 @@
 
 import { QueryKey, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { updatePerformancePlan } from "./action";
+import { updateParticulars } from "./action";
 
 const queryKey: QueryKey = ["bsc"];
 
-export function useUpdatePerformancePlanMutation() {
+export function useUpdateParticularsMutation() {
 	const queryClient = useQueryClient();
 	return useMutation({
-		mutationFn: updatePerformancePlan,
+		mutationFn: updateParticulars,
 		async onSuccess(data, variables, context) {
 			await queryClient.cancelQueries({ queryKey });
 			queryClient.invalidateQueries({ queryKey });
