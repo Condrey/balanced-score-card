@@ -68,7 +68,7 @@ export function groupByPerspective(performanceObjectives: PerformanceObjective[]
 			actions: obj.actions.map((a) => ({ action: a })),
 			expectedResults: obj.expectedResults.map((r) => ({ result: r })),
 			kpis: obj.kpis.map((k) => ({ kpi: k })),
-			score: obj.score===0?undefined:obj.score,
+			score: obj.score === 0 ? undefined : obj.score,
 			comments: obj.comments ?? ""
 		});
 	}
@@ -86,3 +86,5 @@ export function getCurrentFinancialYear() {
 	const month = getMonth(today);
 	return month >= 6 ? `${year}/${year + 1}` : `${year - 1}/${year}`;
 }
+
+export const webName = "Balanced Score Card Generator";
