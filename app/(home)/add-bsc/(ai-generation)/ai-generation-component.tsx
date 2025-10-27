@@ -52,7 +52,6 @@ export default function AiGenerationComponent({
 	const form = useForm<BSCFormData>({
 		resolver: zodResolver(bscSchema),
 		defaultValues: {
-			id: "",
 			organizationId,
 			year,
 			supervisee,

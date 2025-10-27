@@ -8,7 +8,7 @@ export const sendWelcomeRemarksEmail = async ({
   email: string;
   name: string;
 }) => {
-  const organization = webName + " Management System";
+  const organization = webName + "System";
   const senderName = "Ogwang Coundrey James";
   const senderTitle = "Support team";
   const subject = "Welcome remarks!";
