@@ -13,6 +13,7 @@ import { organizationSchema, PositionSchema, positionSchema } from "@/lib/valida
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Organization, Position } from "@prisma/client";
 import { Check, ChevronsUpDown } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import z from "zod";
 import { usePositionOrganizationMutation } from "./mutations";
@@ -30,6 +31,7 @@ export default function BSCInitialDataForm({
 	data: { position, positions, organization, organizations },
 	setOpen
 }: BSCInitialDataFormProps) {
+	const router = useRouter();
 	const schema = z.object({
 		position: positionSchema.optional(),
 		organization: organizationSchema.required()
@@ -52,7 +54,10 @@ export default function BSCInitialDataForm({
 		mutate(
 			{ positionId: input.position?.id!, organizationId: input.organization.id },
 			{
-				onSuccess: () => setOpen(false)
+				onSuccess: () => {
+					setOpen(false);
+					router.refresh();
+				}
 			}
 		);
 
@@ -69,7 +74,7 @@ export default function BSCInitialDataForm({
 						render={({ field }) => (
 							<FormItem className="flex flex-col">
 								<FormLabel>Organization</FormLabel>
-								<Popover modal={false} >
+								<Popover modal={false}>
 									<PopoverTrigger asChild>
 										<FormControl>
 											<Button

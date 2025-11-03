@@ -19,7 +19,7 @@ export default function WebPackages() {
 				<Card className="flex flex-col sm:flex-row gap-4 pt-4 bg-gradient-to-tr from-primary/10">
 					<CardFooter className="flex flex-col items-end justify-center">
 						<CardTitle className="flex-none tabular-nums oldstyle-nums font-sans block break-keep">
-							20,000 Ugx
+							20,000 - 50, 000 Ugx
 						</CardTitle>
 						<CardDescription>Only</CardDescription>
 					</CardFooter>

@@ -4,7 +4,7 @@ export default function ReasonForBsc() {
 	const reasons: { reason: string }[] = [
 		{
 			reason:
-				"Strengthening the alignment if deliverables to government priorities with clearly defined financial, non-financial measures and documented standards"
+				"Strengthening the alignment of deliverables to government priorities with clearly defined financial, non-financial measures and documented standards"
 		},
 		{ reason: "Strengthening accountability for results at all levels" },
 		{

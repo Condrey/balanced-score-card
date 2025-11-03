@@ -25,6 +25,7 @@ export default function BSCFormInitialData({ positionId, organizationId }: BSCFo
 	return (
 		<ResponsiveDrawer
 			open={open}
+			modal={false}
 			setOpen={setOpen}
 			title="Preliminary Values"
 			description="Please set up these preliminary values before proceeding further."

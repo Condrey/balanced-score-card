@@ -20,6 +20,7 @@ interface ResponsiveDrawerProps {
 	children: React.ReactNode;
 	description?: string;
 	className?: string;
+	modal?: boolean;
 }
 
 export default function ResponsiveDrawer({
@@ -28,14 +29,15 @@ export default function ResponsiveDrawer({
 	title,
 	children,
 	description,
-	className
+	className,
+	modal = true
 }: ResponsiveDrawerProps) {
 	const isMobile = useIsMobile();
 
 	return (
 		<>
 			{!isMobile ? (
-				<Dialog open={open} onOpenChange={setOpen}>
+				<Dialog open={open} onOpenChange={setOpen} modal={modal}>
 					<DialogContent className={cn("h-auto max-h-dvh overflow-y-auto scroll-smooth", className)}>
 						<DialogHeader className="">
 							<DialogTitle>{title}</DialogTitle>
@@ -46,7 +48,7 @@ export default function ResponsiveDrawer({
 					</DialogContent>
 				</Dialog>
 			) : (
-				<Drawer open={open} onOpenChange={setOpen}>
+				<Drawer open={open} onOpenChange={setOpen} modal={modal}>
 					<DrawerContent className={cn("mt-6 max-h-dvh", className)}>
 						<div className="flex w-full items-start justify-between gap-2 pe-4">
 							<DrawerHeader className="text-left">
