@@ -69,7 +69,7 @@ Position:
 	const parser = StructuredOutputParser.fromZodSchema(performanceObjectiveArraySchema);
 	const retrievalChain = RunnableSequence.from([prompt, model, parser]);
 	const response = await retrievalChain.invoke({
-		question: `From array of ${duties}, generate the performance objectives with the instructed number of generated perspectives.`,
+		question: `From array of ${duties}, generate the performance objectives with the instructed number of  perspectives.`,
 		format_instructions: parser.getFormatInstructions(),
 		duties,
 		position,
