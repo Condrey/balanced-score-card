@@ -18,6 +18,20 @@ export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }
 
+export function formatLocalCurrency(amount: number | null) {
+	let currencyAmount: string;
+	if (!amount) {
+		currencyAmount = "0";
+	} else {
+		currencyAmount = amount.toLocaleString("en-EN", {
+			currency: "UGX",
+			currencySign: "accounting",
+			currencyDisplay: "name"
+		});
+	}
+	return currencyAmount;
+}
+
 export function formatDate(date: Date) {
 	const now = new Date();
 

@@ -4,10 +4,9 @@ import { DataTableColumnHeader } from "@/components/data-table/data-table-column
 import { Badge } from "@/components/ui/badge";
 import { organizationStructures } from "@/lib/enums";
 import { BSCData } from "@/lib/types";
+import { formatLocalCurrency } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
-import { Copy } from "lucide-react";
-import { toast } from "sonner";
 import DropdownMenuBSC from "./dropdown-menu-bsc";
 
 export const useBSCColumns: ColumnDef<BSCData>[] = [
@@ -87,6 +86,16 @@ export const useBSCColumns: ColumnDef<BSCData>[] = [
 		},
 		cell({ row }) {
 			return <span>{row.original.year}</span>;
+		}
+	},
+	{
+		accessorKey: "year",
+		header({ column }) {
+			return <DataTableColumnHeader column={column} title="Financial Year" />;
+		},
+		cell({ row }) {
+			const paidAmount = row.original.payments.map((p) => p.amount).reduce((acc, total) => acc + total);
+			return <span>{formatLocalCurrency(paidAmount)}</span>;
 		}
 	},
 	{
