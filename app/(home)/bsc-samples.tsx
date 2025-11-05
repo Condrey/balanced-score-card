@@ -137,7 +137,7 @@ function BSCFile({ bsc }: { bsc: BSCData }) {
 				size={"sm"}
 				variant={"outline"}
 				loading={isPending}
-				onClick={onDownloadClicked}
+				// onClick={onDownloadClicked}
 				className={cn(
 					"text-xs  group-hover/bsc:flex hidden  absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2",
 					isPending ? "flex" : "hidden"

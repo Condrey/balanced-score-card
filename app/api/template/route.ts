@@ -31,7 +31,7 @@ export async function POST(req: Request, res: Response) {
 		clients: clients.map((c) => ({ client: c })),
 		behavioralAttributes: bsc.behavioralAttributes.map((bA, index) => ({
 			...bA,
-			score:bA.score===0?undefined:bA.score,
+			score: bA.score === 0 ? undefined : bA.score,
 			index: index + 1
 		})),
 		scheduleOfDuty: !scheduleOfDuty
@@ -78,8 +78,9 @@ export async function POST(req: Request, res: Response) {
 			});
 		});
 
+		const currentTime = Date.now().toLocaleString();
 		// Give a unique fileName
-		const fileName = sanitizeFilename(`${bsc.supervisee.name}-bsc_${bsc.year}.docx`);
+		const fileName = sanitizeFilename(`${bsc.supervisee.name}-bsc_${bsc.year}_${currentTime}.docx`);
 
 		// Upload to Blob storage
 		const blob = await put(fileName, result, {
