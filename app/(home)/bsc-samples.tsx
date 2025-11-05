@@ -56,7 +56,7 @@ export default function BscSamples({ balancedScoreCards, organizationContext }: 
 					<div className="space-y-4">
 						<div className="flex gap-3 items-center flex-wrap">
 							{/* <ButtonAddBSC organizationContext={organizationContext}>New BSC</ButtonAddBSC> */}
-							<div className="grid gap-3  sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 ">
+							<div className="grid gap-3 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 ">
 								{balancedScoreCards.map((bsc) => (
 									<BSCFile bsc={bsc} key={bsc.id} />
 								))}
