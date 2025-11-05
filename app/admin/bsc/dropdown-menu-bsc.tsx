@@ -10,11 +10,21 @@ import LoadingButton from "@/components/ui/loading-button";
 import { useCustomSearchParams } from "@/hooks/use-custom-search-param";
 import { BSCData } from "@/lib/types";
 import ky from "ky";
-import { CopyIcon, DownloadIcon, Edit3Icon, MoreHorizontalIcon, MoveUpRightIcon, Trash2Icon } from "lucide-react";
+import {
+	CoinsIcon,
+	CopyIcon,
+	DownloadIcon,
+	Edit3Icon,
+	MoreHorizontalIcon,
+	MoveUpRightIcon,
+	Trash2Icon
+} from "lucide-react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { DialogDeleteBSC } from "./button-delete-bsc";
+import FormAddEditPaymentForm from "./form-add-edit-payments";
 
 interface DropdownMenuBSCProps {
 	bSC: BSCData;
@@ -22,10 +32,14 @@ interface DropdownMenuBSCProps {
 
 export default function DropdownMenuBSC({ bSC }: DropdownMenuBSCProps) {
 	const [openDelete, setOpenDelete] = useState(false);
+	const [openPayment, setOpenPayment] = useState(false);
 	const [isPending, startTransition] = useTransition();
+
+	const { data: session } = useSession();
 	const { getNavigationLinkWithPathnameWithoutUpdate } = useCustomSearchParams();
 	const newUrl = getNavigationLinkWithPathnameWithoutUpdate(`/admin/bsc/${bSC.id}`);
 	const newEditUrl = getNavigationLinkWithPathnameWithoutUpdate(`/admin/bsc/${bSC.id}`);
+
 	async function printBsc() {
 		startTransition(async () => {
 			const response = await ky.post(`/api/template`, {
@@ -77,6 +91,9 @@ export default function DropdownMenuBSC({ bSC }: DropdownMenuBSCProps) {
 								<Edit3Icon className="mr-2" /> Edit BSC
 							</Link>
 						</DropdownMenuItem>
+						<DropdownMenuItem onClick={() => setOpenPayment(true)}>
+							<CoinsIcon /> Add Payment
+						</DropdownMenuItem>
 						<DropdownMenuItem onClick={() => setOpenDelete(true)}>
 							<Trash2Icon /> Delete BSC
 						</DropdownMenuItem>
@@ -97,6 +114,7 @@ export default function DropdownMenuBSC({ bSC }: DropdownMenuBSCProps) {
 			</DropdownMenu>
 
 			<DialogDeleteBSC open={openDelete} setOpen={setOpenDelete} bSC={bSC} />
+			<FormAddEditPaymentForm open={openPayment} setOpen={setOpenPayment} bSCId={bSC.id} userId={session?.user.id!} />
 		</>
 	);
 }

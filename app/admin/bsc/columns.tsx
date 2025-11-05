@@ -4,9 +4,10 @@ import { DataTableColumnHeader } from "@/components/data-table/data-table-column
 import { Badge } from "@/components/ui/badge";
 import { organizationStructures } from "@/lib/enums";
 import { BSCData } from "@/lib/types";
-import { formatLocalCurrency } from "@/lib/utils";
+import { cn, formatLocalCurrency } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
+import { DotIcon } from "lucide-react";
 import DropdownMenuBSC from "./dropdown-menu-bsc";
 
 export const useBSCColumns: ColumnDef<BSCData>[] = [
@@ -89,15 +90,25 @@ export const useBSCColumns: ColumnDef<BSCData>[] = [
 		}
 	},
 	{
-		accessorKey: "year",
+		accessorKey: "payments",
 		header({ column }) {
-			return <DataTableColumnHeader column={column} title="Financial Year" />;
+			return <DataTableColumnHeader column={column} title="Payments" />;
 		},
 		cell({ row }) {
-			// const paidAmount = row.original.payments.map((p) => p.amount);
-
-			// .reduce((acc, total) => acc + total);
-			return <span>{formatLocalCurrency(3000)}</span>;
+			const paidAmount = row.original.payments.map((p) => p.amount).reduce((acc, total) => acc + total, 0);
+			const balances = row.original.payments.map((p) => p.balance).reduce((acc, total) => acc + total, 0);
+			return (
+				<div>
+					{paidAmount <= 0 ? (
+						<Badge variant={"destructive"}>No payments</Badge>
+					) : (
+						<Badge variant={balances <= 0 ? "default" : "secondary"}>
+							<DotIcon className={cn("", balances > 0 ? "text-destructive" : "text-green-500")} />
+							{formatLocalCurrency(paidAmount)}
+						</Badge>
+					)}
+				</div>
+			);
 		}
 	},
 	{
@@ -115,6 +126,7 @@ export const useBSCColumns: ColumnDef<BSCData>[] = [
 					{updated > created && (
 						<div className="line-clamp-2 text-ellipsis text-xs">{format(updated, "PPPp")} (updated)</div>
 					)}
+					<div className="line-clamp-1 font-semibold text-ellipsis text-xs">By: {bsc.user?.name}</div>
 				</div>
 			);
 		}

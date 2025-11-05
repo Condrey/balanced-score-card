@@ -68,6 +68,16 @@ export const ndpSchema = z.object({
 });
 export type NdpSchema = z.infer<typeof ndpSchema>;
 
+// payments
+export const paymentSchema = z.object({
+	id: z.string().optional(),
+	amount: z.number().min(1, "Specify the amount"),
+	balance: z.number(),
+	bSCId: z.string().min(1, "BSC is not specified"),
+	userId: z.string().min(1, "User is not specified")
+});
+export type PaymentSchema = z.infer<typeof paymentSchema>;
+
 // Miscellaneous
 // Behavioral attribute validation schema
 export const behavioralAttributeSchema = z.object({
@@ -138,7 +148,9 @@ export const scheduleOfDutySchema = z
 `)
 				})
 			)
-			.describe("Key activities are derived from the outputs with which the job holder is expected to deliver. Maintain the roman numeral numbering."),
+			.describe(
+				"Key activities are derived from the outputs with which the job holder is expected to deliver. Maintain the roman numeral numbering."
+			),
 		clients: z
 			.array(stringArraySchema)
 			.describe("Clients/ People the Officer relates with in execution of his/her duties"),

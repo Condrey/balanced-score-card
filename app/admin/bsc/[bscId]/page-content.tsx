@@ -35,6 +35,7 @@ export default function PageContent({ initialData }: PageContentProps) {
 				supervisor={bsc.supervisor}
 				year={bsc.year}
 				bscId={bsc.id}
+				username={bsc.user?.name || "N/A"}
 			/>
 			{/* SECTION 2: BSC STRATEGIC ELEMENTS */}
 			<StrategicElements bsc={bsc} />

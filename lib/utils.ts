@@ -23,10 +23,9 @@ export function formatLocalCurrency(amount: number | null) {
 	if (!amount) {
 		currencyAmount = "0";
 	} else {
-		currencyAmount = amount.toLocaleString("en-EN", {
+		currencyAmount = amount.toLocaleString("en-US", {
+			style:'currency',
 			currency: "UGX",
-			currencySign: "accounting",
-			currencyDisplay: "name"
 		});
 	}
 	return currencyAmount;

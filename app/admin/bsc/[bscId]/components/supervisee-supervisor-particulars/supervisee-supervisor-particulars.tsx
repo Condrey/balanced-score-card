@@ -12,13 +12,15 @@ interface SuperviseeSupervisorParticularsProps {
 	supervisor: EmployeeData;
 	year: string;
 	bscId: string;
+	username: string;
 }
 
 export default function SuperviseeSupervisorParticulars({
 	supervisee,
 	supervisor,
 	year,
-	bscId
+	bscId,
+	username
 }: SuperviseeSupervisorParticularsProps) {
 	const { data, status, isFetching, refetch } = useQuery({
 		queryKey: ["positions"],
@@ -28,12 +30,13 @@ export default function SuperviseeSupervisorParticulars({
 	return (
 		<Card className="max-w-4xl space-y-1.5">
 			<CardHeader className="flex-row flex gap-2 flex-wrap justify-between items-center">
-				<CardTitle className="uppercase">Section 1: Supervisee and Supervisor particulars</CardTitle>
+				<div>
+					<CardTitle className="uppercase">Section 1: Supervisee and Supervisor particulars</CardTitle>
+					<CardDescription>Created by: {username}</CardDescription>
+				</div>
 				<>
 					{status === "error" ? (
-						<LoadingButton loading={isFetching} onClick={() => refetch()}
-													className="ml-auto"
->
+						<LoadingButton loading={isFetching} onClick={() => refetch()} className="ml-auto">
 							Reload
 						</LoadingButton>
 					) : status === "pending" ? (
