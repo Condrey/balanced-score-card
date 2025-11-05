@@ -94,8 +94,10 @@ export const useBSCColumns: ColumnDef<BSCData>[] = [
 			return <DataTableColumnHeader column={column} title="Financial Year" />;
 		},
 		cell({ row }) {
-			const paidAmount = row.original.payments.map((p) => p.amount).reduce((acc, total) => acc + total);
-			return <span>{formatLocalCurrency(paidAmount)}</span>;
+			// const paidAmount = row.original.payments.map((p) => p.amount);
+
+			// .reduce((acc, total) => acc + total);
+			return <span>{formatLocalCurrency(3000)}</span>;
 		}
 	},
 	{
