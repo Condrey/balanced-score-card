@@ -8,6 +8,14 @@ export type PositionData = Prisma.PositionGetPayload<{
 	include: typeof positionDataInclude;
 }>;
 
+export const paymentDataInclude = {
+	bsc: true,
+	user: { select: { name: true, email: true, image: true } }
+} satisfies Prisma.PaymentInclude;
+export type PaymentData = Prisma.PaymentGetPayload<{
+	include: typeof paymentDataInclude;
+}>;
+
 export const coreValueDataInclude = {
 	values: true
 } satisfies Prisma.CoreValueInclude;
@@ -22,10 +30,9 @@ export const bSCDataInclude = {
 	coreValues: { include: { values: true } },
 	performanceObjectives: true,
 	organization: true,
-	user: {include: { position: {select:{responsibleFor:true}} } },
+	user: { include: { position: { select: { responsibleFor: true } } } },
 	payments: true,
-	scheduleOfDuty: { include: { outputActivities: true } },
-	
+	scheduleOfDuty: { include: { outputActivities: true } }
 } satisfies Prisma.BSCInclude;
 export type BSCData = Prisma.BSCGetPayload<{
 	include: typeof bSCDataInclude;
@@ -83,7 +90,7 @@ export type PerspectiveGroup = {
 		actions: { action: string }[];
 		expectedResults: { result: string }[];
 		kpis: { kpi: string }[];
-		score: number|undefined;
+		score: number | undefined;
 		comments: string;
 	}[];
 };

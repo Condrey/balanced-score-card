@@ -78,9 +78,11 @@ export async function POST(req: Request, res: Response) {
 			});
 		});
 
-		const currentTime = Date.now().toLocaleString();
+		const currentTime = Date.now().toString();
 		// Give a unique fileName
-		const fileName = sanitizeFilename(`${bsc.supervisee.name}-bsc_${bsc.year}_${currentTime}.docx`);
+		const fileName = sanitizeFilename(
+			`${bsc.supervisee.name.toUpperCase()}_BSC_FY${bsc.year}_VERSION_${currentTime}.docx`
+		);
 
 		// Upload to Blob storage
 		const blob = await put(fileName, result, {

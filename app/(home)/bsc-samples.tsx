@@ -20,24 +20,6 @@ interface BscSamplesProps {
 }
 
 export default function BscSamples({ balancedScoreCards, organizationContext }: BscSamplesProps) {
-	// 	const { data: session } = useSession();
-	// const year = getCurrentFinancialYear();
-	// const organizationId = session?.user.organizationId!;
-	// const [open, setOpen] = useState(false);
-	// const query = useQuery({
-	// 	queryKey: ["organizationContext", organizationId],
-	// 	queryFn: async () => getOrganizationContext({ year, organizationId }),
-	// 	initialData: organizationContext
-	// });
-	// const { data, status } = query;
-	// if (status === "error") return <ErrorContainer query={query} errorMessage="Failed to get your Organization" />;
-	// if (status === "success" && !data)
-	// 	return (
-	// 		<EmptyContainer message={"You have not set your organization yet."}>
-	// 			<BSCFormInitialData />
-	// 		</EmptyContainer>
-	// 	);
-	const bsc = balancedScoreCards[0]!;
 	return (
 		<div className="space-y-4    max-w-5xl w-full mx-auto">
 			<CardHeader className="bg-card flex-row justify-between items-center">
@@ -146,7 +128,13 @@ function BSCFile({ bsc }: { bsc: BSCData }) {
 				<DownloadCloudIcon />
 				Download
 			</LoadingButton>
+			<div className="flex">
+				<span className={cn("uppercase font-black", isPaid ? "text-green-500" : "text-destructive")}>
+					{isPaid ? "Paid" : "Not Paid"}
+				</span>
+			</div>
 			<p className=" text-sm text-center">FY{year}</p>
+
 			<span className="text-muted-foreground text-center text-xs">{dateTime}</span>
 		</div>
 	);

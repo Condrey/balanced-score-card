@@ -13,7 +13,7 @@ import { usePaymentMutation } from "./mutation";
 
 interface FormAddEditPaymentFormProps {
 	payment?: Payment;
-	bSCId: string;
+	bSCId?: string;
 	userId: string;
 	open: boolean;
 	setOpen: (open: boolean) => void;
