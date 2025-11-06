@@ -30,14 +30,14 @@ export async function upsertBSC(input: BSCFormData) {
 		scheduleOfDuty
 	} = bscSchema.parse(input);
 	const sanitizedSupervisor = {
-		// id: supervisor.id,
+		id: supervisor.id,
 		employeeNumber: supervisor.employeeNumber,
 		name: supervisor.name,
 		jobTitle: supervisor.jobTitle,
 		salaryScale: supervisor.salaryScale
 	};
 	const sanitizedSupervisee = {
-		// id: supervisee.id,
+		id: supervisee.id,
 		employeeNumber: supervisee.employeeNumber,
 		name: supervisee.name,
 		jobTitle: supervisee.jobTitle,
@@ -67,10 +67,16 @@ export async function upsertBSC(input: BSCFormData) {
 			vision,
 			year,
 			supervisor: {
-				create: sanitizedSupervisor
+				connectOrCreate: {
+					where: { id: supervisor.id },
+					create: supervisor
+				}
 			},
 			supervisee: {
-				create: sanitizedSupervisee
+				connectOrCreate: {
+					where: { id: supervisee.id },
+					create: supervisee
+				}
 			},
 			coreValues: {
 				connectOrCreate: {
