@@ -40,6 +40,7 @@ export default function FormAddEditPaymentForm({ payment, bSCId, userId, open, s
 	return (
 		<ResponsiveDrawer open={open} setOpen={setOpen} title={`${payment ? "Update" : "Add"} payment`}>
 			<Form {...form}>
+				<pre>{JSON.stringify(form.formState.errors, null, 2)}</pre>
 				<form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
 					<FormField
 						control={form.control}
