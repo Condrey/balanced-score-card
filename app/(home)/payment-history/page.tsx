@@ -31,5 +31,9 @@ async function PageSuspense() {
 	const { session } = await verifySession();
 	const currentUser = session.user;
 
-	return <ListOfPayments initialData={payments} userId={currentUser.id} />;
+	return (
+		<div className="w-full max-w-5xl mx-auto">
+			<ListOfPayments initialData={payments} userId={currentUser.id} />
+		</div>
+	);
 }

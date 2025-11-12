@@ -276,13 +276,14 @@ model OutputActivity {
 }
 
 model Payment {
-  id      String @id @default(uuid())
-  amount  Float
-  balance Float
-  bsc     BSC    @relation(fields: [bSCId], references: [id])
-  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  bSCId   String
-  userId  String
+  id        String   @id @default(uuid())
+  amount    Float
+  balance   Float
+  bsc       BSC      @relation(fields: [bSCId], references: [id])
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bSCId     String
+  userId    String
+  createdAt DateTime @default(now())
 }
 
 model PerformanceObjective {

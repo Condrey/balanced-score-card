@@ -28,5 +28,13 @@ export default function ListOfPayments({ initialData, userId }: { initialData: P
 		);
 	}
 
-	return <DataTable query={query} data={data} columns={usePaymentColumns}></DataTable>;
+	return (
+		<DataTable
+			query={query}
+			data={data}
+			columns={usePaymentColumns}
+			filterColumn={{ id: "bsc_year", label: "financial year" }}
+			className="w-full max-w-5xl"
+		></DataTable>
+	);
 }
