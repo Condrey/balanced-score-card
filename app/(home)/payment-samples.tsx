@@ -44,7 +44,7 @@ export default function PaymentSamples({ payments, userId }: PaymentSamplesProps
 							</div>
 						</div>
 						{/* <pre>{JSON.stringify(groupByPerspective(payment.performanceObjectives), null, 2)}</pre> */}
-						{payments.length > 5 && (
+						{payments.length > 1 && (
 							<div className="ms-auto w-full max-w-fit">
 								<Link href={"/payment-history"} className={cn(buttonVariants({ variant: "secondary" }))}>
 									View all payments
