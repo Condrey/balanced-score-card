@@ -36,7 +36,7 @@ export default function BscSamples({ balancedScoreCards, organizationContext }: 
 						message={"You have not created any Balanced Score card yet. Please add to view here."}
 						className="min-h-fit"
 					>
-						<ButtonAddBSC variant={'secondary'} organizationContext={organizationContext}>Create one</ButtonAddBSC>
+						<ButtonAddBSC variant={'outline'} organizationContext={organizationContext}>Create one</ButtonAddBSC>
 					</EmptyContainer>
 				) : (
 					<div className="space-y-4">

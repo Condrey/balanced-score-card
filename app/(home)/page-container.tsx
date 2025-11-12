@@ -10,6 +10,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { NavItem } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { MenuIcon } from "lucide-react";
 
 interface PageContainerProps {
 	heading: NavItem[];
@@ -21,7 +22,9 @@ export default function PageContainer({ heading, className, children }: PageCont
 		<main className="w-full">
 			<header className="flex h-16 shrink-0 items-center  gap-2 ">
 				<div className="flex items-center gap-2 px-4">
-					<SidebarTrigger className="-ml-1" />
+					<SidebarTrigger className="-ml-1" >
+						<MenuIcon/>
+					</SidebarTrigger>
 					<Separator orientation="vertical" className="mr-2 data-[orientation=vertical]:h-4" />
 					<Breadcrumb>
 						<BreadcrumbList>

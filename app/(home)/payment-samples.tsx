@@ -29,7 +29,9 @@ export default function PaymentSamples({ payments, userId }: PaymentSamplesProps
 						message={"You have not made any payment yet. Please make one to view here."}
 						className="min-h-fit"
 					>
-						<ButtonAddEditPayment userId={userId}>Add one</ButtonAddEditPayment>
+						<ButtonAddEditPayment variant={"outline"} userId={userId}>
+							Add one
+						</ButtonAddEditPayment>
 					</EmptyContainer>
 				) : (
 					<div className="space-y-4">
