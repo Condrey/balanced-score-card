@@ -114,7 +114,7 @@ export default function DropdownMenuBSC({ bSC }: DropdownMenuBSCProps) {
 			</DropdownMenu>
 
 			<DialogDeleteBSC open={openDelete} setOpen={setOpenDelete} bSC={bSC} />
-			<FormAddEditPaymentForm open={openPayment} setOpen={setOpenPayment} bSCId={bSC.id} userId={session?.user.id!} />
+			<FormAddEditPaymentForm open={openPayment} setOpen={setOpenPayment} bSCId={bSC.id} userId={bSC.user?.id!} />
 		</>
 	);
 }
