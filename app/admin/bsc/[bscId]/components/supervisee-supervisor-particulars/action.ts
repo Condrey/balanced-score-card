@@ -22,7 +22,7 @@ export async function updateParticulars({ bscId, input }: { input: IndividualBSC
 			supervisee: {
 				connectOrCreate: {
 					where: { id: supervisee.id },
-					create: supervisee
+					create: { ...supervisee, reportsToId: supervisor.id }
 				}
 			}
 		},

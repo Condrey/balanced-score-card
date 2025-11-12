@@ -38,7 +38,7 @@ export async function upsertBSC(input: BSCFormData) {
 			supervisee: {
 				connectOrCreate: {
 					where: { id: supervisee.id },
-					create: supervisee
+					create: { ...supervisee, reportsToId: supervisor.id }
 				}
 			},
 			coreValues: {
