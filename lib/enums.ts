@@ -1,4 +1,4 @@
-import { OrganizationStructure } from "@prisma/client";
+import { OrganizationStructure, Role } from "@prisma/client";
 import { Building2Icon, BuildingIcon, GanttChartSquareIcon, LucideIcon, ShapesIcon } from "lucide-react";
 
 export const allOrganizationStructures = Object.values(OrganizationStructure);
@@ -20,4 +20,9 @@ export const organizationStructures: Record<OrganizationStructure, { label: stri
 		label: "Local Government",
 		icon: GanttChartSquareIcon
 	}
+};
+
+export const myPrivileges: Record<Role, Role[]> = {
+	ADMIN: ["ADMIN", "USER"],
+	USER: ["USER"]
 };
