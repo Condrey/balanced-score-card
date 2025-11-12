@@ -15,7 +15,8 @@ export async function updateParticulars({ bscId, input }: { input: IndividualBSC
 		data: {
 			supervisor: {
 				connectOrCreate: {
-					where: { id: supervisor.id },
+					// TODO: Return back to original
+					where: { id: supervisor.id + "2" },
 					create: supervisor
 				}
 			},
