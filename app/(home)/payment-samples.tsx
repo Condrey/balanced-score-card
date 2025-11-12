@@ -19,7 +19,10 @@ export default function PaymentSamples({ payments, userId }: PaymentSamplesProps
 		<div className="space-y-4   max-w-5xl w-full mx-auto">
 			<CardHeader className="bg-card px-0 flex-row flex-wrap justify-between items-center">
 				<CardTitle className=" capitalize">Recent Payments</CardTitle>
-				<ButtonAddEditPayment className="ms-auto" userId={userId}>New Payment</ButtonAddEditPayment>
+								<div className="ms-auto w-full max-w-fit">
+
+				<ButtonAddEditPayment userId={userId}>New Payment</ButtonAddEditPayment>
+				</div>
 			</CardHeader>
 			<CardContent className="px-0">
 				{!payments.length ? (
@@ -59,7 +62,7 @@ function PaymentFile({ payment }: { payment: PaymentData }) {
 	const { amount, balance, bsc, user, createdAt } = payment;
 
 	return (
-		<div className="border px-3 py-1.5 flex flex-col gap-3 sm:flex-row justify-between even:bg-muted">
+		<div className="border px-3 py-1.5 flex flex-wrap gap-3 justify-between even:bg-muted">
 			<div>
 				<div className="flex gap-2 flex-wrap items-center ">
 					<CircleDollarSignIcon

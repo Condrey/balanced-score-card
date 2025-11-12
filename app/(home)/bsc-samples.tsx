@@ -24,9 +24,11 @@ export default function BscSamples({ balancedScoreCards, organizationContext }: 
 		<div className="space-y-4    max-w-5xl w-full mx-auto">
 			<CardHeader className="bg-card px-0 flex-row flex-wrap justify-between items-center">
 				<CardTitle className=" capitalize">Recent Balance Score cards</CardTitle>
-				<ButtonAddBSC className="ms-auto" organizationContext={organizationContext}>
+				<div className="ms-auto w-full max-w-fit">
+					<ButtonAddBSC className="" organizationContext={organizationContext}>
 					New BSC
 				</ButtonAddBSC>
+				</div>
 			</CardHeader>
 			<CardContent className="px-0">
 				{!balancedScoreCards.length ? (
