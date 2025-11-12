@@ -19,7 +19,6 @@ import {
 	MoveUpRightIcon,
 	Trash2Icon
 } from "lucide-react";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
@@ -35,7 +34,6 @@ export default function DropdownMenuBSC({ bSC }: DropdownMenuBSCProps) {
 	const [openPayment, setOpenPayment] = useState(false);
 	const [isPending, startTransition] = useTransition();
 
-	const { data: session } = useSession();
 	const { getNavigationLinkWithPathnameWithoutUpdate } = useCustomSearchParams();
 	const newUrl = getNavigationLinkWithPathnameWithoutUpdate(`/admin/bsc/${bSC.id}`);
 	const newEditUrl = getNavigationLinkWithPathnameWithoutUpdate(`/admin/bsc/${bSC.id}`);

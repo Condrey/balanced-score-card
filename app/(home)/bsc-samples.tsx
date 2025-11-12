@@ -26,8 +26,8 @@ export default function BscSamples({ balancedScoreCards, organizationContext }: 
 				<CardTitle className=" capitalize">Recent Balance Score cards</CardTitle>
 				<div className="ms-auto w-full max-w-fit">
 					<ButtonAddBSC className="" organizationContext={organizationContext}>
-					New BSC
-				</ButtonAddBSC>
+						New BSC
+					</ButtonAddBSC>
 				</div>
 			</CardHeader>
 			<CardContent className="px-0">
@@ -36,7 +36,9 @@ export default function BscSamples({ balancedScoreCards, organizationContext }: 
 						message={"You have not created any Balanced Score card yet. Please add to view here."}
 						className="min-h-fit"
 					>
-						<ButtonAddBSC variant={'outline'} organizationContext={organizationContext}>Create one</ButtonAddBSC>
+						<ButtonAddBSC variant={"outline"} organizationContext={organizationContext}>
+							Create one
+						</ButtonAddBSC>
 					</EmptyContainer>
 				) : (
 					<div className="space-y-4">
@@ -49,7 +51,7 @@ export default function BscSamples({ balancedScoreCards, organizationContext }: 
 							</div>
 						</div>
 						{/* <pre>{JSON.stringify(groupByPerspective(bsc.performanceObjectives), null, 2)}</pre> */}
-						{balancedScoreCards.length > 2 && (
+						{balancedScoreCards.length > 0 && (
 							<div className="ms-auto w-full max-w-fit">
 								<Link href={"/balanced-score-cards"} className={cn(buttonVariants({ variant: "secondary" }))}>
 									View all Balanced Score Cards
