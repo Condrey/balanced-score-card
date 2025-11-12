@@ -14,17 +14,17 @@ export async function updateParticulars({ bscId, input }: { input: IndividualBSC
 		where: { id: bscId },
 		data: {
 			supervisor: {
-				connectOrCreate: {
-					// TODO: Return back to original
-					where: { id: supervisor.id + "2" },
-					create: supervisor
-				}
+				// connectOrCreate: {
+				// 	// TODO: Return back to original
+				// 	where: { id: supervisor.id  },
+				create: supervisor
+				// }
 			},
 			supervisee: {
-				connectOrCreate: {
-					where: { id: supervisee.id },
-					create: { ...supervisee, reportsToId: supervisor.id }
-				}
+				// connectOrCreate: {
+				// 	where: { id: supervisee.id },
+				create: { ...supervisee, reportsToId: supervisor.id }
+				// }
 			}
 		},
 
