@@ -11,7 +11,12 @@ export default function ScheduleOfDuty({ bsc }: ScheduleOfDutyProps) {
 	const data: { title: string; content: string }[] = [
 		{ title: "Name of Officer", content: supervisee.name },
 		{ title: "Title and Salary Scale", content: `${supervisee.jobTitle}\n${supervisee.salaryScale}` },
-		{ title: "Names and titles of supervisees", content: "" },
+		{
+			title: "Names and titles of supervisees",
+			content: !!supervisee.responsibleFor
+				? supervisee.responsibleFor.map((r) => `${r.name},\n${r.jobTitle}\n`).join("\n")
+				: ""
+		},
 		{ title: "Job summary/ purpose ", content: sd?.jobSummary! },
 		{
 			title: "Key Results Areas/ Duties/ Responsibilities ",

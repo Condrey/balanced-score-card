@@ -5,7 +5,7 @@ import { EmployeeData } from "@/lib/validations/bsc";
 import { useQuery } from "@tanstack/react-query";
 import { DotIcon } from "lucide-react";
 import { getPositions } from "./action";
-import ButtonEditParticulars from "./button-edit-particluars";
+import ButtonEditParticulars from "./button-edit-particulars";
 
 interface SuperviseeSupervisorParticularsProps {
 	supervisee: EmployeeData;

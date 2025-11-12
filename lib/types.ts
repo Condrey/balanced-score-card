@@ -23,9 +23,17 @@ export type CoreValueData = Prisma.CoreValueGetPayload<{
 	include: typeof coreValueDataInclude;
 }>;
 
+export const employeeDataInclude = {
+	reportsTo: true,
+	responsibleFor: { orderBy: { name: "asc" } }
+} satisfies Prisma.EmployeeInclude;
+export type EmployeeData = Prisma.EmployeeGetPayload<{
+	include: typeof employeeDataInclude;
+}>;
+
 export const bSCDataInclude = {
-	supervisee: true,
-	supervisor: true,
+	supervisee: { include: employeeDataInclude },
+	supervisor: { include: employeeDataInclude },
 	behavioralAttributes: { orderBy: { createdAt: "asc" } },
 	coreValues: { include: { values: true } },
 	performanceObjectives: true,
