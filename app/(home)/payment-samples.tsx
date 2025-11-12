@@ -16,12 +16,12 @@ interface PaymentSamplesProps {
 
 export default function PaymentSamples({ payments, userId }: PaymentSamplesProps) {
 	return (
-		<div className="space-y-4    max-w-5xl w-full mx-auto">
-			<CardHeader className="bg-card flex-row flex-wrap justify-between items-center">
+		<div className="space-y-4   max-w-5xl w-full mx-auto">
+			<CardHeader className="bg-card px-0 flex-row flex-wrap justify-between items-center">
 				<CardTitle className=" capitalize">Recent Payments</CardTitle>
-				<ButtonAddEditPayment userId={userId}>New Payment</ButtonAddEditPayment>
+				<ButtonAddEditPayment className="ms-auto" userId={userId}>New Payment</ButtonAddEditPayment>
 			</CardHeader>
-			<CardContent>
+			<CardContent className="px-0">
 				{!payments.length ? (
 					<EmptyContainer
 						message={"You have not made any payment yet. Please make one to view here."}
@@ -31,7 +31,7 @@ export default function PaymentSamples({ payments, userId }: PaymentSamplesProps
 					</EmptyContainer>
 				) : (
 					<div className="space-y-4">
-						<div className="flex gap-3 items-center flex-wrap">
+						<div className="flex sm:gap-3 items-center flex-wrap">
 							{/* <ButtonAddPAYMENT organizationContext={organizationContext}>New PAYMENT</ButtonAddPAYMENT> */}
 							<div className=" w-full  ">
 								{payments.map((payment) => (
@@ -62,10 +62,15 @@ function PaymentFile({ payment }: { payment: PaymentData }) {
 		<div className="border px-3 py-1.5 flex flex-col gap-3 sm:flex-row justify-between even:bg-muted">
 			<div>
 				<div className="flex gap-2 flex-wrap items-center ">
-					<CircleDollarSignIcon className={cn("size-16 text-muted fill-muted-foreground")} strokeWidth={0.9} />
+					<CircleDollarSignIcon
+						className={cn("sm:size-16 size-10 text-muted fill-muted-foreground")}
+						strokeWidth={0.9}
+					/>
 					<div>
-						<h2 className="text-xl oldstyle-nums tabular-nums slashed-zero">{formatLocalCurrency(amount)}</h2>
-						<h2 className="text-xl oldstyle-nums tabular-nums slashed-zero">
+						<h2 className="text:lg sm:text-xl oldstyle-nums tabular-nums slashed-zero">
+							{formatLocalCurrency(amount)}
+						</h2>
+						<h2 className="text:lg sm:text-xl oldstyle-nums tabular-nums slashed-zero">
 							{balance <= 0 ? (
 								<span className="text-muted-foreground">No balance</span>
 							) : (
