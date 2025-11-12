@@ -29,7 +29,7 @@ export default function ButtonAddEditBSC({ url, size, variant, children, ...prop
 
 	const { data: canAddExtra, status } = query;
 	if (status === "pending") {
-		return <Skeleton className={cn(buttonVariants({ size, variant }))} />;
+		return <Skeleton className={cn(buttonVariants({ size, variant, className: "min-w-24" }))} />;
 	}
 	if (status === "error") {
 		return <ErrorContainer errorMessage="" query={query} className="min-h-0" />;
