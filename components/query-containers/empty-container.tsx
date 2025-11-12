@@ -7,7 +7,7 @@ interface EmptyContainerProps {
 }
 export default function EmptyContainer({ message, children, className }: EmptyContainerProps) {
 	return (
-		<div className={cn("flex min-h-[20rem] flex-col items-center justify-center gap-4", className)}>
+		<div className={cn("flex min-h-[20rem] bg-muted p-3 sm:bg-transparent flex-col items-center justify-center gap-4", className)}>
 			<p className="max-w-sm text-center text-muted-foreground">{message}</p>
 			{children}
 		</div>
