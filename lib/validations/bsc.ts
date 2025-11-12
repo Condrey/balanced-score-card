@@ -10,8 +10,8 @@ export const employeeSchema = z.object({
 	salaryScale: z.string().min(1, "Salary scale is required").describe("Employee's salary scale or grade level"),
 	location: z.string().optional().describe(`This is the location or facility where the job is being performed, 
         e.g Enrolled Nurse (OPD) and Enrolled Nurse (MALE WARD), Office Attendant (Central Registry) and Office Attendant (Engineering and Works Department or even Service Commission)`)
-
 });
+export type EmployeeSchema = z.infer<typeof employeeSchema>;
 
 // Strategic elements validation schema
 export const strategicElementsSchema = z.object({
@@ -154,9 +154,8 @@ export const bscSchema = z.object({
 		.min(1, "At least one behavioral attribute is required")
 		.describe("List of behavioral attributes for assessment"),
 
-		// Schedule of duty 
-		scheduleOfDuty: scheduleOfDutySchema.optional().describe("Schedule of duty for the supervisee"),
-		
+	// Schedule of duty
+	scheduleOfDuty: scheduleOfDutySchema.optional().describe("Schedule of duty for the supervisee")
 });
 
 export const individualBSCSchema = z.object({

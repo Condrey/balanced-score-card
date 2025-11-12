@@ -2,7 +2,7 @@
 
 import prisma from "@/lib/prisma";
 import { bSCDataInclude, positionDataInclude } from "@/lib/types";
-import { individualBSCSchema, IndividualBSCSchema } from "@/lib/validations/bsc";
+import { EmployeeSchema, individualBSCSchema, IndividualBSCSchema } from "@/lib/validations/bsc";
 import { verifySession } from "@/lib/verify-session";
 import { cache } from "react";
 
@@ -10,6 +10,19 @@ export async function updateParticulars({ bscId, input }: { input: IndividualBSC
 	const { session } = await verifySession();
 	if (!session) throw new Error("You must be logged in to perform this action.");
 	const { supervisee, supervisor, year } = individualBSCSchema.parse(input);
+	const sanitizedSupervisor = {
+		employeeNumber: supervisor.employeeNumber,
+		jobTitle: supervisor.jobTitle,
+		name: supervisor.name,
+		salaryScale: supervisor.salaryScale
+	} satisfies EmployeeSchema;
+
+	const sanitizedSupervisee = {
+		employeeNumber: supervisee.employeeNumber,
+		jobTitle: supervisee.jobTitle,
+		name: supervisee.name,
+		salaryScale: supervisee.salaryScale
+	} satisfies EmployeeSchema;
 	return await prisma.bSC.update({
 		where: { id: bscId },
 		data: {
@@ -17,13 +30,13 @@ export async function updateParticulars({ bscId, input }: { input: IndividualBSC
 				// connectOrCreate: {
 				// 	// TODO: Return back to original
 				// 	where: { id: supervisor.id  },
-				create: supervisor
+				create: sanitizedSupervisor
 				// }
 			},
 			supervisee: {
 				// connectOrCreate: {
 				// 	where: { id: supervisee.id },
-				create: { ...supervisee, reportsToId: supervisor.id }
+				create: { ...sanitizedSupervisee, reportsToId: supervisor.id }
 				// }
 			}
 		},
