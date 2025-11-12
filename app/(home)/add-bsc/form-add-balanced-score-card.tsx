@@ -3,6 +3,7 @@
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import LoadingButton from "@/components/ui/loading-button";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { PositionData } from "@/lib/types";
 import { getCurrentFinancialYear } from "@/lib/utils";
 import { individualBSCSchema, IndividualBSCSchema } from "@/lib/validations/bsc";
@@ -23,6 +24,7 @@ export default function FormAddBalancedScoreCard({ user, positions }: FormAddBal
 	const [isGenerating, setIsGenerating] = useState(false);
 	const [currentStep, setCurrentStep] = useState(1);
 
+	const isMobile = useIsMobile();
 	const year = getCurrentFinancialYear();
 	const form = useForm<IndividualBSCSchema>({
 		resolver: zodResolver(individualBSCSchema),
@@ -69,7 +71,7 @@ export default function FormAddBalancedScoreCard({ user, positions }: FormAddBal
 									name="year"
 									render={({ field }) => (
 										<FormItem className="flex-1">
-											<FormLabel>Financial Year of Planning and Review</FormLabel>
+											<FormLabel>Financial Year &nbsp;{!isMobile && "of Planning and Review"}</FormLabel>
 											<FormControl>
 												<Input placeholder="Please enter year of planning and review" {...field} />
 											</FormControl>
