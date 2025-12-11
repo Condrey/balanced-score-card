@@ -164,9 +164,13 @@ export const individualBSCSchema = z.object({
 	supervisee: employeeSchema.describe("Details of the employee being appraised"),
 	supervisor: employeeSchema.describe("Details of the supervising officer conducting the appraisal")
 });
+export const batchIndividualBSCSchema = z.object({
+	individuals: z.array(individualBSCSchema)
+});
 
 // Type exports for use in components
 export type IndividualBSCSchema = z.infer<typeof individualBSCSchema>;
+export type BatchIndividualBSCSchema = z.infer<typeof batchIndividualBSCSchema>;
 export type BSCFormData = z.infer<typeof bscSchema>;
 export type EmployeeData = z.infer<typeof employeeSchema>;
 export type PerformanceObjectiveSchema = z.infer<typeof performanceObjectiveSchema>;

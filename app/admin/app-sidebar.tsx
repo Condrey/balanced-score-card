@@ -1,5 +1,5 @@
 "use client";
-import { HomeIcon, LetterTextIcon, Loader2Icon, LucideIcon, StoreIcon, VoteIcon } from "lucide-react";
+import { HomeIcon, LetterTextIcon, Loader2Icon, LucideIcon, StoreIcon, VoteIcon, ZapIcon } from "lucide-react";
 
 import {
 	Sidebar,
@@ -32,6 +32,11 @@ const items = [
 		title: "Balance Score Cards",
 		url: "/admin/bsc",
 		icon: LetterTextIcon
+	},
+	{
+		title: "Quick one",
+		url: "/admin/quick-one",
+		icon: ZapIcon
 	}
 ];
 
