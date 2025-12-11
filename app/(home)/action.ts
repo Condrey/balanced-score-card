@@ -1,6 +1,5 @@
 "use server";
 
-import { auth ,handlers} from "@/auth";
 import prisma from "@/lib/prisma";
 import { organizationContextDataInclude } from "@/lib/types";
 import { verifySession } from "@/lib/verify-session";
@@ -48,5 +47,4 @@ export default async function updateUserPositionAndOrganization({
 			positionId
 		}
 	});
-	
 }

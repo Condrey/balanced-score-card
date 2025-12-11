@@ -3,8 +3,9 @@
 import prisma from "@/lib/prisma";
 import { BSCFormData, bscSchema } from "@/lib/validations/bsc";
 import { verifySession } from "@/lib/verify-session";
+import cuid from "cuid";
 
-export async function createBSC(data: BSCFormData) {
+export async function createBSC(input: BSCFormData) {
 	const { session } = await verifySession();
 	if (!session) throw new Error("You must be logged in to perform this action.");
 
@@ -20,7 +21,7 @@ export async function createBSC(data: BSCFormData) {
 		year,
 		clients,
 		scheduleOfDuty
-	} = bscSchema.parse(data);
+	} = bscSchema.parse(input);
 	const sanitizedSupervisor = {
 		// id: supervisor.id,
 		employeeNumber: supervisor.employeeNumber,
@@ -35,10 +36,13 @@ export async function createBSC(data: BSCFormData) {
 		jobTitle: supervisee.jobTitle,
 		salaryScale: supervisee.salaryScale
 	};
+
+	console.log("data: ", input);
 	try {
 		await prisma.bSC.create({
 			data: {
-				// organization: { connect: { id: organizationId || "" } },
+				id: cuid(),
+				organization: { connect: { id: organizationId || "" } },
 				clients: clients ? clients.map((c) => c.value) : [],
 				departmentalMandate,
 				goal,
