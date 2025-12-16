@@ -23,14 +23,14 @@ export async function createBSC(input: BSCFormData) {
 		scheduleOfDuty
 	} = bscSchema.parse(input);
 	const sanitizedSupervisor = {
-		// id: supervisor.id,
+		id: cuid(),
 		employeeNumber: supervisor.employeeNumber,
 		name: supervisor.name,
 		jobTitle: supervisor.jobTitle,
 		salaryScale: supervisor.salaryScale
 	};
 	const sanitizedSupervisee = {
-		// id: supervisee.id,
+		id: cuid(),
 		employeeNumber: supervisee.employeeNumber,
 		name: supervisee.name,
 		jobTitle: supervisee.jobTitle,
@@ -57,14 +57,15 @@ export async function createBSC(input: BSCFormData) {
 				},
 				supervisee: {
 					create: {
-						...sanitizedSupervisee,
-						reportsTo: { connectOrCreate: { where: { id: supervisor.id }, create: sanitizedSupervisee } }
+						...sanitizedSupervisee
+						// reportsTo: { connectOrCreate: { where: { id: supervisor.id }, create: sanitizedSupervisee } }
 					}
 				},
 				coreValues: {
 					connectOrCreate: {
 						where: { id: coreValues.id || "" },
 						create: {
+							id: cuid(),
 							acronym: coreValues.acronym,
 							values: {
 								createMany: { data: coreValues.values, skipDuplicates: true }
@@ -89,6 +90,7 @@ export async function createBSC(input: BSCFormData) {
 				scheduleOfDuty: {
 					create: {
 						...scheduleOfDuty,
+						id: cuid(),
 						positionId: scheduleOfDuty?.positionId!,
 						jobTitle: scheduleOfDuty?.jobTitle!,
 						location: scheduleOfDuty?.location!,
