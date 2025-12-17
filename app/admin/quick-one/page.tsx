@@ -1,10 +1,17 @@
+import prisma from "@/lib/prisma";
+import { positionDataInclude } from "@/lib/types";
 import { getAllOrganizations } from "../organizations/actions";
-import { getAllPositions } from "../positions/action";
 import MainForm from "./main-form";
 
 interface PageProps {}
 export default async function Page() {
-	const [positions, organizations] = await Promise.all([await getAllPositions(), await getAllOrganizations()]);
+	const [positions, organizations] = await Promise.all([
+		await prisma.position.findMany({
+			include: positionDataInclude,
+			orderBy: { createdAt: "desc" }
+		}),
+		await getAllOrganizations()
+	]);
 
 	return (
 		<div className="max-w-11/12 mx-auto space-y-12 w-full">
