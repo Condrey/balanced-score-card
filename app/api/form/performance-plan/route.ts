@@ -17,17 +17,24 @@ export async function POST(req: Request) {
 				statusText: errorMessage
 			});
 		}
-		const position = await prisma.position.findFirst({
+		let position = await prisma.position.findFirst({
 			where: { id: superviseeId },
 			include: positionDataInclude
 		});
 
 		if (!position) {
-			const errorMessage = "Sorry, this position was not found, please cross-check and try again.";
-			return Response.json(errorMessage, {
-				status: 200,
-				statusText: errorMessage
+			const employee = await prisma.employee.findUnique({ where: { id: superviseeId } });
+			position = await prisma.position.findFirst({
+				where: { jobTitle: { mode: "insensitive", equals: employee?.jobTitle } },
+				include: positionDataInclude
 			});
+			if (!position) {
+				const errorMessage = "Sorry, this position was not found, please cross-check and try again.";
+				return Response.json(errorMessage, {
+					status: 200,
+					statusText: errorMessage
+				});
+			}
 		}
 
 		const { duties } = position;

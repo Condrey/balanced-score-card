@@ -32,7 +32,6 @@ export default function PerformancePlanAndAppraisal({ bsc }: PerformancePlanAndA
 					organizationId={organizationId!}
 					position={superviseeId}
 					year={year}
-					
 				>
 					Re-submit
 				</ButtonEditPerformancePlanAndAppraisal>
