@@ -12,7 +12,14 @@ interface PerformancePlanAndAppraisalProps {
 }
 
 export default function PerformancePlanAndAppraisal({ bsc }: PerformancePlanAndAppraisalProps) {
-	const { performanceObjectives, organizationId, superviseeId, year, clients, behavioralAttributes } = bsc;
+	const {
+		performanceObjectives,
+		organizationId,
+		supervisee: { jobTitle },
+		year,
+		clients,
+		behavioralAttributes
+	} = bsc;
 
 	const groupedPerspectives = groupByPerspective(performanceObjectives);
 	const totalScore = performanceObjectives.reduce((acc, obj) => acc + obj.score, 0);
@@ -30,7 +37,7 @@ export default function PerformancePlanAndAppraisal({ bsc }: PerformancePlanAndA
 					bscId={bsc.id}
 					behavioralAttributes={behavioralAttributes}
 					organizationId={organizationId!}
-					position={superviseeId}
+					position={jobTitle}
 					year={year}
 				>
 					Re-submit

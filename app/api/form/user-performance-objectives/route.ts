@@ -13,8 +13,8 @@ export async function POST(req: Request) {
 	console.log("Requesting plan");
 	try {
 		const body = await req.json();
-		const { position: superviseeId, behavioralAttributes } = organizationContextPropsSchema.parse(body);
-		if (!superviseeId) {
+		const { position: superviseeJobTitle, behavioralAttributes } = organizationContextPropsSchema.parse(body);
+		if (!superviseeJobTitle) {
 			const errorMessage = "Please provide the position for the post.";
 			return Response.json(errorMessage, {
 				status: 200,
@@ -22,7 +22,7 @@ export async function POST(req: Request) {
 			});
 		}
 		const position = await prisma.position.findFirst({
-			where: { id: superviseeId },
+			where: { jobTitle: { equals: superviseeJobTitle, mode: "insensitive" } },
 			include: positionDataInclude
 		});
 
