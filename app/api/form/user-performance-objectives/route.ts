@@ -39,7 +39,7 @@ export async function POST(req: Request) {
 				}));
 
 		if (!position) {
-			const errorMessage = "Sorry, this position was not found, please cross-check and try again.";
+			const errorMessage = superviseeJobTitle + "Sorry, this position was not found, please cross-check and try again.";
 			return Response.json(errorMessage, {
 				status: 200,
 				statusText: errorMessage
