@@ -75,7 +75,7 @@ function AddMoreStaffForm({ data, index, open, setOpen, form, positions }: AddMo
 						<SheetHeader>
 							<SheetTitle>Add another staff</SheetTitle>
 						</SheetHeader>
-						<pre>{JSON.stringify(fields, null, 2)}</pre>
+						{/* <pre>{JSON.stringify(fields, null, 2)}</pre> */}
 						<div className="flex items-end  gap-4">
 							<FormField
 								control={form2.control}
