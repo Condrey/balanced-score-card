@@ -46,7 +46,7 @@ export async function POST(req: Request) {
 			});
 		}
 
-		const { duties } = position;
+		const { duties, jobTitle } = position;
 		if (!duties) {
 			const errorMessage = "This position is missing duties.";
 			return Response.json(errorMessage, {
@@ -58,32 +58,18 @@ export async function POST(req: Request) {
 		//Ai part
 		const template = `
 You are a Balanced Scorecard Maker for Local Governments in Uganda who makes annual BSCs. 
-Your role is to generate Balanced Scorecards tailored to the Ugandan local government context.
+Your role is to generate Balanced Score cards tailored to the Ugandan local government context.
 
 **Instructions:**
-1. Use the provided Job Description Duties (duties) to create Performance Objectives for the specified Position (position).
-2. The Balanced Scorecard must include *all* blueprint perspectives, and each blueprint perspective must appear at least **four times**  in the output:
-   - STAKEHOLDERS_CLIENTS
-   - FINANCIAL_STEWARDSHIP
-   - INTERNAL_PROCESSES
-   - MDA_LG_CAPACITY
-   There is a tendency for the AI to forget FINANCIAL_STEWARDSHIP, take note.  
-3. These are the blueprint perspectives with their maximum allowable percentages:  
-   (perspectivesWithPercentages){perspectivesWithPercentages}
-4. Ensure the total percentage of objectives under each perspective does **not exceed** its allotted percentage.  
-5. If the draft misses 1 or more objectives for a given perspective, smartly add them to ensure every perspective is represented at least twice.  
-6. Distribute percentages realistically and fairly across objectives.  
-7. Output must strictly follow the required format.  
+1. Use the (duties){duties} to create Performance Plan and Performance Appraisal for the specified (position){position}.
+2. It must include *all* (perspectivesWithPercentages){perspectivesWithPercentages} with their maximum allowable percentages:  
+   Each perspective must appear exactly **four times**  in the output. There is a tendency for the AI to forget FINANCIAL_STEWARDSHIP, take note.  
+3. If the output misses even 1 or more objectives for a given perspective, smartly add them to ensure every perspective has four objectives.  
+4. Distribute percentages realistically and fairly across objectives.  
+5. Output must strictly follow the required format.  
 
 {format_instructions}
 
-{question}
-
-Duties:  
-{duties}
-
-Position:  
-{position}
 `;
 
 		const prompt = ChatPromptTemplate.fromTemplate(template);
@@ -91,10 +77,10 @@ Position:
 		const parser = StructuredOutputParser.fromZodSchema(performanceObjectiveArraySchema);
 		const retrievalChain = RunnableSequence.from([prompt, model, parser]);
 		const response = await retrievalChain.invoke({
-			question: `From array of ${duties}, generate the performance objectives with the instructed number of generated perspectives.`,
+			question: `From array of ${duties}, generate the Performance Plan and Performance Appraisal with four four performance objectives. In case the numbers are not four, think outside the box `,
 			format_instructions: parser.getFormatInstructions(),
 			duties,
-			position,
+			position: jobTitle,
 			perspectivesWithPercentages
 		});
 		return Response.json(response, { statusText: "Success", status: 200 });
